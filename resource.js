@@ -1,0 +1,42 @@
+var res = {
+	sprite_background_sunset: 'res/sprite/background_sunset.png',
+	sprite_words_title: 'res/sprite/title.png',
+	sprite_ui_left: 'res/sprite/ui_left.png',
+	sprite_ui_right: 'res/sprite/ui_right.png',
+	sprite_ui_shoot: 'res/sprite/shoot.png',
+	sprite_ui_hp: 'res/sprite/hp.png',
+	sprite_sun: 'res/sprite/sun.png',
+	sprite_sunlight: 'res/sprite/sunlight.png',
+	sprite_island: 'res/sprite/island.png',
+	sprite_ref1: 'res/sprite/ref1.png',
+	sprite_ref2: 'res/sprite/ref2.png',
+	sprite_ref3: 'res/sprite/ref3.png',
+	sprite_ui_bullet: 'res/sprite/bullet.png',
+	sprite_role: 'res/sprite/role.png',
+	sprite_light: 'res/sprite/light.png',
+	sprite_fire: 'res/sprite/fire.png',
+	sprite_grass: 'res/sprite/grass.png',
+	sprite_weapon1: 'res/sprite/weapon1.png',
+	sprite_katana: 'res/sprite/katana.png',
+	sprite_table: 'res/sprite/table.png',
+	sprite_teapot: 'res/sprite/teapot.png',
+	sprite_press_bg: 'res/sprite/press_bg.png',
+	sprite_fire: 'res/sprite/fire.png',
+	sprite_weapon2: 'res/sprite/weapon2.png',
+	sprite_spear: 'res/sprite/spear.png',
+	sprite_player: 'res/sprite/player.png',
+	sprite_boss: 'res/sprite/boss.png',
+	sprite_tea_player: 'res/sprite/tea_player.png',
+	sprite_tea_boss: 'res/sprite/tea_boss.png',
+	sprite_ui_tea: 'res/sprite/ui_tea.png',
+	sprite_ui_mountain: 'res/sprite/ui_mountain.png',
+	sprite_ui_talk: 'res/sprite/ui_talk.png',
+	p_dust: 'res/sprite/dust.plist',
+	p_water: 'res/sprite/water.plist',
+	sprite_pressstart: 'res/sprite/pressstart.png'
+};
+
+var g_resources = [];
+for (var i in res) {
+    g_resources.push(res[i]);
+}

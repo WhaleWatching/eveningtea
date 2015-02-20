@@ -1,0 +1,1097 @@
+
+var game_state = {
+  state: 0,
+  role: {
+    speed: 0,
+    vector: 0
+  }
+};
+
+var controller = {
+  state: {
+    log_position: cc.p(165, 75),
+    log_size: cc.size(570, 62)
+  },
+  director: {},
+  talking: false
+};
+
+var TikTok = {
+  start_time: 0,
+  init: function () {
+    this.start_time = new Date();
+  },
+  getSeconds: function () {
+    var now = new Date();
+    return Math.floor((now.getTime() - this.start_time.getTime())/1000)
+  }
+};
+
+var ControllerLayer = cc.Layer.extend({
+  sprite:null,
+  ctor: function () {
+    self = this;
+    this._super();
+
+    cc.eventManager.addListener({
+      event: cc.EventListener.KEYBOARD,
+      onKeyPressed: function (key) {
+        if(game_state.state > 1) {
+          if( 88 == key){
+            var event = new cc.EventCustom("start_shoot");
+            cc.eventManager.dispatchEvent(event);
+          }
+          if(key == cc.KEY.left) {
+            game_state.role.vector = -10;
+          }
+          if(key == cc.KEY.right) {
+            game_state.role.vector = 10;
+          }
+        }
+      },
+      onKeyReleased: function (key) {
+        if(game_state.state > 1) {
+          if(key == cc.KEY.left || key == cc.KEY.right) {
+            game_state.role.vector = 0;
+          }
+          if(key == cc.KEY.z) {
+            controller.director.talk();
+          }
+          if(key == cc.KEY.x) {
+            controller.director.tea();
+          }
+          if(key == cc.KEY.c) {
+            controller.director.mountain();
+          }
+        }
+      }
+    }, this);
+  }
+}); 
+
+var BackgroundLayer = cc.LayerColor.extend({
+  sprite:null,
+  ctor: function () {
+    self = this;
+    this._super(cc.color(255, 255, 255));
+    var background_position = {
+      x: 450,
+      y: 200
+    };
+    
+    var BackgroundSunsetSprite = new cc.Sprite(res.sprite_background_sunset);
+    BackgroundSunsetSprite.texture.setAliasTexParameters();
+    BackgroundSunsetSprite.attr(background_position);
+
+    this.addChild(BackgroundSunsetSprite);
+
+    return true;
+  }
+});
+
+var PressstartLayer = cc.Layer.extend({
+  sprite:null,
+  ctor: function () {
+    self = this;
+    this._super();
+
+    var PromptSprite = new cc.Sprite(res.sprite_pressstart);
+    PromptSprite.texture.setAliasTexParameters();
+    PromptSprite.attr({
+      x: 450,
+      y: 70,
+      color: cc.color(255,255,255)
+    });
+    this.addChild(PromptSprite, 1);
+    var blink = cc.blink(2,1);
+    // console.log(blink);
+    PromptSprite.runAction(cc.repeatForever(blink));
+
+    var PressBgLSprite = new cc.Sprite(res.sprite_press_bg);
+    PressBgLSprite.texture.setAliasTexParameters();
+    PressBgLSprite.attr({
+      x: 0,
+      y: 0,
+      scaleX: 450,
+      scaleY: 400,
+      anchorX: 0,
+      anchorY: 0
+    });
+    this.addChild(PressBgLSprite);
+
+    var PressBgRSprite = new cc.Sprite(res.sprite_press_bg);
+    PressBgRSprite.texture.setAliasTexParameters();
+    PressBgRSprite.attr({
+      x: 450,
+      y: 0,
+      scaleX: 450,
+      scaleY: 400,
+      anchorX: 0,
+      anchorY: 0
+    });
+    this.addChild(PressBgRSprite);
+
+    var is_gone = false;
+
+
+    cc.eventManager.addListener({
+      event: cc.EventListener.KEYBOARD,
+      onKeyPressed: function (key) {
+        if(88 === key && is_gone != true) {
+          is_gone = true;
+          self.runAction(cc.sequence(cc.fadeOut(2), cc.callFunc(function () {
+            this.parent.removeChild(this);
+          }, self)));
+          // console.log(cc.moveTo(2, cc.p(-450, 0)));
+          PressBgLSprite.runAction(cc.moveTo(1, cc.p(-450, 0)).easing(cc.easeIn(3.0)) );
+          PressBgRSprite.runAction(cc.moveTo(1, cc.p(900, 0)).easing(cc.easeIn(3.0)) );
+          self.runAction(cc.sequence(cc.delayTime(0.7), cc.callFunc(function () {
+            var event = new cc.EventCustom("pressstart_gone");
+            cc.eventManager.dispatchEvent(event);
+            game_state.state = 1;
+            TikTok.init();
+          }, self)));
+          self.removeChild(PromptSprite);
+        }
+      }
+    }, this);
+
+    return true;
+  }
+});
+
+var TitleLayer = cc.Layer.extend({
+  sprite:null,
+  ctor: function () {
+    self = this;
+    this._super();
+    var TitleSprite = new cc.Sprite(res.sprite_words_title);
+    TitleSprite.texture.setAliasTexParameters();
+    TitleSprite.attr({
+      x: 450,
+      y: 70,
+      opacity: 0
+    });
+    this.addChild(TitleSprite);
+
+    var _listener1 = cc.EventListener.create({
+        event: cc.EventListener.CUSTOM,
+        eventName: "pressstart_gone",
+        callback: function(event){
+              TitleSprite.runAction(cc.sequence( cc.fadeIn(1.2), cc.callFunc(function () {
+                  var event = new cc.EventCustom("game_start");
+                  cc.eventManager.dispatchEvent(event);
+                  game_state.state = 2;
+                }, this),cc.delayTime(2), cc.fadeOut(0.4)
+              ));
+        }
+    });    
+    cc.eventManager.addListener(_listener1, 1);
+
+    var start_shoot_listener = cc.EventListener.create({
+        event: cc.EventListener.CUSTOM,
+        eventName: "start_shoot",
+        callback: function(event){
+            TitleSprite.runAction(cc.fadeOut(0.5));
+        }
+    });    
+    cc.eventManager.addListener(start_shoot_listener, 1);
+
+    return true;
+  }
+});
+
+var UiLayer = cc.Layer.extend({
+  sprite:null,
+  ctor: function () {
+    self = this;
+    this._super();
+    var UiLeftSprite = new cc.Sprite(res.sprite_ui_left);
+    var UiRightSprite = new cc.Sprite(res.sprite_ui_right);
+    UiLeftSprite.texture.setAliasTexParameters();
+    UiRightSprite.texture.setAliasTexParameters();
+    UiLeftSprite.attr({
+      x: 17.5,
+      y: 13.5,
+      opacity: 0,
+      anchorX: 0,
+      anchorY: 0
+    });
+    UiRightSprite.attr({
+      x: 900 - 17.5,
+      y: 13.5,
+      opacity: 0,
+      anchorX: 1,
+      anchorY: 0
+    });
+    this.addChild(UiLeftSprite);
+    this.addChild(UiRightSprite);
+
+    var UiShootSprite = new cc.Sprite(res.sprite_ui_shoot);
+    UiShootSprite.texture.setAliasTexParameters();
+    UiShootSprite.attr({
+      x: 800,
+      y: 240,
+      opacity: 0
+    });
+    this.addChild(UiShootSprite);
+
+    var UiHpRoleSprite =  new cc.Sprite(res.sprite_ui_hp);
+    UiHpRoleSprite.texture.setAliasTexParameters();
+    UiHpRoleSprite.attr({
+      x: 830.5,
+      y: 38.5,
+      opacity: 0,
+      anchorX: 1,
+      anchorY: 0
+    });
+    UiHpRoleSprite.runAction(cc.scaleTo(0.2, 0.37, 1));
+    this.addChild(UiHpRoleSprite);
+
+    var UiHpBossSprite =  new cc.Sprite(res.sprite_ui_hp);
+    UiHpBossSprite.texture.setAliasTexParameters();
+    UiHpBossSprite.attr({
+      x: 68.5,
+      y: 38.5,
+      opacity: 0,
+      anchorX: 0,
+      anchorY: 0
+    });
+    UiHpBossSprite.runAction(cc.scaleTo(0.2, 0.65, 1));
+    this.addChild(UiHpBossSprite);
+
+    var UiBossBullets = [];
+    for (var i = 0; i < 0; i++) {
+      var bullet =  new cc.Sprite(res.sprite_ui_bullet);
+      bullet.attr({
+        x: 23 + i * 7,
+        y: 19,
+        opacity: 0
+      });
+      UiBossBullets.push(bullet);
+      this.addChild(bullet);
+    };
+
+    var UiRoleBullets = [];
+    for (var i = 0; i < 0; i++) {
+      var bullet =  new cc.Sprite(res.sprite_ui_bullet);
+      bullet.attr({
+        x: 876 - i * 7,
+        y: 18,
+        opacity: 0
+      });
+      UiRoleBullets.push(bullet);
+      this.addChild(bullet);
+    };
+
+    // var game_start_listener = cc.EventListener.create({
+    //     event: cc.EventListener.CUSTOM,
+    //     eventName: "game_start",
+    //     callback: function(event){
+    //           // UiShootSprite.runAction(cc.fadeIn(1));
+    //           console.log('remove shoot');
+    //         }
+    // }, this);
+    // cc.eventManager.addListener(game_start_listener, 1);
+
+    var start_shoot_listener = cc.EventListener.create({
+        event: cc.EventListener.CUSTOM,
+        eventName: "pressstart_gone",
+        callback: function(event){
+            UiLeftSprite.runAction(cc.fadeIn(2.6));
+            UiRightSprite.runAction(cc.fadeIn(2.6));
+            UiHpBossSprite.runAction(cc.fadeIn(2.6));
+            UiHpRoleSprite.runAction(cc.fadeIn(2.6));
+            for (var i = 0; i < UiBossBullets.length; i++) {
+              UiBossBullets[i].runAction(cc.fadeIn(2.6));
+            };
+            for (var i = 0; i < UiRoleBullets.length; i++) {
+              UiRoleBullets[i].runAction(cc.fadeIn(2.6));
+            };
+            UiShootSprite.runAction(cc.fadeOut(0.1));
+        }
+    });    
+    cc.eventManager.addListener(start_shoot_listener, 1);
+
+    return true;
+  }
+});
+
+var RoleLayer = cc.Layer.extend({
+  sprite:null,
+  ctor: function () {
+    self = this;
+    this._super();
+    this.scheduleUpdate();
+
+    this.role_sprite = new cc.Sprite(res.sprite_role);
+    this.role_sprite.attr({
+      x: 840,
+      y: 165
+    });
+    this.addChild(this.role_sprite);
+  },
+  update: function (delta) {
+    game_state.role.speed += game_state.role.vector;
+    game_state.role.speed = game_state.role.speed * 0.8;
+    if(game_state.role.speed > 150)
+      game_state.role.speed = 150;
+    this.role_sprite.x = this.role_sprite.x + delta * 10 * game_state.role.speed;
+    if(this.role_sprite.x < 200)
+      this.role_sprite.x = 200;
+    if(this.role_sprite.x > 880)
+      this.role_sprite.x = 880;
+  }
+});
+
+var BossLayer = cc.Layer.extend({
+  sprite:null,
+  ctor: function () {
+    self = this;
+    this._super();
+
+    var draw_pen = new cc.DrawNode();
+    draw_pen.drawRect(new cc.Point(70,115), new cc.Point(130, 210), cc.color(255,255,255,200), 0, cc.color(0,0,0,0));
+    this.addChild(draw_pen);
+  }
+});
+
+var SunLayer = cc.Layer.extend({
+  sprite:null,
+  ctor: function () {
+    self = this;
+    this._super();
+    var frames = [];
+    for (var i = 0; i < 8; i++) {
+      var sprite_frame = new cc.SpriteFrame(res.sprite_sun,cc.rect(i*237,0,237,68));
+      frames.push(sprite_frame);
+    };
+    var SunAnimation = new cc.Animation(frames, 0.2);
+    console.log('SunAnimation', SunAnimation);
+    var sprite_sun = new cc.Sprite(new cc.SpriteFrame(res.sprite_sun,cc.rect(0,0,237,68)));
+    sprite_sun.attr({x:305,y:218});
+    // sprite_sun.setBlendFunc(gl.ONE_MINUS_DST_COLOR, gl.ONE);
+    this.addChild(sprite_sun, 1);
+    sprite_sun.runAction(cc.repeatForever( cc.animate(SunAnimation)));
+  }
+});
+
+var SunlightLayer = cc.Layer.extend({
+  sprite:null,
+  ctor: function () {
+    self = this;
+    this._super();
+
+
+    var sprite_sunlight = new cc.Sprite(res.sprite_sunlight);
+    // sprite_sunlight.setBlendFunc(gl.SRC_ALPHA, gl.ONE);
+    // sprite_sunlight.setBlendFunc(gl.SRC_ALPHA, gl.DST_COLOR);
+    // sprite_sunlight.setBlendFunc(gl.DST_COLOR, gl.ONE);
+    sprite_sunlight.setBlendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
+    sprite_sunlight.attr({x:390,y:200});
+    var sunlight_animation = function () {
+      var light = 235 + 20 * Math.random();
+      // console.log(light);
+      this.runAction(
+        cc.sequence(
+          cc.fadeTo(0.4,light),cc.delayTime(0.8),
+          cc.callFunc(sunlight_animation, this))
+      );
+    };
+    sunlight_animation.apply(sprite_sunlight);
+    this.addChild(sprite_sunlight);
+  }
+});
+
+var IslandsLayer = cc.Layer.extend({
+  sprite:null,
+  ctor: function () {
+    self = this;
+    this._super();
+
+
+    var sprite_islands = new cc.Sprite(res.sprite_island);
+    sprite_islands.texture.setAliasTexParameters();
+    // sprite_islands.setBlendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
+    sprite_islands.attr({x:450,y:238});
+    this.addChild(sprite_islands, 10);
+
+    var frames_ref1 = [];
+    for (var i = 0; i < 8; i++) {
+      var sprite_frame = new cc.SpriteFrame(res.sprite_ref1,cc.rect(i*127,0,127,48));
+      frames_ref1.push(sprite_frame);
+    };
+    var Ref1Animation = new cc.Animation(frames_ref1, 0.2);
+    // console.log('Ref1Animation', Ref1Animation);
+    var sprite_ref1 = new cc.Sprite(new cc.SpriteFrame(res.sprite_ref1,cc.rect(0,0,127,48)));
+    sprite_ref1.attr({x:58,y:223, opacity: 170});
+    sprite_ref1.setBlendFunc(gl.DST_COLOR, gl.ONE_MINUS_SRC_ALPHA);
+    // sprite_ref1.setBlendFunc(gl.ONE_MINUS_DST_COLOR, gl.ONE);
+    // sprite_ref1.setBlendFunc(gl.ONE, gl.ONE);
+    this.addChild(sprite_ref1, 1);
+    sprite_ref1.runAction(cc.repeatForever( cc.animate(Ref1Animation)));
+
+    var frames_ref2 = [];
+    for (var i = 0; i < 8; i++) {
+      var sprite_frame = new cc.SpriteFrame(res.sprite_ref2,cc.rect(0,i*65,368,65));
+      frames_ref2.push(sprite_frame);
+    };
+    var Ref2Animation = new cc.Animation(frames_ref2, 0.2);
+    console.log('Ref2Animation', Ref2Animation);
+    var sprite_ref2 = new cc.Sprite(new cc.SpriteFrame(res.sprite_ref2,cc.rect(0,0,368,65)));
+    sprite_ref2.texture.setAliasTexParameters();
+    sprite_ref2.attr({x:577,y:220, opacity: 170});
+    sprite_ref2.setBlendFunc(gl.DST_COLOR, gl.ONE_MINUS_SRC_ALPHA);
+    // sprite_ref2.setBlendFunc(gl.ONE_MINUS_DST_COLOR, gl.ONE);
+    // sprite_ref2.setBlendFunc(gl.ONE, gl.ONE);
+    this.addChild(sprite_ref2, 1);
+    sprite_ref2.runAction(cc.repeatForever( cc.animate(Ref2Animation)));
+
+    var frames_ref3 = [];
+    for (var i = 0; i < 8; i++) {
+      var sprite_frame = new cc.SpriteFrame(res.sprite_ref3,cc.rect(i*101,0,101,65));
+      frames_ref3.push(sprite_frame);
+    };
+    var Ref3Animation = new cc.Animation(frames_ref3, 0.2);
+    console.log('Ref3Animation', Ref3Animation);
+    var sprite_ref3 = new cc.Sprite(new cc.SpriteFrame(res.sprite_ref3,cc.rect(0,0,101,65)));
+    sprite_ref3.texture.setAliasTexParameters();
+    sprite_ref3.attr({x:855,y:209, opacity: 170});
+    sprite_ref3.setBlendFunc(gl.DST_COLOR, gl.ONE_MINUS_SRC_ALPHA);
+    // sprite_ref3.setBlendFunc(gl.ONE_MINUS_DST_COLOR, gl.ONE);
+    // sprite_ref3.setBlendFunc(gl.ONE, gl.ONE);
+    this.addChild(sprite_ref3, 1);
+    sprite_ref3.runAction(cc.repeatForever( cc.animate(Ref3Animation)));
+  }
+});
+
+
+
+var DustLayer = cc.Layer.extend({
+  sprite:null,
+  ctor: function () {
+    self = this;
+    this._super();
+
+    var DustPart = new cc.ParticleSystem(res.p_dust);
+    DustPart.setStartColor(cc.color(217, 191, 77, 127));
+    DustPart.setStartColorVar(cc.color(0, 0, 0, 127));
+    DustPart.setEndColor(cc.color(217, 191, 77, 0));
+    DustPart.setEndColorVar(cc.color(0, 0, 0, 255));
+    DustPart.setEmissionRate(20);
+    DustPart.setLife(10);
+    DustPart.setAngleVar(10);
+    DustPart.setBlendFunc(gl.SRC_ALPHA, gl.ONE);
+    DustPart.attr({x: 0, y: 600});
+    // console.log(DustPart);
+    this.addChild(DustPart);
+
+    return true;
+  }
+});
+
+var WaterLayer = cc.Layer.extend({
+  sprite:null,
+  ctor: function () {
+    self = this;
+    this._super();
+
+    var lights = [];
+    var range = {
+      center: {x: 308, y: 149},
+      random: {x: 587, y: 85, left: 309},
+      random_pick: {x: Math.pow(587,2), y: Math.pow(85,2), left: Math.pow(309,2)}
+    };
+
+    var lights_call = function () {
+      var position_x = 0;
+      if (Math.random() > 0.7) {
+        position_x = range.center.x - range.random.left + Math.sqrt(Math.random() * range.random_pick.left);
+      } else {
+        position_x = range.center.x + range.random.x - Math.sqrt(Math.random() * range.random_pick.x);
+      }
+      var position_y = range.center.y + Math.sqrt(Math.random() * range.random_pick.y);
+      position_x = Math.floor(position_x) + 0.5;
+      position_y = Math.floor(position_y) + 0.5;
+      var animation_time = 0.2+Math.random()*0.4;
+      this.attr({x: position_x, y: position_y, opacity: 0});
+      if(Math.random() > 0.9) {
+        this.attr({scaleY: 3+Math.random()*7, scaleX: 1});
+      } else {
+        this.attr({scaleX: 10+Math.random()*47, scaleY: 1});
+      }
+      this.runAction(cc.sequence(cc.fadeIn(animation_time), cc.fadeOut(animation_time), cc.callFunc(function  (argument) {
+        lights_call.apply(this);
+      }, this)));
+    }
+
+    for (var i = 0; i < 160; i++) {
+      var SpriteLight = new cc.Sprite(res.sprite_light);
+      lights_call.apply(SpriteLight);
+      this.addChild(SpriteLight);
+    };
+
+    
+
+
+    return true;
+  }
+});
+
+var GroundLayer = cc.Layer.extend({
+  sprite:null,
+  ctor: function () {
+    self = this;
+    this._super();
+
+    var GrassSprite = new cc.Sprite(res.sprite_grass);
+    GrassSprite.attr({x: 451, y: 159});
+    GrassSprite.texture.setAliasTexParameters();
+    this.addChild(GrassSprite);
+
+    var Weapon1Sprite = new cc.Sprite(res.sprite_weapon1);
+    Weapon1Sprite.attr({x: 865, y: 184});
+    Weapon1Sprite.texture.setAliasTexParameters();
+    this.addChild(Weapon1Sprite, 1);
+
+    var Weapon2Sprite = new cc.Sprite(res.sprite_weapon2);
+    Weapon2Sprite.attr({x: 227, y: 191});
+    Weapon2Sprite.texture.setAliasTexParameters();
+    this.addChild(Weapon2Sprite, 1);
+
+    var TableSprite = new cc.Sprite(res.sprite_table);
+    TableSprite.attr({x: 437, y: 180});
+    TableSprite.texture.setAliasTexParameters();
+    this.addChild(TableSprite, 1);
+
+
+    var frames_fire = [];
+    for (var i = 0; i < 8; i++) {
+      var sprite_frame = new cc.SpriteFrame(res.sprite_fire,cc.rect(0,i*148,227,148));
+      frames_fire.push(sprite_frame);
+    };
+    var FireAnimation = new cc.Animation(frames_fire, 0.13);
+    console.log('FireAnimation', FireAnimation);
+    var sprite_fire = new cc.Sprite(new cc.SpriteFrame(res.sprite_fire,cc.rect(0,0,227,148)));
+    sprite_fire.texture.setAliasTexParameters();
+    sprite_fire.attr({x:725,y:151});
+    // sprite_fire.setBlendFunc(gl.DST_COLOR, gl.ONE_MINUS_SRC_ALPHA);
+    // sprite_fire.setBlendFunc(gl.ONE_MINUS_DST_COLOR, gl.ONE);
+    // sprite_fire.setBlendFunc(gl.ONE, gl.ONE);
+    this.addChild(sprite_fire, 1);
+    sprite_fire.runAction(cc.repeatForever( cc.animate(FireAnimation)));
+
+    var frames_katana = [];
+    for (var i = 0; i < 4; i++) {
+      var sprite_frame = new cc.SpriteFrame(res.sprite_katana,cc.rect(i*76,0,76,185));
+      frames_katana.push(sprite_frame);
+    };
+    var KatanaAnimation = new cc.Animation(frames_katana, 0.18);
+    console.log('KatanaAnimation', KatanaAnimation);
+    var sprite_katana = new cc.Sprite(new cc.SpriteFrame(res.sprite_katana,cc.rect(0,0,76,185)));
+    sprite_katana.texture.setAliasTexParameters();
+    sprite_katana.attr({x:805,y:186});
+    // sprite_katana.setBlendFunc(gl.DST_COLOR, gl.ONE_MINUS_SRC_ALPHA);
+    // sprite_katana.setBlendFunc(gl.ONE_MINUS_DST_COLOR, gl.ONE);
+    // sprite_katana.setBlendFunc(gl.ONE, gl.ONE);
+    this.addChild(sprite_katana, 1);
+    sprite_katana.runAction(cc.repeatForever( cc.animate(KatanaAnimation)));
+
+    var frames_spear = [];
+    for (var i = 0; i < 4; i++) {
+      var sprite_frame = new cc.SpriteFrame(res.sprite_spear,cc.rect(i*78,0,78,318));
+      frames_spear.push(sprite_frame);
+    };
+    var SpearAnimation = new cc.Animation(frames_spear, 0.18);
+    console.log('SpearAnimation', SpearAnimation);
+    var sprite_spear = new cc.Sprite(new cc.SpriteFrame(res.sprite_spear,cc.rect(0,0,78,318)));
+    sprite_spear.texture.setAliasTexParameters();
+    sprite_spear.attr({x:70,y:239});
+    // sprite_spear.setBlendFunc(gl.DST_COLOR, gl.ONE_MINUS_SRC_ALPHA);
+    // sprite_spear.setBlendFunc(gl.ONE_MINUS_DST_COLOR, gl.ONE);
+    // sprite_spear.setBlendFunc(gl.ONE, gl.ONE);
+    this.addChild(sprite_spear, 1);
+    sprite_spear.runAction(cc.repeatForever( cc.animate(SpearAnimation)));
+
+    return true;
+  }
+});
+
+var IdleLayer = cc.Layer.extend({
+  sprite:null,
+  ctor: function () {
+    self = this;
+    this._super();
+
+    // var TeapotSprite = new cc.Sprite(res.sprite_teapot);
+    // TeapotSprite.attr({x: 442, y: 219, opacity: 0});
+    // TeapotSprite.texture.setAliasTexParameters();
+    // this.addChild(TeapotSprite, 1);
+
+    var frames_player = [];
+    for (var i = 0; i < 12; i++) {
+      var sprite_frame = new cc.SpriteFrame(res.sprite_player,cc.rect(i*165,0,165,223));
+      frames_player.push(sprite_frame);
+    };
+    var PlayerAnimation = new cc.Animation(frames_player, 0.18);
+    console.log('PlayerAnimation', PlayerAnimation);
+    var sprite_player = new cc.Sprite(new cc.SpriteFrame(res.sprite_player,cc.rect(0,0,165,223)));
+    sprite_player.texture.setAliasTexParameters();
+    sprite_player.attr({x:552,y:213});
+    // sprite_player.setBlendFunc(gl.DST_COLOR, gl.ONE_MINUS_SRC_ALPHA);
+    // sprite_player.setBlendFunc(gl.ONE_MINUS_DST_COLOR, gl.ONE);
+    // sprite_player.setBlendFunc(gl.ONE, gl.ONE);
+    this.addChild(sprite_player, 1);
+    sprite_player.runAction(cc.repeatForever( cc.animate(PlayerAnimation)));
+
+    var frames_boss = [];
+    for (var i = 0; i < 12; i++) {
+      var sprite_frame = new cc.SpriteFrame(res.sprite_boss,cc.rect(i*162,0,162,203));
+      frames_boss.push(sprite_frame);
+    };
+    var BossAnimation = new cc.Animation(frames_boss, 0.18);
+    console.log('BossAnimation', BossAnimation);
+    var sprite_boss = new cc.Sprite(new cc.SpriteFrame(res.sprite_boss,cc.rect(0,0,162,203)));
+    sprite_boss.texture.setAliasTexParameters();
+    sprite_boss.attr({x:342,y:207});
+    // sprite_boss.setBlendFunc(gl.DST_COLOR, gl.ONE_MINUS_SRC_ALPHA);
+    // sprite_boss.setBlendFunc(gl.ONE_MINUS_DST_COLOR, gl.ONE);
+    // sprite_boss.setBlendFunc(gl.ONE, gl.ONE);
+    this.addChild(sprite_boss, 1);
+    sprite_boss.runAction(cc.repeatForever( cc.animate(BossAnimation)));
+
+    return true;
+  }
+});
+
+var LogicLayer = cc.Layer.extend({
+  sprite:null,
+  ctor: function () {
+    self = this;
+    this._super();
+
+    var input = {
+      tea: false,
+      talk: false,
+      mountain: false,
+      switchState: function (target, state) {
+        if (typeof(target) == 'string' && typeof(state) == 'boolean') {
+          if(state) {
+            switch(target) {
+              case 'tea':
+                if(!controller.talking) {
+                  input.sprite_ui_tea.runAction(cc.fadeIn(0.1));
+                }
+                input.tea = true;
+                break;
+              case 'talk':
+                if(!controller.talking) {
+                  input.sprite_ui_talk.runAction(cc.fadeIn(0.1));
+                }
+                input.talk = true;
+                break;
+              case 'mountain':
+                if(!controller.talking) {
+                  input.sprite_ui_mountain.runAction(cc.fadeIn(0.1));
+                }
+                input.mountain = true;
+                break;
+            }
+          } else {
+            switch(target) {
+              case 'tea':
+                input.sprite_ui_tea.runAction(cc.fadeOut(0.1));
+                input.tea = false;
+                break;
+              case 'talk':
+                input.sprite_ui_talk.runAction(cc.fadeOut(0.1));
+                input.talk = false;
+                break;
+              case 'mountain':
+                input.sprite_ui_mountain.runAction(cc.fadeOut(0.1));
+                input.mountain = false;
+                break;
+            }
+          }
+        }
+      },
+      duringStart: function () {
+        input.sprite_ui_tea.runAction(cc.fadeOut(0.1));
+        input.sprite_ui_talk.runAction(cc.fadeOut(0.1));
+        input.sprite_ui_mountain.runAction(cc.fadeOut(0.1));
+        controller.talking = true;
+      },
+      duringEnd: function (only_logic) {
+        if(!only_logic) {
+          if(input.tea) {
+            input.sprite_ui_tea.runAction(cc.fadeIn(0.1));
+          }
+          if(input.talk) {
+            input.sprite_ui_talk.runAction(cc.fadeIn(0.1));
+          }
+          if(input.mountain) {
+            input.sprite_ui_mountain.runAction(cc.fadeIn(0.1));
+          }
+        }
+        controller.talking = false;
+      }
+    };
+
+    input.sprite_ui_tea = new cc.Sprite(res.sprite_ui_tea);
+    input.sprite_ui_tea.attr({
+      x: 605,
+      y: 210,
+      anchorX: 0,
+      opacity: 0
+    });
+    this.addChild(input.sprite_ui_tea);
+
+    input.sprite_ui_talk = new cc.Sprite(res.sprite_ui_talk);
+    input.sprite_ui_talk.attr({
+      x: 605,
+      y: 230,
+      anchorX: 0,
+      opacity: 0
+    });
+    this.addChild(input.sprite_ui_talk);
+
+    input.sprite_ui_mountain = new cc.Sprite(res.sprite_ui_mountain);
+    input.sprite_ui_mountain.attr({
+      x: 605,
+      y: 190,
+      anchorX: 0,
+      opacity: 0
+    });
+    this.addChild(input.sprite_ui_mountain);
+
+
+
+    var TeapotSprite = new cc.Sprite(res.sprite_teapot);
+    TeapotSprite.attr({x: 442, y: 219, opacity: 0});
+    TeapotSprite.texture.setAliasTexParameters();
+    this.addChild(TeapotSprite, 1);
+
+
+    var frames_tea_player = [];
+    for (var i = 0; i < 13; i++) {
+      var sprite_frame = new cc.SpriteFrame(res.sprite_tea_player,cc.rect(i*90,0,90,129));
+      frames_tea_player.push(sprite_frame);
+    };
+    var TeaPlayerAnimation = new cc.Animation(frames_tea_player, 0.15);
+    TeaPlayerAnimation._frames[7].setDelayUnits(10);
+    TeaPlayerAnimation._totalDelayUnits += 9;
+    console.log('TeaPlayerAnimation', TeaPlayerAnimation);
+    var sprite_tea_player = new cc.Sprite(new cc.SpriteFrame(res.sprite_tea_player,cc.rect(0,0,90,129)));
+    sprite_tea_player.texture.setAliasTexParameters();
+    sprite_tea_player.attr({x:544,y:234});
+    // sprite_tea_player.setBlendFunc(gl.DST_COLOR, gl.ONE_MINUS_SRC_ALPHA);
+    // sprite_tea_player.setBlendFunc(gl.ONE_MINUS_DST_COLOR, gl.ONE);
+    // sprite_tea_player.setBlendFunc(gl.ONE, gl.ONE);
+    this.addChild(sprite_tea_player, 1);
+    animate_tea_player = cc.animate(TeaPlayerAnimation);
+    // sprite_tea_player.runAction(cc.repeatForever( cc.animate(TeaPlayerAnimation)));
+
+    var frames_tea_boss = [];
+    for (var i = 0; i < 13; i++) {
+      var sprite_frame = new cc.SpriteFrame(res.sprite_tea_boss,cc.rect(i*117,0,117,140));
+      // console.log(sprite_frame);
+      frames_tea_boss.push(sprite_frame);
+    };
+    var TeaBossAnimation = new cc.Animation(frames_tea_boss, 0.15);
+    TeaBossAnimation._frames[7].setDelayUnits(10);
+    TeaBossAnimation._totalDelayUnits += 9;
+    console.log('TeaBossAnimation', TeaBossAnimation);
+    var sprite_tea_boss = new cc.Sprite(new cc.SpriteFrame(res.sprite_tea_boss,cc.rect(0,0,117,140)));
+    sprite_tea_boss.texture.setAliasTexParameters();
+    sprite_tea_boss.attr({x:328,y:233});
+    // sprite_tea_boss.setBlendFunc(gl.DST_COLOR, gl.ONE_MINUS_SRC_ALPHA);
+    // sprite_tea_boss.setBlendFunc(gl.ONE_MINUS_DST_COLOR, gl.ONE);
+    // sprite_tea_boss.setBlendFunc(gl.ONE, gl.ONE);
+    this.addChild(sprite_tea_boss, 1);
+    animate_tea_boss = cc.animate(TeaBossAnimation);
+    // sprite_tea_boss.runAction(cc.repeatForever( cc.animate(TeaBossAnimation)));\
+
+
+
+    var drinkTea = function (role, callback) {
+      input.duringStart();
+      controller.director.step_action();
+      if(role == 'player') {
+        sprite_tea_player.runAction(cc.sequence(animate_tea_player, cc.callFunc(function () {
+          input.duringEnd();
+          if(callback) {
+            callback();
+          }
+        })));
+      } else if(role == 'boss') {
+        sprite_tea_boss.runAction(cc.sequence(animate_tea_boss, cc.callFunc(function () {
+          input.duringEnd();
+          if(callback) {
+            callback();
+          }
+        })));
+      } else {
+        sprite_tea_player.runAction(cc.sequence(animate_tea_player, cc.callFunc(function () {
+          drinkTea('boss');
+        })));
+      }
+      if(role == 'boss') {
+        controller.director.log('[Drink tea]', 'boss');
+      } else {
+        controller.director.log('[Drink tea]', 'player');
+      }
+    }
+
+
+
+
+    var frames_fire = [];
+    for (var i = 0; i < 8; i++) {
+      var sprite_frame = new cc.SpriteFrame(res.sprite_fire,cc.rect(0,i*148,227,148));
+      frames_fire.push(sprite_frame);
+    };
+    var FireAnimation = new cc.Animation(frames_fire, 0.13);
+    console.log('FireAnimation', FireAnimation);
+    var sprite_fire = new cc.Sprite(new cc.SpriteFrame(res.sprite_fire,cc.rect(0,0,227,148)));
+    sprite_fire.texture.setAliasTexParameters();
+    sprite_fire.attr({x:725,y:151});
+    // sprite_fire.setBlendFunc(gl.DST_COLOR, gl.ONE_MINUS_SRC_ALPHA);
+    // sprite_fire.setBlendFunc(gl.ONE_MINUS_DST_COLOR, gl.ONE);
+    // sprite_fire.setBlendFunc(gl.ONE, gl.ONE);
+    this.addChild(sprite_fire, 1);
+    sprite_fire.runAction(cc.repeatForever( cc.animate(FireAnimation)));
+
+
+
+
+
+    typeWriter = function (label, typeCallback, intervalCallback) {
+      var whole_str = label.string;
+      // console.log(whole_str, label.string);
+      label.string = '';
+
+      label.finish = function () {
+        label.string = whole_str;
+        clearTimeout(label.time_id);
+        if(typeCallback) {
+          typeCallback.call(label);
+        }
+      }
+
+      type = function () {
+        if(label.string.length < whole_str.length) {
+          label.string = whole_str.slice(0, label.string.length + 1);
+          label.time_id = setTimeout(type, 30);
+          if(intervalCallback) {
+            intervalCallback.call(label);
+          }
+        } else if(typeCallback) {
+          typeCallback.call(label);
+        }
+      }
+      type();
+    }
+
+    finishType = function () {
+      for (var i = 0; i < labels.length; i++) {
+        if(labels[i].finish) {
+          labels[i].finish();
+        }
+      };
+    }
+
+    var log_node = new cc.Node();
+    log_node.attr({
+      x: controller.state.log_position.x,
+      y: controller.state.log_position.y,
+      height: controller.state.log_size.height,
+      anchorX: 0,
+      anchorY: 1,
+      width: controller.state.log_size.width
+    });
+    this.addChild(log_node);
+
+    var log_labels = [];
+
+    var log_update = function () {
+      var offset = 0;
+      for (var i = 0; i < log_labels.length; i++) {
+        var label = log_labels[i];
+        if(label == false) {
+          continue;
+        }
+        if(0 == i) {
+          label.attr({opacity: 255});
+        } else {
+          label.attr({opacity: 128});
+        }
+        var label_height = label.getContentSize().height / 2;
+        offset += label_height;
+        // console.log(label_height, offset);
+        if(typeof(label.should_offset) == 'undefined' || label.should_offset != offset) {
+          if(label.move_action) {
+            label.move_action.stop();
+          }
+          label.move_action = label.runAction(cc.moveTo(0.2, cc.p(0, offset)));
+        }
+        label.should_offset = offset;
+        if (offset > controller.state.log_size.height) {
+          label.runAction(cc.fadeOut(0.2));
+          log_labels[i] = false;
+        }
+      }
+    }
+
+    var logic_state = {
+      current: {
+        block: logic['start_block'],
+        dialogue: 0 
+      },
+      tea_countdown: 0
+    };
+
+    controller.director.log = function (str, role, callback) {
+      if (typeof(str) != 'string') {
+        return;
+      }
+      console.log(role + ': ' + str);
+      var label = new cc.LabelTTF(str, 'Play', 22, cc.size(controller.state.log_size.width * 2,0));
+      if(role === 'player') {
+        label.setHorizontalAlignment(cc.TEXT_ALIGNMENT_RIGHT);
+      } else {
+        label.setHorizontalAlignment(cc.TEXT_ALIGNMENT_LEFT);
+      }
+      label.attr({
+        anchorX: 0,
+        anchorY: 1,
+        scale: 0.5,
+        color: cc.color(255,255,255,255)
+      });
+      log_node.addChild(label);
+      log_labels.unshift(label);
+      typeWriter(label, function () {
+        if(callback) {
+          callback();
+        }
+      }, log_update);
+      log_update();
+    }
+
+    controller.director.step_action = function () {
+      if(!logic_state.current.block.start_block || (logic_state.current.block.start_block && logic_state.current.dialogue == logic_state.current.block.dialogues.length) ) {
+        if(logic_state.tea_countdown < 1) {
+          input.switchState('tea', true);
+        } else {
+          input.switchState('tea', false);
+          logic_state.tea_countdown --;
+        }
+      }
+      if(logic_state.current.block.start_block && logic_state.current.dialogue == logic_state.current.block.dialogues.length) {
+        input.switchState('talk', false);
+      } else {
+        input.switchState('talk', true);
+      }
+    }
+
+    textPre = function (text) {
+      return text.replace('{{total_seconds}}', TikTok.getSeconds());
+    }
+
+    controller.director.next = function () {
+      var pick = Math.floor(Math.random() * logic.random_pool.length);
+      logic_state.current.block = logic.random_pool[pick];
+      logic_state.current.dialogue = 0;
+    }
+
+    controller.director.talk = function (force) {
+      if((controller.talking || !input.talk)) {
+        return;
+      }
+      if(logic_state.current.dialogue < logic_state.current.block.dialogues.length) {
+        current_dialogue = logic_state.current.block.dialogues[logic_state.current.dialogue];
+        current_text = textPre(current_dialogue.text);
+        // console.log(current_dialogue);
+        // if(controller.talking) {
+        //   finishType();
+        //   return;
+        // }
+        input.duringStart();
+        controller.director.log(current_text, current_dialogue.role, function () {
+          console.log();
+          if(current_dialogue.role == 'player' && logic_state.current.dialogue < logic_state.current.block.dialogues.length) {
+            setTimeout(function() {
+              input.duringEnd(true);
+              controller.director.talk();
+            }, 400);
+          } else {
+            input.duringEnd();
+          }
+        });
+        logic_state.current.dialogue++;
+        controller.director.step_action();
+      } else {
+        input.duringStart();
+        controller.director.next();
+        controller.director.log('Yes，I agree with you', 'player', function () {
+          drinkTea('boss', function () {
+            controller.director.talk();
+          });
+        });
+        // controller.director.tea(true);
+      }
+    }
+
+    controller.director.tea = function () {
+      if((controller.talking || !input.tea)) {
+        return;
+      }
+      logic_state.tea_countdown = 2;
+      controller.director.next();
+      console.log(logic_state);
+      if(logic_state.current.dialogue == logic_state.current.block.dialogues.length) {
+        drinkTea('player', function () {
+          controller.director.talk();
+        });
+      } else {
+        drinkTea('both', function () {
+          controller.director.talk();
+        });
+      }
+    }
+
+    var game_start_listener = cc.EventListener.create({
+        event: cc.EventListener.CUSTOM,
+        eventName: "game_start",
+        callback: function(event){
+          input.switchState('talk', true);
+        }
+    }, this);
+    cc.eventManager.addListener(game_start_listener, 1);
+
+    return true;
+  }
+});
+
+
+
+var EveningScene = cc.Scene.extend({
+    onEnter:function () {
+        this._super();
+        this.addChild(new BackgroundLayer(), 1);
+        this.addChild(new WaterLayer(), 3);
+        this.addChild(new SunLayer(), 4);
+        this.addChild(new IslandsLayer(), 5);
+        this.addChild(new GroundLayer(), 5);
+        // this.addChild(new RoleLayer(), 50);
+        // this.addChild(new BossLayer(), 50);
+        this.addChild(new IdleLayer(), 50);
+        this.addChild(new TitleLayer(), 90);
+        this.addChild(new UiLayer(), 90);
+        this.addChild(new DustLayer(), 92);
+        this.addChild(new ControllerLayer(), 95);
+        this.addChild(new LogicLayer(), 96);
+        this.addChild(new SunlightLayer(), 99);
+        this.addChild(new PressstartLayer(), 100);
+    }
+});
+

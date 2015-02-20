@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Evening Tea</title>
+    <link rel="icon" type="image/GIF" href="res/favicon.ico"/>
+    <meta name="apple-mobile-web-app-capable" content="yes"/>
+    <meta name="full-screen" content="yes"/>
+    <meta name="screen-orientation" content="portrait"/>
+    <meta name="x5-fullscreen" content="true"/>
+    <meta name="360-fullscreen" content="true"/>
+<style type="text/css">
+    body, canvas, div {
+        -moz-user-select: none;
+        -webkit-user-select: none;
+        -ms-user-select: none;
+        -khtml-user-select: none;
+        -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+    }
+    body {
+        background-color: #222;
+    }
+    #Cocos2dGameContainer {
+        top: 80px;
+    }
+    .font-loader {
+        font-family: 'Play';
+        visibility: hidden;
+    }
+</style>
+    <link href='http://fonts.googleapis.com/css?family=Play' rel='stylesheet' type='text/css'>
+</head>
+<body style="">
+<canvas id="gameCanvas" height="400" width="900"></canvas>
+<div class="font-loader">Loader</div>
+<script src="cocos2d-js-v3.3.js"></script>
+<script src="loader.js"></script>
+<script src="logic.js"></script>
+<script src="eveningtea.js"></script>
+<script src="resource.js"></script>
+</body>
+</html>
