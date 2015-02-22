@@ -1,7 +1,17 @@
 (function (global) {
   var logic = {
-    random_pool: []
+    random_pool: [],
+    popcorn_pool: []
   };
+
+  logic.popcorn_pool = [
+    "Yes, I agree",
+    "You’re right",
+    "I guess so",
+    "Emm…Ye, that’s awesome",
+    "Why not?",
+    "I think so"
+  ];
 
   logic['start_block'] = {
     start_block: true,
@@ -43,8 +53,8 @@
   logic.random_pool.push({
     dialogues: [
       {role: 'boss', text: 'Why were you trying to kill me ?'},
-      {role: 'player', text: 'That is one of the things I cannot recall'},
-      {role: 'boss', text: 'Cannot recall the reason? Or the fact that you managed to kill me?'},
+      {role: 'player', text: 'That is one of the[delay1000] things I cannot recall'},
+      {role: 'boss', text: 'Cannot recall the reason?[delay1000] Or the fact that[delay1000] you managed to kill me?'},
       {role: 'player', text: 'Both'},
       {role: 'boss', text: 'Amnesia is an useful trait'}
     ]
