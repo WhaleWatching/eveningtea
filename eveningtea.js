@@ -1,4 +1,6 @@
 
+var debug_scene = true;
+
 var debug_dialog = 0;
 
 var game_state = {
@@ -900,7 +902,7 @@ var LogicLayer = cc.Layer.extend({
           delay = delay_points[0].delay;
           delay_points.shift();
         }
-        console.log(str_num, delay_points);
+        // console.log(str_num, delay_points);
         return delay;
       }
 
@@ -1136,7 +1138,14 @@ var EveningScene = cc.Scene.extend({
         this.addChild(new ControllerLayer(), 95);
         this.addChild(new LogicLayer(), 96);
         this.addChild(new SunlightLayer(), 99);
-        this.addChild(new PressstartLayer(), 100);
+        if(!debug_scene) {
+          this.addChild(new PressstartLayer(), 100);
+        } else {
+          var event = new cc.EventCustom("pressstart_gone");
+          cc.eventManager.dispatchEvent(event);
+          game_state.state = 2;
+          TikTok.init();
+        }
     }
 });
 
