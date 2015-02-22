@@ -27,12 +27,14 @@ var res = {
 	sprite_player: 'res/sprite/player.png',
 	sprite_boss: 'res/sprite/boss.png',
 	sprite_tea_player: 'res/sprite/tea_player.png',
+	sprite_tea_player_start: 'res/sprite/tea_player_start.png',
 	sprite_tea_boss: 'res/sprite/tea_boss.png',
 	sprite_ui_tea: 'res/sprite/ui_tea.png',
 	sprite_ui_mountain: 'res/sprite/ui_mountain.png',
 	sprite_ui_talk: 'res/sprite/ui_talk.png',
 	p_dust: 'res/sprite/dust.plist',
 	p_water: 'res/sprite/water.plist',
+	p_tea: 'res/sprite/tea.plist',
 	sprite_pressstart: 'res/sprite/pressstart.png'
 };
 
