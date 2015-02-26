@@ -32,6 +32,7 @@ var res = {
 	sprite_ui_tea: 'res/sprite/ui_tea.png',
 	sprite_ui_mountain: 'res/sprite/ui_mountain.png',
 	sprite_ui_talk: 'res/sprite/ui_talk.png',
+	sprite_mountain: 'res/sprite/mountain.png',
 	p_dust: 'res/sprite/dust.plist',
 	p_water: 'res/sprite/water.plist',
 	p_tea: 'res/sprite/tea.plist',

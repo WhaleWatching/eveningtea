@@ -16856,7 +16856,9 @@ cc.Blink = cc.ActionInterval.extend({
         this._originalState = target.visible;
     },
     stop:function () {
-        this.target.visible = this._originalState;
+        if(this.target) {
+            this.target.visible = this._originalState;
+        }
         cc.ActionInterval.prototype.stop.call(this);
     },
     reverse:function () {

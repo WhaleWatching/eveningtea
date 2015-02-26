@@ -1,6 +1,8 @@
 
 var debug_scene = true;
 
+var debug_speed_up = true;
+
 var debug_dialog = false;
 
 var game_state = {
@@ -14,7 +16,7 @@ var game_state = {
 var controller = {
   state: {
     log_position: cc.p(170, 75),
-    log_width: 360,
+    log_width: 560,
     log_content_size: cc.size(560, 62)
   },
   director: {},
@@ -183,12 +185,17 @@ var TitleLayer = cc.Layer.extend({
         event: cc.EventListener.CUSTOM,
         eventName: "pressstart_gone",
         callback: function(event){
-              TitleSprite.runAction(cc.sequence( cc.fadeIn(1.2),cc.delayTime(3.8), cc.callFunc(function () {
-                  var event = new cc.EventCustom("game_start");
-                  cc.eventManager.dispatchEvent(event);
-                  game_state.state = 2;
-                }, this) // ,cc.delayTime(2), cc.fadeOut(0.4)
-              ));
+          if(debug_speed_up) {
+              var event = new cc.EventCustom("game_start");
+              cc.eventManager.dispatchEvent(event);
+          } else {
+            TitleSprite.runAction(cc.sequence( cc.fadeIn(1.2),cc.delayTime(3.8), cc.callFunc(function () {
+                var event = new cc.EventCustom("game_start");
+                cc.eventManager.dispatchEvent(event);
+                game_state.state = 2;
+              }, this) // ,cc.delayTime(2), cc.fadeOut(0.4)
+            ));
+          }
         }
     });    
     cc.eventManager.addListener(pressstart_gone_listener, 1);
@@ -259,7 +266,7 @@ var UiLayer = cc.Layer.extend({
       anchorX: 1,
       anchorY: 0
     });
-    UiHpPlayerSprite.runAction(cc.scaleTo(0.1, 0.36, 1));
+    UiHpPlayerSprite.runAction(cc.scaleTo(0.1, 0.35, 1));
     this.addChild(UiHpPlayerSprite, 20);
     var UiHpBackPlayerSprite =  new cc.Sprite(res.sprite_ui_hp);
     UiHpBackPlayerSprite.texture.setAliasTexParameters();
@@ -271,7 +278,7 @@ var UiLayer = cc.Layer.extend({
       anchorY: 0,
       color: cc.color(64, 64, 64, 255)
     });
-    UiHpBackPlayerSprite.runAction(cc.scaleTo(0.1, 0.36, 1));
+    UiHpBackPlayerSprite.runAction(cc.scaleTo(0.1, 0.35, 1));
     this.addChild(UiHpBackPlayerSprite, 10);
 
     var UiHpBossSprite =  new cc.Sprite(res.sprite_ui_hp);
@@ -283,7 +290,7 @@ var UiLayer = cc.Layer.extend({
       anchorX: 0,
       anchorY: 0
     });
-    UiHpBossSprite.runAction(cc.scaleTo(0.1, 0.68, 1));
+    UiHpBossSprite.runAction(cc.scaleTo(0.1, 0.65, 1));
     this.addChild(UiHpBossSprite, 20);
     var UiHpBackBossSprite =  new cc.Sprite(res.sprite_ui_hp);
     UiHpBackBossSprite.texture.setAliasTexParameters();
@@ -295,16 +302,16 @@ var UiLayer = cc.Layer.extend({
       anchorY: 0,
       color: cc.color(64, 64, 64, 255)
     });
-    UiHpBackBossSprite.runAction(cc.scaleTo(0.1, 0.68, 1));
+    UiHpBackBossSprite.runAction(cc.scaleTo(0.1, 0.65, 1));
     this.addChild(UiHpBackBossSprite, 10);
 
     controller.director.hp = function (role, action) {
       var offset = 0;
       if('more' == action) {
-        offset = 0.08;
+        offset = 0.05;
       }
       if('less' == action) {
-        offset = -0.08;
+        offset = -0.05;
       }
       var target = {};
       var target_back = {};
@@ -326,7 +333,10 @@ var UiLayer = cc.Layer.extend({
       } else if(target_size < 0) {
         target_size = 0;
       }
-      target.runAction(cc.sequence(cc.blink(0.8, 4), cc.scaleTo(1.7, target_size, 1)));
+      if(target_size >= 0.6 && target == UiHpPlayerSprite) {
+        controller.input.switchState('mountain', true);
+      }
+      target.runAction(cc.sequence(cc.blink(0.8, 4), cc.delayTime(0.5), cc.scaleTo(1.7, target_size, 1)));
       target_back.runAction(cc.sequence(cc.blink(0.8, 4), cc.scaleTo(0.2, target_size, 1)));
     }
 
@@ -478,6 +488,19 @@ var IslandsLayer = cc.Layer.extend({
   ctor: function () {
     self = this;
     this._super();
+
+
+    sprite_mountain = new cc.Sprite(res.sprite_mountain);
+    sprite_mountain.attr({
+      x: 497,
+      y: 310,
+      opacity: 0
+    });
+    this.addChild(sprite_mountain, 0);
+
+    controller.director.showMountain = function () {
+      sprite_mountain.runAction(cc.fadeIn(2));
+    }
 
 
     var sprite_islands = new cc.Sprite(res.sprite_island);
@@ -745,6 +768,7 @@ var LogicLayer = cc.Layer.extend({
       talk: false,
       mountain: false,
       tea_inited: false,
+      mountain_inited: false,
       switchState: function (target, state) {
         if (typeof(target) == 'string' && typeof(state) == 'boolean') {
           if(state) {
@@ -771,6 +795,10 @@ var LogicLayer = cc.Layer.extend({
               case 'mountain':
                 if(!controller.talking) {
                   input.sprite_ui_mountain.runAction(cc.fadeIn(0.1));
+                }
+                if(!input.mountain_inited) {
+                  controller.director.showMountain();
+                  input.mountain_inited = true;
                 }
                 input.mountain = true;
                 break;
@@ -825,9 +853,13 @@ var LogicLayer = cc.Layer.extend({
         controller.talking = false;
       },
       blinkTea: function () {
-        // body...
+        if(input.sprite_ui_tea.blink_action) {
+          input.sprite_ui_tea.blink_action.stop();
+        }
+        input.sprite_ui_tea.blink_action = input.sprite_ui_tea.runAction(cc.blink(0.6, 3));
       }
     };
+    controller.input = input;
 
     input.sprite_ui_tea = new cc.Sprite(res.sprite_ui_tea);
     input.sprite_ui_tea.attr({
@@ -857,7 +889,6 @@ var LogicLayer = cc.Layer.extend({
     this.addChild(input.sprite_ui_mountain);
 
 
-
     var TeapotSprite = new cc.Sprite(res.sprite_teapot);
     TeapotSprite.attr({x: 442, y: 219, opacity: 0});
     TeapotSprite.texture.setAliasTexParameters();
@@ -876,7 +907,7 @@ var LogicLayer = cc.Layer.extend({
     TeaPlayerPart.setEndColorVar(cc.color(0, 0, 0, 0));
     TeaPlayerPart.setEmissionRate(0);
     TeaPlayerPart.setPosVar(cc.p(3, 0));
-    // TeaPlayerPart.setLife(10);
+    TeaPlayerPart.setLife(0.17);
     // TeaPlayerPart.setAngleVar(10);
     // TeaPlayerPart.setBlendFunc(gl.SRC_ALPHA, gl.ONE);
     TeaPlayerPart.attr({x: 520, y: 212});
@@ -889,7 +920,7 @@ var LogicLayer = cc.Layer.extend({
     TeaBossPart.setEndColorVar(cc.color(0, 0, 0, 0));
     TeaBossPart.setEmissionRate(0);
     TeaBossPart.setPosVar(cc.p(3, 0));
-    // TeaBossPart.setLife(10);
+    TeaBossPart.setLife(0.17);
     // TeaBossPart.setAngleVar(10);
     // TeaBossPart.setBlendFunc(gl.SRC_ALPHA, gl.ONE);
     TeaBossPart.attr({x: 370, y: 212});
@@ -952,6 +983,17 @@ var LogicLayer = cc.Layer.extend({
     // sprite_tea_boss.runAction(cc.repeatForever( cc.animate(TeaBossAnimation)));\
 
 
+    var teaIsTooHot = function () {
+      input.blinkTea();
+      if(last_log._tea_is_too_hot) {
+        return;
+      }
+      input.duringStart(true);
+      controller.director.log('[Tea is too hot]', 'player', function () {
+        input.duringEnd(true);
+        this._tea_is_too_hot = true;
+      });
+    }
 
     var drinkTea = function (role, callback) {
       // input.duringStart();
@@ -1047,12 +1089,16 @@ var LogicLayer = cc.Layer.extend({
         whole_str = whole_str.replace(delay_point_reg, '');
       }
 
+      whole_str = textLineBreak(whole_str);
 
       var get_delay = function (str_num) {
-        var delay = 40 + Math.floor(Math.random() * 80);
+        var delay = 20 + Math.floor(Math.random() * 80);
         if(delay_points.length > 0 && delay_points[0].str_num == str_num) {
           delay = delay_points[0].delay;
           delay_points.shift();
+        }
+        if(debug_speed_up) {
+          delay = 10;
         }
         // console.log(str_num, delay_points);
         return delay;
@@ -1100,6 +1146,7 @@ var LogicLayer = cc.Layer.extend({
       width: controller.state.log_content_size.width
     });
     this.addChild(log_node);
+    var last_log = {};
 
     var log_labels = [];
 
@@ -1149,6 +1196,10 @@ var LogicLayer = cc.Layer.extend({
       step: 0
     };
 
+    if(debug_speed_up) {
+      logic_state.current.dialogue = logic_state.current.block.dialogues.length - 3;
+    }
+
     if(debug_dialog !== false) {
       console.log('Logic debug enabled, id is ' + debug_dialog);
       logic_state.current.block = logic.random_pool[debug_dialog];
@@ -1167,6 +1218,7 @@ var LogicLayer = cc.Layer.extend({
         label.setHorizontalAlignment(cc.TEXT_ALIGNMENT_LEFT);
         label.game_role = 'boss';
       }
+      label.setLineHeight(28);
       label.attr({
         anchorX: 0,
         anchorY: 1,
@@ -1174,10 +1226,11 @@ var LogicLayer = cc.Layer.extend({
         color: cc.color(255,255,255,255)
       });
       log_node.addChild(label);
+      last_log = label;
       log_labels.unshift(label);
       typeWriter(label, function () {
         if(callback) {
-          callback();
+          callback.call(label);
         }
       }, log_update);
       log_update();
@@ -1192,13 +1245,13 @@ var LogicLayer = cc.Layer.extend({
           switchTeaPart('player', false);
         } else {
           input.switchState('tea', false);
-          switchTeaPart('player', logic_state.tea_countdown.player * 5);
+          switchTeaPart('player', logic_state.tea_countdown.player * 10);
         }
         logic_state.tea_countdown.boss --;
         if(logic_state.tea_countdown.boss < 1) {
           switchTeaPart('boss', false);
         } else {
-          switchTeaPart('boss', logic_state.tea_countdown.boss * 5);
+          switchTeaPart('boss', logic_state.tea_countdown.boss * 10);
         }
         console.log(logic_state.tea_countdown);
       }
@@ -1210,7 +1263,28 @@ var LogicLayer = cc.Layer.extend({
     }
 
     textPre = function (text) {
-      return text.replace('{{total_seconds}}', TikTok.getSeconds());
+      var output = text;
+      output = output.replace('{{total_seconds}}', TikTok.getSeconds());
+      return output;
+    }
+
+    textLineBreak = function (text) {
+      var output = text;
+      for (var i = 90; i < output.length;) {
+        if( i < 0) {
+          break;
+        }
+        if(output[i] != ' ') {
+          console.log('no', i);
+          i--;
+        } else {
+          console.log('yes', i);
+          output = output.slice(0, i) + '\n' + output.slice(i+1, output.length);
+          i+=90;
+        }
+        console.log('out', output);
+      };
+      return output;
     }
 
     var random_log = '';
@@ -1235,6 +1309,10 @@ var LogicLayer = cc.Layer.extend({
         console.log('Talk fail, talking: ', controller.talking, ', talk state: ', input.talk);
         return;
       }
+      var boss_delay = 800 + Math.floor(Math.random() * 1200);
+      if(debug_speed_up) {
+        boss_delay = 0;
+      }
       if(logic_state.step == 0) {
         var event = new cc.EventCustom("key_pressed");
         cc.eventManager.dispatchEvent(event);
@@ -1255,7 +1333,7 @@ var LogicLayer = cc.Layer.extend({
               controller.director.step_action();
               input.duringEnd(true);
               controller.director.talk();
-            }, 800 + Math.floor(Math.random() * 1200));
+            }, boss_delay);
           } else {
             controller.director.step_action();
             input.duringEnd();
@@ -1272,14 +1350,20 @@ var LogicLayer = cc.Layer.extend({
               input.duringEnd(true);
               controller.director.talk(true);
             });
-          }, 800 + Math.floor(Math.random() * 1200));
+          }, boss_delay);
         });
         // controller.director.tea(true);
       }
     }
 
     controller.director.tea = function () {
-      if((controller.talking || !input.tea)) {
+      if(controller.talking) {
+        return;
+      }
+      if(!input.tea) {
+        if(logic_state.tea_countdown.player > 0) {
+          teaIsTooHot();
+        }
         return;
       }
       // logic_state.tea_countdown = 3;
@@ -1299,6 +1383,15 @@ var LogicLayer = cc.Layer.extend({
           input.duringEnd(true);
           controller.director.talk(true);
         });
+      }
+    }
+
+    controller.director.mountain = function () {
+      if(controller.talking) {
+        return;
+      }
+      if(!input.mountain) {
+        return;
       }
     }
 
