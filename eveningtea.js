@@ -15,7 +15,7 @@ var game_state = {
 
 var controller = {
   state: {
-    log_position: cc.p(170, 75),
+    log_position: cc.p(170, 75.5),
     log_width: 560,
     log_content_size: cc.size(560, 62)
   },
@@ -333,11 +333,11 @@ var UiLayer = cc.Layer.extend({
       } else if(target_size < 0) {
         target_size = 0;
       }
-      if(target_size >= 0.6 && target == UiHpPlayerSprite) {
+      if(target_size >= 0.8) {
         controller.input.switchState('mountain', true);
       }
-      target.runAction(cc.sequence(cc.blink(0.8, 4), cc.delayTime(0.5), cc.scaleTo(1.7, target_size, 1)));
-      target_back.runAction(cc.sequence(cc.blink(0.8, 4), cc.scaleTo(0.2, target_size, 1)));
+      target.runAction(cc.sequence(cc.blink(0.8, 4), cc.delayTime(0.3), cc.scaleTo(1.7, target_size, 1)));
+      target_back.runAction(cc.sequence(cc.blink(0.8, 4), cc.delayTime(0.3), cc.scaleTo(0.2, target_size, 1)));
     }
 
     var UiBossBullets = [];
@@ -930,8 +930,10 @@ var LogicLayer = cc.Layer.extend({
     var switchTeaPart = function (role, state) {
       if(state) {
         if(role == 'player') {
+          TeaPlayerPart.setLife(0.015 * state);
           TeaPlayerPart.setEmissionRate(state);
         } else {
+          TeaPlayerPart.setLife(0.015 * state);
           TeaBossPart.setEmissionRate(state);
         }
       } else {
@@ -1270,7 +1272,7 @@ var LogicLayer = cc.Layer.extend({
 
     textLineBreak = function (text) {
       var output = text;
-      for (var i = 90; i < output.length;) {
+      for (var i = 80; i < output.length;) {
         if( i < 0) {
           break;
         }
@@ -1280,7 +1282,7 @@ var LogicLayer = cc.Layer.extend({
         } else {
           console.log('yes', i);
           output = output.slice(0, i) + '\n' + output.slice(i+1, output.length);
-          i+=90;
+          i+=80;
         }
         console.log('out', output);
       };
