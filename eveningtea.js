@@ -1075,6 +1075,8 @@ var LogicLayer = cc.Layer.extend({
 
     var delay_point_reg = /\[delay[0-9]*\]/;
 
+    var mountain_delay = 100;
+
     typeWriter = function (label, typeCallback, intervalCallback) {
       var whole_str = label.string;
       // var talk_delta = 30 + Math.floor(Math.random() * 60);
@@ -1101,6 +1103,9 @@ var LogicLayer = cc.Layer.extend({
         }
         if(debug_speed_up) {
           delay = 10;
+        }
+        if(whole_str == '[Mountaining]') {
+          delay = mountain_delay;
         }
         // console.log(str_num, delay_points);
         return delay;
@@ -1395,6 +1400,17 @@ var LogicLayer = cc.Layer.extend({
       if(!input.mountain) {
         return;
       }
+      input.duringStart();
+      controller.director.next();
+      controller.director.log('[Mountaining]', 'player', function () {
+        controller.director.step_action();
+        controller.director.log('[Mountaining]', 'boss', function () {
+          controller.director.step_action();
+          mountain_delay = mountain_delay * 2;
+          input.duringEnd(true);
+          controller.director.talk();
+        });
+      });
     }
 
     var game_start_listener = cc.EventListener.create({
