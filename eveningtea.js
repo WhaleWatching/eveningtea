@@ -1119,6 +1119,7 @@ var LogicLayer = cc.Layer.extend({
         }
         if(whole_str == '[Mountaining]') {
           delay = mountain_delay;
+          // console.log('mountain delay');
         }
         // console.log(str_num, delay_points);
         return delay;
@@ -1337,7 +1338,7 @@ var LogicLayer = cc.Layer.extend({
       logic_state.current.dialogue = 0;
     }
 
-    controller.director.talk = function (force) {
+    controller.director.talk = function (force, mountain) {
       if((controller.talking || !input.talk) && !force) {
         console.log('Talk fail, talking: ', controller.talking, ', talk state: ', input.talk);
         return;
@@ -1377,14 +1378,19 @@ var LogicLayer = cc.Layer.extend({
         input.duringStart();
         controller.director.next();
         var popcorn_pick = Math.floor(Math.random()*logic.popcorn_pool.length);
-        controller.director.log(logic.popcorn_pool[popcorn_pick], 'player', function () {
-          setTimeout(function() {
-            drinkTea('boss', function () {
-              input.duringEnd(true);
-              controller.director.talk(true);
-            });
-          }, boss_delay);
-        });
+        if(!mountain) {
+          controller.director.log(logic.popcorn_pool[popcorn_pick], 'player', function () {
+            setTimeout(function() {
+              drinkTea('boss', function () {
+                input.duringEnd(true);
+                controller.director.talk(true);
+              });
+            }, boss_delay);
+          });
+        } else {
+          input.duringEnd(true);
+          controller.director.talk(true);
+        }
         // controller.director.tea(true);
       }
     }
@@ -1427,15 +1433,18 @@ var LogicLayer = cc.Layer.extend({
         return;
       }
       input.duringStart();
-      controller.director.next();
+      // controller.director.next();
       controller.director.log('[Mountaining]', 'player', function () {
+        logic_state.current.dialogue++;
         controller.director.step_action();
-        controller.director.log('[Mountaining]', 'boss', function () {
-          controller.director.step_action();
-          mountain_delay = mountain_delay * 2;
-          input.duringEnd(true);
-          controller.director.talk();
-        });
+        controller.director.talk(true, true);
+        mountain_delay = mountain_delay * 2;
+        // controller.director.log('[Mountaining]', 'boss', function () {
+        //   controller.director.step_action();
+        //   mountain_delay = mountain_delay * 2;
+        //   input.duringEnd(true);
+        //   controller.director.talk();
+        // });
       });
     }
 
