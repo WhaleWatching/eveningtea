@@ -1004,7 +1004,11 @@ var LogicLayer = cc.Layer.extend({
         return;
       }
       input.duringStart(true);
-      controller.director.log('[Tea is too hot]', 'player', function () {
+      var tea_string = '[The Tea is Still Mildly Hot]';
+      if(logic_state.tea_countdown.player >= 3) {
+        tea_string = '[The Tea is Buring Hot]';
+      }
+      controller.director.log(tea_string, 'player', function () {
         input.duringEnd(true);
         this._tea_is_too_hot = true;
       });
@@ -1279,13 +1283,13 @@ var LogicLayer = cc.Layer.extend({
           switchTeaPart('player', false);
         } else {
           input.switchState('tea', false);
-          switchTeaPart('player', logic_state.tea_countdown.player * 10);
+          switchTeaPart('player', logic_state.tea_countdown.player * 8);
         }
         logic_state.tea_countdown.boss --;
         if(logic_state.tea_countdown.boss < 1) {
           switchTeaPart('boss', false);
         } else {
-          switchTeaPart('boss', logic_state.tea_countdown.boss * 10);
+          switchTeaPart('boss', logic_state.tea_countdown.boss * 8);
         }
         console.log(logic_state.tea_countdown);
       }
