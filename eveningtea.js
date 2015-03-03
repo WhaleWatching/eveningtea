@@ -1291,7 +1291,7 @@ var LogicLayer = cc.Layer.extend({
         } else {
           switchTeaPart('boss', logic_state.tea_countdown.boss * 8);
         }
-        console.log(logic_state.tea_countdown);
+        console.log('Tea count down: ', logic_state.tea_countdown);
       }
       if(logic_state.current.block.start_block && logic_state.current.dialogue == logic_state.current.block.dialogues.length) {
         input.switchState('talk', false);
