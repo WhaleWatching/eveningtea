@@ -1006,7 +1006,7 @@ var LogicLayer = cc.Layer.extend({
           });
           sprite_tea_player.runAction(cc.sequence(animate_tea_player, cc.callFunc(function () {
             // input.duringEnd();
-            logic_state.tea_countdown.player = 4;
+            logic_state.tea_countdown.player = 5;
             controller.director.step_action();
             if(callback) {
               callback();
@@ -1024,7 +1024,7 @@ var LogicLayer = cc.Layer.extend({
             });
           sprite_tea_boss.runAction(cc.sequence(animate_tea_boss, cc.callFunc(function () {
             // input.duringEnd();
-            logic_state.tea_countdown.boss = 4;
+            logic_state.tea_countdown.boss = 5;
             controller.director.step_action();
             if(callback) {
               callback();
@@ -1041,7 +1041,7 @@ var LogicLayer = cc.Layer.extend({
             controller.director.hp('player', 'more');
           });
           sprite_tea_player.runAction(cc.sequence(animate_tea_player, cc.callFunc(function () {
-            logic_state.tea_countdown.player = 4;
+            logic_state.tea_countdown.player = 5;
             controller.director.step_action();
             drinkTea('boss', callback);
           })));
