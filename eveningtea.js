@@ -1,7 +1,20 @@
+var url_params = decodeURIComponent(window.location.search.slice(1))
+                      .split('&')
+                      .reduce(function _reduce (/*Object*/ a, /*String*/ b) {
+                        b = b.split('=');
+                        a[b[0]] = b[1];
+                        return a;
+                      }, {});
 
-var debug_scene = true;
+var debug_scene = false;
 
-var debug_speed_up = true;
+var debug_speed_up = false;
+
+if(url_params.debug == 'true') {
+  debug_scene = true;
+
+  debug_speed_up = true;
+}
 
 var debug_dialog = false;
 
