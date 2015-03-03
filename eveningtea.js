@@ -1179,8 +1179,10 @@ var LogicLayer = cc.Layer.extend({
         }
         if(0 == i) {
           label.attr({opacity: 255});
+          label.arraw_sprite.attr({opacity: 255});
         } else {
           label.attr({opacity: 128});
+          label.arraw_sprite.attr({opacity: 128});
         }
         var label_height = label.getContentSize().height / 2;
         offset += label_height;
@@ -1189,16 +1191,20 @@ var LogicLayer = cc.Layer.extend({
           if(label.move_action) {
             label.move_action.stop();
           }
+          label.arraw_sprite.attr({y:label_height*2-16});
           if(label.game_role == 'player') {
+            label.arraw_sprite.attr({x:controller.state.log_width * 2 + 10, rotation: 180});
             label.attr({x: controller.state.log_content_size.width - controller.state.log_width});
             label.move_action = label.runAction(cc.moveTo(0.2, cc.p(controller.state.log_content_size.width - controller.state.log_width, offset)));
           } else {
+            label.arraw_sprite.attr({x:-10});
             label.move_action = label.runAction(cc.moveTo(0.2, cc.p(0, offset)));
           }
         }
         label.should_offset = offset;
         if (offset > controller.state.log_content_size.height) {
           label.runAction(cc.fadeOut(0.2));
+          label.arraw_sprite.runAction(cc.fadeOut(0.2));
           log_labels[i] = false;
         }
       }
@@ -1245,6 +1251,13 @@ var LogicLayer = cc.Layer.extend({
         scale: 0.5,
         color: cc.color(255,255,255,255)
       });
+    
+      var ArrawSunsetSprite = new cc.Sprite(res.sprite_arraw);
+      ArrawSunsetSprite.texture.setAliasTexParameters();
+      ArrawSunsetSprite.attr({scale: 2});
+      label.addChild(ArrawSunsetSprite);
+      label.arraw_sprite = ArrawSunsetSprite;
+
       log_node.addChild(label);
       last_log = label;
       log_labels.unshift(label);
