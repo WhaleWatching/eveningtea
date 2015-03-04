@@ -903,7 +903,7 @@ var LogicLayer = cc.Layer.extend({
 
 
     var TeapotSprite = new cc.Sprite(res.sprite_teapot);
-    TeapotSprite.attr({x: 442, y: 219, opacity: 0});
+    TeapotSprite.attr({x: 436, y: 219, opacity: 0});
     TeapotSprite.texture.setAliasTexParameters();
     this.addChild(TeapotSprite, 1);
 
@@ -941,7 +941,7 @@ var LogicLayer = cc.Layer.extend({
     this.addChild(TeaBossPart);
 
     var switchTeaPart = function (role, state) {
-      if(state) {
+      if(state>0) {
         if(role == 'player') {
           TeaPlayerPart.setLife(0.015 * state);
           TeaPlayerPart.setEmissionRate(state);
@@ -957,6 +957,51 @@ var LogicLayer = cc.Layer.extend({
         }
       }
     }
+
+    // Tea fills boss
+    var frames_tea_left = [];
+    for (var i = 0; i < 14; i++) {
+      var sprite_frame = new cc.SpriteFrame(res.sprite_tea_left,cc.rect(0,51*i,110,51));
+      frames_tea_left.push(sprite_frame);
+    };
+    for (var i = 13; i >= 0; i--) {
+      var sprite_frame = new cc.SpriteFrame(res.sprite_tea_left,cc.rect(0,51*i,110,51));
+      frames_tea_left.push(sprite_frame);
+    };
+    var TeaLeftAnimation = new cc.Animation(frames_tea_left, 0.10);
+    TeaLeftAnimation._frames[14].setDelayUnits(10);
+    TeaLeftAnimation._totalDelayUnits += 9;
+    console.log('TeaLeftAnimation', TeaLeftAnimation);
+    var sprite_tea_left = new cc.Sprite(new cc.SpriteFrame(res.sprite_tea_left,cc.rect(0,0,110,51)));
+    sprite_tea_left.texture.setAliasTexParameters();
+    sprite_tea_left.attr({x:415,y:223,opacity: 255});
+    this.addChild(sprite_tea_left, 1);
+    animate_tea_player = cc.animate(TeaLeftAnimation);
+    sprite_tea_left.runAction(cc.repeatForever( cc.animate(TeaLeftAnimation)));
+
+    // Tea fills player
+    var frames_tea_right = [];
+    for (var i = 0; i < 17; i++) {
+      var sprite_frame = new cc.SpriteFrame(res.sprite_tea_right,cc.rect(0,53*i,126,53));
+      frames_tea_right.push(sprite_frame);
+    };
+    for (var i = 16; i >= 0; i--) {
+      var sprite_frame = new cc.SpriteFrame(res.sprite_tea_right,cc.rect(0,53*i,126,53));
+      frames_tea_right.push(sprite_frame);
+    };
+    var TeaRightAnimation = new cc.Animation(frames_tea_right, 0.10);
+    TeaRightAnimation._frames[17].setDelayUnits(10);
+    TeaRightAnimation._totalDelayUnits += 9;
+    console.log('TeaRightAnimation', TeaRightAnimation);
+    var sprite_tea_right = new cc.Sprite(new cc.SpriteFrame(res.sprite_tea_right,cc.rect(0,0,126,53)));
+    sprite_tea_right.texture.setAliasTexParameters();
+    sprite_tea_right.attr({x:465,y:224,opacity: 255});
+    this.addChild(sprite_tea_right, 1);
+    animate_tea_player = cc.animate(TeaRightAnimation);
+    sprite_tea_right.runAction(cc.repeatForever( cc.animate(TeaRightAnimation)));
+
+
+
 
     var frames_tea_player = [];
     for (var i = 0; i < 13; i++) {
@@ -1224,7 +1269,11 @@ var LogicLayer = cc.Layer.extend({
         player: 0,
         boss: 0
       },
-      step: 0
+      step: 0,
+      filling_tea: {
+        player: false,
+        boss: false
+      }
     };
 
     if(debug_speed_up) {
@@ -1274,23 +1323,51 @@ var LogicLayer = cc.Layer.extend({
       log_update();
     }
 
+    updateTeaPart = function () {
+      if(!logic_state.filling_tea.player) {
+        switchTeaPart('player', logic_state.tea_countdown.player * 8);
+      }
+      if(!logic_state.filling_tea.boss) {
+        switchTeaPart('boss', logic_state.tea_countdown.boss * 8);
+      }
+    }
+
+    fillTeaPart = function (role) {
+      logic_state.filling_tea[role] = true;
+      var countdown = logic_state.tea_countdown[role];
+      var current = 0;
+      var fillInter = function () {
+        if(countdown < current) {
+          switchTeaPart(role, current * 8);
+          current+=1;
+          setTimeout(function() {
+            fillInter();
+          }, 150);
+        } else {
+          logic_state.filling_tea[role] = false;
+        }
+      }
+      fillInter();
+    }
+
     controller.director.step_action = function () {
       logic_state.step ++;
       if(!logic_state.current.block.start_block || (logic_state.current.block.start_block && logic_state.current.dialogue == logic_state.current.block.dialogues.length) ) {
         logic_state.tea_countdown.player --;
         if(logic_state.tea_countdown.player < 1) {
           input.switchState('tea', true);
-          switchTeaPart('player', false);
+          // switchTeaPart('player', false);
         } else {
           input.switchState('tea', false);
-          switchTeaPart('player', logic_state.tea_countdown.player * 8);
+          // switchTeaPart('player', logic_state.tea_countdown.player * 8);
         }
         logic_state.tea_countdown.boss --;
-        if(logic_state.tea_countdown.boss < 1) {
-          switchTeaPart('boss', false);
-        } else {
-          switchTeaPart('boss', logic_state.tea_countdown.boss * 8);
-        }
+        // if(logic_state.tea_countdown.boss < 1) {
+        //   switchTeaPart('boss', false);
+        // } else {
+        //   switchTeaPart('boss', logic_state.tea_countdown.boss * 8);
+        // }
+        updateTeaPart();
         console.log('Tea count down: ', logic_state.tea_countdown);
       }
       if(logic_state.current.block.start_block && logic_state.current.dialogue == logic_state.current.block.dialogues.length) {

@@ -20,6 +20,8 @@ var res = {
 	sprite_katana: 'res/sprite/katana.png',
 	sprite_table: 'res/sprite/table.png',
 	sprite_teapot: 'res/sprite/teapot.png',
+	sprite_tea_right: 'res/sprite/TeaRight.png',
+	sprite_tea_left: 'res/sprite/TeaLeft.png',
 	sprite_press_bg: 'res/sprite/press_bg.png',
 	sprite_fire: 'res/sprite/fire.png',
 	sprite_weapon2: 'res/sprite/weapon2.png',
