@@ -483,11 +483,11 @@ var SunlightLayer = cc.Layer.extend({
     sprite_sunlight.setBlendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
     sprite_sunlight.attr({x:390,y:200});
     var sunlight_animation = function () {
-      var light = 215 + 20 * Math.random();
+      var light = 128 + 127 * Math.random();
       // console.log(light);
       this.runAction(
         cc.sequence(
-          cc.fadeTo(0.4,light),cc.delayTime(0.8),
+          cc.fadeTo(0.4 + 2 * Math.random(),light),cc.delayTime(0.1 + 5 * Math.random()),
           cc.callFunc(sunlight_animation, this))
       );
     };
@@ -729,11 +729,6 @@ var IdleLayer = cc.Layer.extend({
     self = this;
     this._super();
 
-    // var TeapotSprite = new cc.Sprite(res.sprite_teapot);
-    // TeapotSprite.attr({x: 442, y: 219, opacity: 0});
-    // TeapotSprite.texture.setAliasTexParameters();
-    // this.addChild(TeapotSprite, 1);
-
     var frames_player = [];
     for (var i = 0; i < 12; i++) {
       var sprite_frame = new cc.SpriteFrame(res.sprite_player,cc.rect(i*165,0,165,223));
@@ -974,10 +969,10 @@ var LogicLayer = cc.Layer.extend({
     console.log('TeaLeftAnimation', TeaLeftAnimation);
     var sprite_tea_left = new cc.Sprite(new cc.SpriteFrame(res.sprite_tea_left,cc.rect(0,0,110,51)));
     sprite_tea_left.texture.setAliasTexParameters();
-    sprite_tea_left.attr({x:415,y:223,opacity: 255});
+    sprite_tea_left.attr({x:415,y:223,opacity: 0});
     this.addChild(sprite_tea_left, 1);
     animate_tea_player = cc.animate(TeaLeftAnimation);
-    sprite_tea_left.runAction(cc.repeatForever( cc.animate(TeaLeftAnimation)));
+    // sprite_tea_left.runAction(cc.repeatForever( cc.animate(TeaLeftAnimation)));
 
     // Tea fills player
     var frames_tea_right = [];
@@ -995,11 +990,54 @@ var LogicLayer = cc.Layer.extend({
     console.log('TeaRightAnimation', TeaRightAnimation);
     var sprite_tea_right = new cc.Sprite(new cc.SpriteFrame(res.sprite_tea_right,cc.rect(0,0,126,53)));
     sprite_tea_right.texture.setAliasTexParameters();
-    sprite_tea_right.attr({x:465,y:224,opacity: 255});
+    sprite_tea_right.attr({x:465,y:224,opacity: 0});
     this.addChild(sprite_tea_right, 1);
     animate_tea_player = cc.animate(TeaRightAnimation);
-    sprite_tea_right.runAction(cc.repeatForever( cc.animate(TeaRightAnimation)));
+    // sprite_tea_right.runAction(cc.repeatForever( cc.animate(TeaRightAnimation)));
 
+    var tea_filling = false;
+    var tea_filling_queue = false;
+    controller.director.fill = function (role) {
+      if(tea_filling) {
+        logic_state.filling_tea[role] = true;
+        tea_filling_queue = role;
+        return;
+      }
+      TeapotSprite.attr({opacity: 0});
+      var finish = function () {
+        TeapotSprite.attr({opacity: 255});
+        if(tea_filling_queue) {
+          controller.director.fill(tea_filling_queue);
+          tea_filling_queue = false;
+        }
+      }
+      if(role == 'player') {
+        tea_filling = true;
+        logic_state.filling_tea.player = true;
+        sprite_tea_right.attr({opacity:255});
+        sprite_tea_right.runAction(cc.sequence(cc.animate(TeaRightAnimation),cc.callFunc(function () {
+          tea_filling = false;
+          sprite_tea_right.attr({opacity:0});
+          logic_state.filling_tea.player = false;
+          finish();
+        })));
+        setTimeout(function() {
+          fillTeaPart('player');
+        }, 1700);
+      } else {
+        logic_state.filling_tea.boss = true;
+        sprite_tea_left.attr({opacity:255});
+        sprite_tea_left.runAction(cc.sequence(cc.animate(TeaLeftAnimation),cc.callFunc(function () {
+          tea_filling = false;
+          sprite_tea_left.attr({opacity:0});
+          logic_state.filling_tea.boss = false;
+          finish();
+        })));
+        setTimeout(function() {
+          fillTeaPart('boss');
+        }, 1400);
+      }
+    }
 
 
 
@@ -1068,6 +1106,7 @@ var LogicLayer = cc.Layer.extend({
           });
           sprite_tea_player.runAction(cc.sequence(animate_tea_player, cc.callFunc(function () {
             // input.duringEnd();
+            controller.director.fill('player');
             logic_state.tea_countdown.player = 5;
             controller.director.step_action();
             if(callback) {
@@ -1086,6 +1125,7 @@ var LogicLayer = cc.Layer.extend({
             });
           sprite_tea_boss.runAction(cc.sequence(animate_tea_boss, cc.callFunc(function () {
             // input.duringEnd();
+            controller.director.fill('boss');
             logic_state.tea_countdown.boss = 5;
             controller.director.step_action();
             if(callback) {
@@ -1104,6 +1144,7 @@ var LogicLayer = cc.Layer.extend({
           });
           sprite_tea_player.runAction(cc.sequence(animate_tea_player, cc.callFunc(function () {
             logic_state.tea_countdown.player = 5;
+            controller.director.fill('player');
             controller.director.step_action();
             drinkTea('boss', callback);
           })));
@@ -1333,22 +1374,24 @@ var LogicLayer = cc.Layer.extend({
     }
 
     fillTeaPart = function (role) {
-      logic_state.filling_tea[role] = true;
+      // logic_state.filling_tea[role] = true;
       var countdown = logic_state.tea_countdown[role];
       var current = 0;
       var fillInter = function () {
-        if(countdown < current) {
+        console.log('current',current,'countdown',countdown);
+        if(countdown > current) {
           switchTeaPart(role, current * 8);
           current+=1;
           setTimeout(function() {
             fillInter();
-          }, 150);
+          }, 300);
         } else {
-          logic_state.filling_tea[role] = false;
+          // logic_state.filling_tea[role] = false;
         }
       }
       fillInter();
     }
+    controller.fill_tea_part = fillTeaPart;
 
     controller.director.step_action = function () {
       logic_state.step ++;
