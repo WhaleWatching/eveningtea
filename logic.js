@@ -4,6 +4,15 @@
     popcorn_pool: []
   };
 
+  logic.tea_fog_size = 8;
+
+  logic.messages = {
+    tea_still_hot: '[The tea is boiling hot]',
+    tea_too_hot: '[The tea is still too hot]',
+    mountain: '[Mountaining]',
+    drinking: '[Drinking tea]'
+  };
+
   logic.popcorn_pool = [
     "Yes, I agree",
     "You’re right",

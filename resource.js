@@ -24,6 +24,7 @@ var res = {
 	sprite_tea_left: 'res/sprite/TeaLeft.png',
 	sprite_press_bg: 'res/sprite/press_bg.png',
 	sprite_fire: 'res/sprite/fire.png',
+	sprite_ammo: 'res/sprite/ammo.png',
 	sprite_weapon2: 'res/sprite/weapon2.png',
 	sprite_spear: 'res/sprite/spear.png',
 	sprite_player: 'res/sprite/player.png',
