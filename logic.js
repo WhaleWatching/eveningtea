@@ -243,6 +243,20 @@
       {role: 'boss', text: 'True,[delay650] we all got our roles to play'}
     ]
   });
+  // 21
+  logic.random_pool.push({
+    dialogues: [
+      {role: 'boss', text: 'Are you still there?'},
+      {role: 'player', text: 'The answer is obviously visible to you'},
+      {role: 'boss', text: 'By saying so,[delay400] my actual subtext is:[delay600] "Are[delay350] you[delay350] paying[delay350] attention?"'},
+      {role: 'player', text: 'What do you want me to do, [delay550]boss?'},
+      {role: 'boss', text: 'I hope you can pay more attention [delay250]to what I am saying, [delay450] instead of solely deciding your next move'},
+      {role: 'player', text: 'You wouldn\'t even say this line if it wasn\'t my decision, [delay500]so what\'s this for?'},
+      {role: 'boss', text: 'For not wasting the tea, [delay600]for getting a better outcome out of this'},
+      {role: 'player', text: 'What outcome?'},
+      {role: 'boss', text: 'That\'s what we\'re trying to find out'}
+    ]
+  });
 
 
   global.logic = logic;

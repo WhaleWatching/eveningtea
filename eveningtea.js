@@ -513,11 +513,11 @@ var SunlightLayer = cc.Layer.extend({
     sprite_sunlight.setBlendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
     sprite_sunlight.attr({x:390,y:200});
     var sunlight_animation = function () {
-      var light = 128 + 127 * Math.random();
+      var light = 160 + 95 * Math.random();
       // console.log(light);
       this.runAction(
         cc.sequence(
-          cc.fadeTo(0.4 + 2 * Math.random(),light),cc.delayTime(0.1 + 5 * Math.random()),
+          cc.fadeTo(0.1 + 0.4 * Math.random(),light),cc.delayTime(0.1 + 0.1 * Math.random()),
           cc.callFunc(sunlight_animation, this))
       );
     };
@@ -943,6 +943,7 @@ var LogicLayer = cc.Layer.extend({
     controller.director.end = function () {
       game_state.state = 3;
       game_state.end = true;
+      clearFill();
       log_clear();
       input.end();
       sprite_ammo.attr({opacity:255});
@@ -998,9 +999,11 @@ var LogicLayer = cc.Layer.extend({
         if(role == 'player') {
           TeaPlayerPart.setLife(0.1 + state * 0.15);
           TeaPlayerPart.setEmissionRate(5 + state * logic.tea_fog_size);
+          console.log('player EmissionRate', 5 + state * logic.tea_fog_size);
         } else {
           TeaPlayerPart.setLife(0.1 + state * 0.15);
           TeaBossPart.setEmissionRate(5 + state * logic.tea_fog_size);
+          console.log('boss EmissionRate', 10 + state * logic.tea_fog_size);
         }
       } else {
         if(role == 'player') {
@@ -1052,6 +1055,12 @@ var LogicLayer = cc.Layer.extend({
     this.addChild(sprite_tea_right, 1);
     animate_tea_player = cc.animate(TeaRightAnimation);
     // sprite_tea_right.runAction(cc.repeatForever( cc.animate(TeaRightAnimation)));
+
+    clearFill = function () {
+      TeapotSprite.attr({opacity: 255});
+      sprite_tea_right.attr({opacity:0});
+      sprite_tea_left.attr({opacity:0});
+    }
 
     var tea_filling = false;
     var tea_filling_queue = false;
@@ -1337,6 +1346,9 @@ var LogicLayer = cc.Layer.extend({
     var log_labels = [];
 
     var log_update = function () {
+      if(game_state.end) {
+        log_clear();
+      }
       var offset = 0;
       for (var i = 0; i < log_labels.length; i++) {
         var label = log_labels[i];
@@ -1465,7 +1477,7 @@ var LogicLayer = cc.Layer.extend({
       var countdown = logic_state.tea_countdown[role];
       var current = 0;
       var fillInter = function () {
-        console.log('current',current,'countdown',countdown);
+        // console.log('current',current,'countdown',countdown);
         if(countdown > current) {
           switchTeaPart(role, current);
           current+=1;
@@ -1593,9 +1605,20 @@ var LogicLayer = cc.Layer.extend({
           }
           if(current_dialogue.total_listen) {
             var target_label = this;
-            setInterval(function () {
-              target_label.string = textPre(original_text.replace(/\[delay[0-9]*\]/g, ''));
-            }, 1000);
+            var delay = 4;
+            var callback = function () {
+              delay = Math.floor(delay * 1.4);
+              if(delay > 1000) {
+                delay = 1000;
+              }
+              if(delay !== 1000) {
+                target_label.string = original_text.replace(/\[delay[0-9]*\]/g, '').replace('{{total_seconds}}', Math.floor(18 + Math.random() * 120));
+              } else {
+                target_label.string = textPre(original_text.replace(/\[delay[0-9]*\]/g, ''));
+              }
+              setTimeout(callback, delay);
+            }
+            callback();
           }
         });
         logic_state.current.dialogue++;
