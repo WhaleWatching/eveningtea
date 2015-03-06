@@ -1535,7 +1535,7 @@ var LogicLayer = cc.Layer.extend({
     var random_log = '';
 
     controller.director.next = function () {
-      if(controller.director.isFullHp()) {
+      if(controller.director.isFullHp() && Math.random() > 0.7) {
         controller.director.end();
         return;
       }
