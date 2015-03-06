@@ -20,6 +20,7 @@ var debug_dialog = false;
 
 var game_state = {
   state: 0,
+  end: false,
   role: {
     speed: 0,
     vector: 0
@@ -167,7 +168,7 @@ var PressstartLayer = cc.Layer.extend({
     cc.eventManager.addListener({
       event: cc.EventListener.KEYBOARD,
       onKeyPressed: function (key) {
-        if(88 === key && is_gone != true && game_state == 0) {
+        if(88 === key && is_gone != true && game_state.state == 0) {
           is_gone = true;
           // self.runAction(cc.sequence(cc.fadeOut(2), cc.callFunc(function () {
           //   this.parent.removeChild(this);
@@ -888,6 +889,11 @@ var LogicLayer = cc.Layer.extend({
           input.sprite_ui_tea.blink_action.stop();
         }
         input.sprite_ui_tea.blink_action = input.sprite_ui_tea.runAction(cc.blink(0.6, 3));
+      },
+      end: function () {
+        input.sprite_ui_tea.runAction(cc.fadeOut(0.1));
+        input.sprite_ui_talk.runAction(cc.fadeOut(0.1));
+        input.sprite_ui_mountain.runAction(cc.fadeOut(0.1));
       }
     };
     controller.input = input;
@@ -931,13 +937,16 @@ var LogicLayer = cc.Layer.extend({
     console.log('AmmoAnimation', AmmoAnimation);
     var sprite_ammo = new cc.Sprite(new cc.SpriteFrame(res.sprite_ammo,cc.rect(0,0,185,200)));
     sprite_ammo.texture.setAliasTexParameters();
-    sprite_ammo.attr({x:442,y:300,opacity:0});
-    this.addChild(sprite_ammo, 1);
+    sprite_ammo.attr({x:438,y:300,opacity:0});
+    this.addChild(sprite_ammo, 10);
 
     controller.director.end = function () {
       game_state.state = 3;
+      game_state.end = true;
+      log_clear();
+      input.end();
       sprite_ammo.attr({opacity:255});
-      sprite_ammo.runAction(cc.sequence(cc.animate(AmmoAnimation),cc.callFunc(function () {
+      sprite_ammo.runAction(cc.sequence(cc.animate(AmmoAnimation), cc.delayTime(1.5),cc.callFunc(function () {
         controller.director.pressstartEnd();
       })));
     }
@@ -1047,6 +1056,9 @@ var LogicLayer = cc.Layer.extend({
     var tea_filling = false;
     var tea_filling_queue = false;
     controller.director.fill = function (role) {
+      if(game_state.end) {
+        return;
+      }
       if(tea_filling) {
         logic_state.filling_tea[role] = true;
         tea_filling_queue = role;
@@ -1147,6 +1159,9 @@ var LogicLayer = cc.Layer.extend({
     }
 
     var drinkTea = function (role, callback) {
+      if(game_state.end) {
+        return;
+      }
       // input.duringStart();
       if(role == 'player') {
         if(logic_state.tea_countdown.player < 1) {
@@ -1361,6 +1376,18 @@ var LogicLayer = cc.Layer.extend({
       }
     }
 
+    log_clear = function () {
+      for (var i = 0; i < log_labels.length; i++) {
+        var label = log_labels[i];
+        if(label == false) {
+          continue;
+        }
+        label.runAction(cc.fadeOut(0.2));
+        label.arraw_sprite.runAction(cc.fadeOut(0.2));
+        log_labels[i] = false;
+      }
+    }
+
     var logic_state = {
       current: {
         block: logic['start_block'],
@@ -1527,6 +1554,9 @@ var LogicLayer = cc.Layer.extend({
     }
 
     controller.director.talk = function (force, mountain) {
+      if(game_state.end) {
+        return;
+      }
       if((controller.talking || !input.talk) && !force) {
         console.log('Talk fail, talking: ', controller.talking, ', talk state: ', input.talk);
         return;
