@@ -747,7 +747,7 @@ var GroundLayer = cc.Layer.extend({
         y: 0
       };
       this.life = 0;
-      this.sprite = new cc.Sprite(res.sprite_light);
+      this.sprite = new cc.Sprite(res.sprite_light_fire);
       parent.addChild(this.sprite);
       this.opacity = 1;
       this.current_life = 0;
@@ -756,18 +756,18 @@ var GroundLayer = cc.Layer.extend({
       }
       this.reset = function () {
         // console.log(this);
-        this.sprite.attr({opacity: 255, scale: 2});
-        this.life = randomRange(2, 8);
+        this.sprite.attr({opacity: 255, color: cc.color(255,206,49)});
+        this.life = randomRange(1, 4);
         this.current_life = 0;
-        this.location.x = randomRange(this.start_location.x - 8, this.start_location.x + 8);
+        this.location.x = randomRange(this.start_location.x - 20, this.start_location.x + 20);
         this.location.y = randomRange(this.start_location.y - 8, this.start_location.y + 8);
         this.speed = {
-          x: randomRange(-8, 8, true),
-          y: randomRange(40, 160, true)
+          x: randomRange(-20, 20, true),
+          y: randomRange(40, 80, true)
         };
         this.vector = {
-          x: randomRange(5, 8, true),
-          y: randomRange(-10, -6, true)
+          x: randomRange(10, 20, true),
+          y: randomRange(-20, -8, true)
         };
         this.apply();
         this.color();
@@ -778,7 +778,7 @@ var GroundLayer = cc.Layer.extend({
           this.reset();
           return;
         }
-        this.sprite.runAction(cc.sequence(cc.fadeTo(randomRange(0.1, 0.3),255 * this.opacity), cc.delayTime(randomRange(0.1, 0.3)), cc.fadeOut(randomRange(0.1, 0.3)), cc.callFunc(function () {
+        this.sprite.runAction(cc.sequence(cc.fadeTo(randomRange(0.1, 0.3),255 * this.opacity), cc.delayTime(randomRange(0.1, 0.3)), cc.fadeTo(randomRange(0.1, 0.3), 0.2 * this.opacity), cc.callFunc(function () {
           this.color();
         }, this)));
       }
@@ -799,9 +799,9 @@ var GroundLayer = cc.Layer.extend({
       var lights = [];
       var lights_container = new cc.Node();
       lights_container.attr({x:0, y:0});
-      self.addChild(lights_container);
+      self.addChild(lights_container, 5);
       for (var i = 0; i < 20; i++) {
-        lights.push(new Light(372, 64, lights_container));
+        lights.push(new Light(681, 139, lights_container));
       }
       console.log('lights_container', lights_container);
       console.log('lights', lights);

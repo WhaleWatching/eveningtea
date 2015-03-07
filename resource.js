@@ -14,6 +14,7 @@ var res = {
 	sprite_ui_bullet: 'res/sprite/bullet.png',
 	sprite_role: 'res/sprite/role.png',
 	sprite_light: 'res/sprite/light.png',
+	sprite_light_fire: 'res/sprite/light_fire.png',
 	sprite_fire: 'res/sprite/fire.png',
 	sprite_grass: 'res/sprite/grass.png',
 	sprite_weapon1: 'res/sprite/weapon1.png',
