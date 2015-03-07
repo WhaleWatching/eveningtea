@@ -1253,7 +1253,7 @@ var LogicLayer = cc.Layer.extend({
     SmokePart1.setEndColor(cc.color(0, 0, 0, 0));
     SmokePart1.setEndColorVar(cc.color(0, 0, 0, 0));
     SmokePart1.setEmissionRate(100);
-    SmokePart1.setPosVar(cc.p(15, 0));
+    SmokePart1.setPosVar(cc.p(8, 0));
     SmokePart1.setLife(1.2);
     SmokePart1.setSpeed(40);
     SmokePart1.setSpeedVar(10);
@@ -1264,7 +1264,7 @@ var LogicLayer = cc.Layer.extend({
     SmokePart1.setTotalParticles(200);
     // SmokePart1.setAngleVar(10);
     // SmokePart1.setBlendFunc(gl.SRC_ALPHA, gl.ONE);
-    SmokePart1.attr({x: 680, y: 136});
+    SmokePart1.attr({x: 680, y: 136, scaleX: 2});
     console.log(SmokePart1);
     this.addChild(SmokePart1);
 
@@ -1275,7 +1275,7 @@ var LogicLayer = cc.Layer.extend({
     SmokePart2.setEndColor(cc.color(0, 0, 0, 0));
     SmokePart2.setEndColorVar(cc.color(0, 0, 0, 0));
     SmokePart2.setEmissionRate(100);
-    SmokePart2.setPosVar(cc.p(15, 0));
+    SmokePart2.setPosVar(cc.p(8, 0));
     SmokePart2.setLife(1.7);
     SmokePart2.setSpeed(40);
     SmokePart2.setSpeedVar(10);
@@ -1286,7 +1286,7 @@ var LogicLayer = cc.Layer.extend({
     SmokePart2.setTotalParticles(200);
     // SmokePart2.setAngleVar(10);
     // SmokePart2.setBlendFunc(gl.SRC_ALPHA, gl.ONE);
-    SmokePart2.attr({x: 733, y: 136});
+    SmokePart2.attr({x: 733, y: 136, scaleX: 2});
     console.log(SmokePart2);
     this.addChild(SmokePart2);
 
@@ -1297,7 +1297,7 @@ var LogicLayer = cc.Layer.extend({
     SmokePart3.setEndColor(cc.color(0, 0, 0, 0));
     SmokePart3.setEndColorVar(cc.color(0, 0, 0, 0));
     SmokePart3.setEmissionRate(50);
-    SmokePart3.setPosVar(cc.p(10, 0));
+    SmokePart3.setPosVar(cc.p(5, 0));
     SmokePart3.setLife(0.9);
     SmokePart3.setSpeed(40);
     SmokePart3.setSpeedVar(10);
@@ -1308,7 +1308,7 @@ var LogicLayer = cc.Layer.extend({
     SmokePart3.setTotalParticles(200);
     // SmokePart3.setAngleVar(10);
     // SmokePart3.setBlendFunc(gl.SRC_ALPHA, gl.ONE);
-    SmokePart3.attr({x: 779, y: 136});
+    SmokePart3.attr({x: 779, y: 136, scaleX: 2});
     console.log(SmokePart3);
     this.addChild(SmokePart3);
 
@@ -1325,7 +1325,9 @@ var LogicLayer = cc.Layer.extend({
 
     var delay_point_reg = /\[delay[0-9]*\]/;
 
-    var mountain_delay = 100;
+    var mountain_delay = 1;
+
+    var next_mountain = false;
 
     typeWriter = function (label, typeCallback, intervalCallback) {
       var whole_str = label.string;
@@ -1351,15 +1353,19 @@ var LogicLayer = cc.Layer.extend({
           delay = delay_points[0].delay;
           delay_points.shift();
         }
-        if(debug_speed_up) {
+        if(debug_speed_up && !next_mountain) {
           delay = 10;
         }
-        if(whole_str == logic.messages.mountain) {
-          delay = mountain_delay;
+        // if(whole_str == logic.messages.mountain) {
+        //   delay = mountain_delay;
+        //   // console.log('mountain delay');
+        // }
+        if(next_mountain) {
+          delay = delay * mountain_delay;
           // console.log('mountain delay');
         }
         if(isMessage(whole_str)) {
-          delay = 10;
+          delay = 20;
         }
         // console.log(str_num, delay_points);
         return delay;
@@ -1382,6 +1388,11 @@ var LogicLayer = cc.Layer.extend({
             intervalCallback.call(label);
           }
         } else if(typeCallback) {
+          if(whole_str == logic.messages.mountain) {
+            next_mountain = true;
+          } else {
+            next_mountain = false;
+          }
           label.string = whole_str;
           typeCallback.call(label);
         }
@@ -1752,7 +1763,7 @@ var LogicLayer = cc.Layer.extend({
         logic_state.current.dialogue++;
         controller.director.step_action();
         controller.director.talk(true, true);
-        mountain_delay = mountain_delay * 2;
+        mountain_delay = mountain_delay * 1.5;
         // controller.director.log('[Mountaining]', 'boss', function () {
         //   controller.director.step_action();
         //   mountain_delay = mountain_delay * 2;
