@@ -1682,11 +1682,15 @@ var LogicLayer = cc.Layer.extend({
           }
           if(current_dialogue.total_listen) {
             var target_label = this;
+            var count = 0;
             var delay = 4;
             var callback = function () {
               delay = Math.floor(delay * 1.4);
-              if(delay > 1000) {
+              if(count > 10) {
                 delay = 1000;
+              } else {
+                count ++;
+                delay = 10 + Math.floor(Math.random() * 100);
               }
               if(delay !== 1000) {
                 target_label.string = original_text.replace(/\[delay[0-9]*\]/g, '').replace('{{total_seconds}}', Math.floor(18 + Math.random() * 120));
