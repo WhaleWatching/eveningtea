@@ -18,6 +18,14 @@ if(url_params.debug == 'true') {
 
 var debug_dialog = false;
 
+var randomRange = function (start, end, floored) {
+  if(floored) {
+    return Math.floor(start + Math.random() * (end - start));
+  } else {
+    return start + Math.random() * (end - start);
+  }
+}
+
 var game_state = {
   state: 0,
   end: false,
@@ -517,7 +525,7 @@ var SunlightLayer = cc.Layer.extend({
       // console.log(light);
       this.runAction(
         cc.sequence(
-          cc.fadeTo(0.1 + 0.4 * Math.random(),light),cc.delayTime(0.1 + 0.1 * Math.random()),
+          cc.fadeTo(0.1 + 0.4 * Math.random(),light),cc.delayTime(0.4 + 0.8 * Math.random()),
           cc.callFunc(sunlight_animation, this))
       );
     };
@@ -679,6 +687,7 @@ var GroundLayer = cc.Layer.extend({
   ctor: function () {
     self = this;
     this._super();
+    this.scheduleUpdate();
 
     var GrassSprite = new cc.Sprite(res.sprite_grass);
     GrassSprite.attr({x: 451, y: 159});
@@ -717,6 +726,96 @@ var GroundLayer = cc.Layer.extend({
     this.addChild(sprite_fire, 1);
     sprite_fire.runAction(cc.repeatForever( cc.animate(FireAnimation)));
 
+
+
+    var Light = function (x, y, parent) {
+      var self = this;
+      this.start_location = {
+        x: x,
+        y: y
+      };
+      this.location = {
+        x: 0,
+        y: 0
+      };
+      this.speed = {
+        x: 0,
+        y: 0
+      };
+      this.vector = {
+        x: 0,
+        y: 0
+      };
+      this.life = 0;
+      this.sprite = new cc.Sprite(res.sprite_light);
+      parent.addChild(this.sprite);
+      this.opacity = 1;
+      this.current_life = 0;
+      this.apply = function () {
+        this.sprite.attr({x: this.location.x, y: this.location.y});
+      }
+      this.reset = function () {
+        // console.log(this);
+        this.sprite.attr({opacity: 255, scale: 2});
+        this.life = randomRange(2, 8);
+        this.current_life = 0;
+        this.location.x = randomRange(this.start_location.x - 8, this.start_location.x + 8);
+        this.location.y = randomRange(this.start_location.y - 8, this.start_location.y + 8);
+        this.speed = {
+          x: randomRange(-8, 8, true),
+          y: randomRange(40, 160, true)
+        };
+        this.vector = {
+          x: randomRange(5, 8, true),
+          y: randomRange(-10, -6, true)
+        };
+        this.apply();
+        this.color();
+      }
+      this.color = function () {
+        this.opacity = (this.life - this.current_life) / this.life;
+        if(this.opacity < 0) {
+          this.reset();
+          return;
+        }
+        this.sprite.runAction(cc.sequence(cc.fadeTo(randomRange(0.1, 0.3),255 * this.opacity), cc.delayTime(randomRange(0.1, 0.3)), cc.fadeOut(randomRange(0.1, 0.3)), cc.callFunc(function () {
+          this.color();
+        }, this)));
+      }
+      this.update = function (delta) {
+        this.current_life += delta;
+        this.speed.x += this.vector.x * delta;
+        this.speed.y += this.vector.y * delta;
+        this.location.x += this.speed.x * delta;
+        this.location.y += this.speed.y * delta;
+        this.apply();
+      }
+      setTimeout(function() {
+        self.reset();
+      }, randomRange(0, 1000, true));
+    }
+
+    var fireLights = function () {
+      var lights = [];
+      var lights_container = new cc.Node();
+      lights_container.attr({x:0, y:0});
+      self.addChild(lights_container);
+      for (var i = 0; i < 20; i++) {
+        lights.push(new Light(372, 64, lights_container));
+      }
+      console.log('lights_container', lights_container);
+      console.log('lights', lights);
+      return lights;
+    }
+
+    this.lights = fireLights();
+
+    this.fireLightUpdate = function (delta) {
+      this.lights.forEach(function (light) {
+        light.update(delta);
+      });
+    }
+
     var frames_katana = [];
     for (var i = 0; i < 4; i++) {
       var sprite_frame = new cc.SpriteFrame(res.sprite_katana,cc.rect(i*76,0,76,185));
@@ -750,6 +849,9 @@ var GroundLayer = cc.Layer.extend({
     sprite_spear.runAction(cc.repeatForever( cc.animate(SpearAnimation)));
 
     return true;
+  },
+  update: function (delta) {
+    this.fireLightUpdate(delta);
   }
 });
 
@@ -1228,25 +1330,6 @@ var LogicLayer = cc.Layer.extend({
     }
 
 
-
-
-    var frames_fire = [];
-    for (var i = 0; i < 8; i++) {
-      var sprite_frame = new cc.SpriteFrame(res.sprite_fire,cc.rect(0,i*148,227,148));
-      frames_fire.push(sprite_frame);
-    };
-    var FireAnimation = new cc.Animation(frames_fire, 0.13);
-    console.log('FireAnimation', FireAnimation);
-    var sprite_fire = new cc.Sprite(new cc.SpriteFrame(res.sprite_fire,cc.rect(0,0,227,148)));
-    sprite_fire.texture.setAliasTexParameters();
-    sprite_fire.attr({x:725,y:151});
-    // sprite_fire.setBlendFunc(gl.DST_COLOR, gl.ONE_MINUS_SRC_ALPHA);
-    // sprite_fire.setBlendFunc(gl.ONE_MINUS_DST_COLOR, gl.ONE);
-    // sprite_fire.setBlendFunc(gl.ONE, gl.ONE);
-    this.addChild(sprite_fire, 1);
-    sprite_fire.runAction(cc.repeatForever( cc.animate(FireAnimation)));
-
-
     // var SmokePart1 = new cc.ParticleSystem(res.p_tea);
     // SmokePart1.setStartColor(cc.color(0, 0, 0, 200));
     // SmokePart1.setStartColorVar(cc.color(0, 0, 0, 50));
@@ -1686,7 +1769,7 @@ var LogicLayer = cc.Layer.extend({
             var delay = 4;
             var callback = function () {
               delay = Math.floor(delay * 1.4);
-              if(count > 10) {
+              if(count > 40) {
                 delay = 1000;
               } else {
                 count ++;
