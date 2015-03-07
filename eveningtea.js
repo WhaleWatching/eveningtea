@@ -513,7 +513,7 @@ var SunlightLayer = cc.Layer.extend({
     sprite_sunlight.setBlendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
     sprite_sunlight.attr({x:390,y:200});
     var sunlight_animation = function () {
-      var light = 160 + 95 * Math.random();
+      var light = 210 + 45 * Math.random();
       // console.log(light);
       this.runAction(
         cc.sequence(
