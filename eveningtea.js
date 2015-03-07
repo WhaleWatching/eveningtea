@@ -766,7 +766,7 @@ var GroundLayer = cc.Layer.extend({
           y: randomRange(40, 80, true)
         };
         this.vector = {
-          x: randomRange(10, 20, true),
+          x: randomRange(20, 40, true),
           y: randomRange(-20, -8, true)
         };
         this.apply();
@@ -1769,11 +1769,11 @@ var LogicLayer = cc.Layer.extend({
             var delay = 4;
             var callback = function () {
               delay = Math.floor(delay * 1.4);
-              if(count > 40) {
+              if(count > 18) {
                 delay = 1000;
               } else {
                 count ++;
-                delay = 10 + Math.floor(Math.random() * 100);
+                delay = 10 + Math.floor(Math.random() * 40);
               }
               if(delay !== 1000) {
                 target_label.string = original_text.replace(/\[delay[0-9]*\]/g, '').replace('{{total_seconds}}', Math.floor(18 + Math.random() * 120));
