@@ -757,7 +757,15 @@ var GroundLayer = cc.Layer.extend({
       }
       this.reset = function () {
         // console.log(this);
-        this.sprite.attr({opacity: 255, color: cc.color(255,206,49)});
+        var color;
+        if(Math.random() > 0.66) {
+          color = cc.color(255,206,49);
+        } else if (Math.random() > 0.5) {
+          color = cc.color(255,157,1);
+        } else {
+          color = cc.color(255,99,0);
+        }
+        this.sprite.attr({opacity: 255, color: color});
         this.life = randomRange(1, 4);
         this.current_life = 0;
         this.location.x = randomRange(this.start_location.x - 20, this.start_location.x + 20);
@@ -769,7 +777,7 @@ var GroundLayer = cc.Layer.extend({
         this.vector = {
           x: randomRange(80, 120, true),
           y: randomRange(-20, -8, true),
-          r: 0.7
+          r: 0.8
         };
         this.apply();
         this.color();
@@ -935,7 +943,7 @@ var LogicLayer = cc.Layer.extend({
               case 'talk':
                 input.talk = true;
                 if(!input.talk_inited) {
-                  input.sprite_ui_talk.blink_animation = input.sprite_ui_talk.runAction(cc.repeatForever(cc.sequence(cc.fadeTo(0.6, 32),cc.fadeTo(0.6, 255))));
+                  input.sprite_ui_talk.blink_animation = input.sprite_ui_talk.runAction(cc.repeatForever(cc.sequence(cc.fadeTo(1, 32),cc.fadeTo(1, 255))));
                   input.talk_inited = true;
                   break;
                 }
