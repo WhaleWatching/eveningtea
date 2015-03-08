@@ -184,7 +184,8 @@ var PressstartLayer = cc.Layer.extend({
           // console.log(cc.moveTo(2, cc.p(-450, 0)));
           self.blow();
           // cc.audioEngine.playMusic(res.sprite_prelude, true);
-          audio_tree.audio_background.play().fadeIn(3000);
+          audio_tree.background.setVolume(0).play().fadeTo(audio_tree.background._start_volume, 3000);
+          audio_tree.curtain.play();
           self.runAction(cc.sequence(cc.delayTime(0.7), cc.callFunc(function () {
             var event = new cc.EventCustom("pressstart_gone");
             cc.eventManager.dispatchEvent(event);
@@ -1309,6 +1310,7 @@ var LogicLayer = cc.Layer.extend({
       // input.duringStart();
       if(role == 'player') {
         if(logic_state.tea_countdown.player < 1) {
+          audio_tree.action_tea.play();
           controller.director.log(logic.messages.drinking, 'player', function () {
             controller.director.hp('player', 'more');
           });
@@ -1347,6 +1349,7 @@ var LogicLayer = cc.Layer.extend({
         }
       } else {
         if(logic_state.tea_countdown.player < 1) {
+          audio_tree.action_tea.play();
           controller.director.log(logic.messages.drinking, 'player', function () {
             controller.director.hp('player', 'more');
           });
@@ -1784,6 +1787,9 @@ var LogicLayer = cc.Layer.extend({
         //   return;
         // }
         input.duringStart();
+        if(current_dialogue.role == 'player') {
+          audio_tree.action_talk.play();
+        }
         controller.director.log(current_text, current_dialogue.role, function () {
           // console.log();
           if(current_dialogue.role == 'player' && logic_state.current.dialogue < logic_state.current.block.dialogues.length) {
@@ -1882,6 +1888,7 @@ var LogicLayer = cc.Layer.extend({
         return;
       }
       input.duringStart();
+      audio_tree.action_mountain.play();
       // controller.director.next();
       controller.director.log('[Mountaining]', 'player', function () {
         logic_state.current.dialogue++;
