@@ -1479,7 +1479,7 @@ var LogicLayer = cc.Layer.extend({
           // console.log('mountain delay');
         }
         if(isMessage(whole_str)) {
-          delay = 30;
+          delay = 60;
         }
         // console.log(str_num, delay_points);
         return delay;
