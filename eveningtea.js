@@ -744,7 +744,8 @@ var GroundLayer = cc.Layer.extend({
       };
       this.vector = {
         x: 0,
-        y: 0
+        y: 0,
+        r: 0
       };
       this.life = 0;
       this.sprite = new cc.Sprite(res.sprite_light_fire);
@@ -762,12 +763,13 @@ var GroundLayer = cc.Layer.extend({
         this.location.x = randomRange(this.start_location.x - 20, this.start_location.x + 20);
         this.location.y = randomRange(this.start_location.y - 8, this.start_location.y + 8);
         this.speed = {
-          x: randomRange(-20, 20, true),
-          y: randomRange(40, 80, true)
+          x: randomRange(-80, 80, true),
+          y: randomRange(80, 140, true)
         };
         this.vector = {
-          x: randomRange(20, 40, true),
-          y: randomRange(-20, -8, true)
+          x: randomRange(70, 80, true),
+          y: randomRange(-20, -8, true),
+          r: 0.5
         };
         this.apply();
         this.color();
@@ -786,6 +788,9 @@ var GroundLayer = cc.Layer.extend({
         this.current_life += delta;
         this.speed.x += this.vector.x * delta;
         this.speed.y += this.vector.y * delta;
+        // console.log((1 - this.vector.r * delta));
+        this.speed.x *= (1 - this.vector.r * delta);
+        this.speed.y *= (1 - this.vector.r * delta);
         this.location.x += this.speed.x * delta;
         this.location.y += this.speed.y * delta;
         this.apply();
@@ -909,6 +914,7 @@ var LogicLayer = cc.Layer.extend({
       mountain: false,
       tea_inited: false,
       mountain_inited: false,
+      talk_inited: false,
       switchState: function (target, state) {
         if (typeof(target) == 'string' && typeof(state) == 'boolean') {
           if(state) {
@@ -927,10 +933,15 @@ var LogicLayer = cc.Layer.extend({
                 input.tea = true;
                 break;
               case 'talk':
+                input.talk = true;
+                if(!input.talk_inited) {
+                  input.sprite_ui_talk.blink_animation = input.sprite_ui_talk.runAction(cc.repeatForever(cc.sequence(cc.fadeTo(0.6, 32),cc.fadeTo(0.6, 255))));
+                  input.talk_inited = true;
+                  break;
+                }
                 if(!controller.talking) {
                   input.sprite_ui_talk.runAction(cc.fadeIn(0.1));
                 }
-                input.talk = true;
                 break;
               case 'mountain':
                 if(!controller.talking) {
@@ -969,6 +980,12 @@ var LogicLayer = cc.Layer.extend({
           input.sprite_ui_tea.runAction(cc.fadeOut(0.1));
           if(input.sprite_ui_talk.fade_in_action) {
             input.sprite_ui_talk.fade_in_action.stop();
+          }
+          if(input.sprite_ui_talk.blink_animation) {
+            // console.log(input.sprite_ui_talk.blink_animation);
+            input.sprite_ui_talk.stopAllActions();
+            input.sprite_ui_talk.attr({opacity: 0});
+            input.sprite_ui_talk.blink_animation = false;
           }
           input.sprite_ui_talk.runAction(cc.fadeOut(0.1));
           if(input.sprite_ui_mountain.fade_in_action) {
@@ -1055,7 +1072,7 @@ var LogicLayer = cc.Layer.extend({
       log_clear();
       input.end();
       sprite_ammo.attr({opacity:255});
-      sprite_ammo.runAction(cc.sequence(cc.animate(AmmoAnimation), cc.delayTime(1.5),cc.callFunc(function () {
+      sprite_ammo.runAction(cc.sequence(cc.animate(AmmoAnimation), cc.delayTime(8),cc.callFunc(function () {
         controller.director.pressstartEnd();
       })));
     }
@@ -1454,7 +1471,7 @@ var LogicLayer = cc.Layer.extend({
           // console.log('mountain delay');
         }
         if(isMessage(whole_str)) {
-          delay = 20;
+          delay = 30;
         }
         // console.log(str_num, delay_points);
         return delay;

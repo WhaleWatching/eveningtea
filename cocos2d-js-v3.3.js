@@ -16901,7 +16901,9 @@ cc.FadeTo = cc.ActionInterval.extend({
     },
     startWithTarget:function (target) {
         cc.ActionInterval.prototype.startWithTarget.call(this, target);
-        this._fromOpacity = target.opacity;
+        if(target) {
+            this._fromOpacity = target.opacity;
+        }
     }
 });
 cc.fadeTo = function (duration, opacity) {
