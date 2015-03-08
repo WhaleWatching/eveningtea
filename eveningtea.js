@@ -498,7 +498,7 @@ var SunLayer = cc.Layer.extend({
       frames.push(sprite_frame);
     };
     var SunAnimation = new cc.Animation(frames, 0.2);
-    console.log('SunAnimation', SunAnimation);
+    // console.log('SunAnimation', SunAnimation);
     var sprite_sun = new cc.Sprite(new cc.SpriteFrame(res.sprite_sun,cc.rect(0,0,237,68)));
     sprite_sun.attr({x:305,y:218});
     // sprite_sun.setBlendFunc(gl.ONE_MINUS_DST_COLOR, gl.ONE);
@@ -521,7 +521,7 @@ var SunlightLayer = cc.Layer.extend({
     sprite_sunlight.setBlendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
     sprite_sunlight.attr({x:390,y:200});
     var sunlight_animation = function () {
-      var light = 210 + 45 * Math.random();
+      var light = 220 + 35 * Math.random();
       // console.log(light);
       this.runAction(
         cc.sequence(
@@ -581,7 +581,7 @@ var IslandsLayer = cc.Layer.extend({
       frames_ref2.push(sprite_frame);
     };
     var Ref2Animation = new cc.Animation(frames_ref2, 0.2);
-    console.log('Ref2Animation', Ref2Animation);
+    // console.log('Ref2Animation', Ref2Animation);
     var sprite_ref2 = new cc.Sprite(new cc.SpriteFrame(res.sprite_ref2,cc.rect(0,0,368,65)));
     sprite_ref2.texture.setAliasTexParameters();
     sprite_ref2.attr({x:577,y:220, opacity: 170});
@@ -597,7 +597,7 @@ var IslandsLayer = cc.Layer.extend({
       frames_ref3.push(sprite_frame);
     };
     var Ref3Animation = new cc.Animation(frames_ref3, 0.2);
-    console.log('Ref3Animation', Ref3Animation);
+    // console.log('Ref3Animation', Ref3Animation);
     var sprite_ref3 = new cc.Sprite(new cc.SpriteFrame(res.sprite_ref3,cc.rect(0,0,101,65)));
     sprite_ref3.texture.setAliasTexParameters();
     sprite_ref3.attr({x:855,y:209, opacity: 170});
@@ -716,7 +716,7 @@ var GroundLayer = cc.Layer.extend({
       frames_fire.push(sprite_frame);
     };
     var FireAnimation = new cc.Animation(frames_fire, 0.13);
-    console.log('FireAnimation', FireAnimation);
+    // console.log('FireAnimation', FireAnimation);
     var sprite_fire = new cc.Sprite(new cc.SpriteFrame(res.sprite_fire,cc.rect(0,0,227,148)));
     sprite_fire.texture.setAliasTexParameters();
     sprite_fire.attr({x:725,y:151});
@@ -800,11 +800,17 @@ var GroundLayer = cc.Layer.extend({
       var lights_container = new cc.Node();
       lights_container.attr({x:0, y:0});
       self.addChild(lights_container, 5);
-      for (var i = 0; i < 20; i++) {
+      for (var i = 0; i < 10; i++) {
         lights.push(new Light(681, 139, lights_container));
       }
-      console.log('lights_container', lights_container);
-      console.log('lights', lights);
+      for (var i = 0; i < 16; i++) {
+        lights.push(new Light(731, 139, lights_container));
+      }
+      for (var i = 0; i < 6; i++) {
+        lights.push(new Light(781, 139, lights_container));
+      }
+      // console.log('lights_container', lights_container);
+      // console.log('lights', lights);
       return lights;
     }
 
@@ -822,7 +828,7 @@ var GroundLayer = cc.Layer.extend({
       frames_katana.push(sprite_frame);
     };
     var KatanaAnimation = new cc.Animation(frames_katana, 0.18);
-    console.log('KatanaAnimation', KatanaAnimation);
+    // console.log('KatanaAnimation', KatanaAnimation);
     var sprite_katana = new cc.Sprite(new cc.SpriteFrame(res.sprite_katana,cc.rect(0,0,76,185)));
     sprite_katana.texture.setAliasTexParameters();
     sprite_katana.attr({x:805,y:186});
@@ -838,7 +844,7 @@ var GroundLayer = cc.Layer.extend({
       frames_spear.push(sprite_frame);
     };
     var SpearAnimation = new cc.Animation(frames_spear, 0.18);
-    console.log('SpearAnimation', SpearAnimation);
+    // console.log('SpearAnimation', SpearAnimation);
     var sprite_spear = new cc.Sprite(new cc.SpriteFrame(res.sprite_spear,cc.rect(0,0,78,318)));
     sprite_spear.texture.setAliasTexParameters();
     sprite_spear.attr({x:70,y:239});
@@ -867,7 +873,7 @@ var IdleLayer = cc.Layer.extend({
       frames_player.push(sprite_frame);
     };
     var PlayerAnimation = new cc.Animation(frames_player, 0.18);
-    console.log('PlayerAnimation', PlayerAnimation);
+    // console.log('PlayerAnimation', PlayerAnimation);
     var sprite_player = new cc.Sprite(new cc.SpriteFrame(res.sprite_player,cc.rect(0,0,165,223)));
     sprite_player.texture.setAliasTexParameters();
     sprite_player.attr({x:552,y:213});
@@ -880,7 +886,7 @@ var IdleLayer = cc.Layer.extend({
       frames_boss.push(sprite_frame);
     };
     var BossAnimation = new cc.Animation(frames_boss, 0.18);
-    console.log('BossAnimation', BossAnimation);
+    // console.log('BossAnimation', BossAnimation);
     var sprite_boss = new cc.Sprite(new cc.SpriteFrame(res.sprite_boss,cc.rect(0,0,162,203)));
     sprite_boss.texture.setAliasTexParameters();
     sprite_boss.attr({x:342,y:207});
@@ -1036,7 +1042,7 @@ var LogicLayer = cc.Layer.extend({
       ammo_player.push(sprite_frame);
     };
     var AmmoAnimation = new cc.Animation(ammo_player, 0.10);
-    console.log('AmmoAnimation', AmmoAnimation);
+    // console.log('AmmoAnimation', AmmoAnimation);
     var sprite_ammo = new cc.Sprite(new cc.SpriteFrame(res.sprite_ammo,cc.rect(0,0,185,200)));
     sprite_ammo.texture.setAliasTexParameters();
     sprite_ammo.attr({x:438,y:300,opacity:0});
@@ -1101,11 +1107,11 @@ var LogicLayer = cc.Layer.extend({
         if(role == 'player') {
           TeaPlayerPart.setLife(0.1 + state * 0.15);
           TeaPlayerPart.setEmissionRate(5 + state * logic.tea_fog_size);
-          console.log('player EmissionRate', 5 + state * logic.tea_fog_size);
+          // console.log('player EmissionRate', 5 + state * logic.tea_fog_size);
         } else {
-          TeaPlayerPart.setLife(0.1 + state * 0.15);
+          TeaBossPart.setLife(0.1 + state * 0.15);
           TeaBossPart.setEmissionRate(5 + state * logic.tea_fog_size);
-          console.log('boss EmissionRate', 10 + state * logic.tea_fog_size);
+          // console.log('boss EmissionRate', 5 + state * logic.tea_fog_size);
         }
       } else {
         if(role == 'player') {
@@ -1129,7 +1135,7 @@ var LogicLayer = cc.Layer.extend({
     var TeaLeftAnimation = new cc.Animation(frames_tea_left, 0.10);
     TeaLeftAnimation._frames[14].setDelayUnits(10);
     TeaLeftAnimation._totalDelayUnits += 9;
-    console.log('TeaLeftAnimation', TeaLeftAnimation);
+    // console.log('TeaLeftAnimation', TeaLeftAnimation);
     var sprite_tea_left = new cc.Sprite(new cc.SpriteFrame(res.sprite_tea_left,cc.rect(0,0,110,51)));
     sprite_tea_left.texture.setAliasTexParameters();
     sprite_tea_left.attr({x:415,y:223,opacity: 0});
@@ -1150,7 +1156,7 @@ var LogicLayer = cc.Layer.extend({
     var TeaRightAnimation = new cc.Animation(frames_tea_right, 0.10);
     TeaRightAnimation._frames[17].setDelayUnits(10);
     TeaRightAnimation._totalDelayUnits += 9;
-    console.log('TeaRightAnimation', TeaRightAnimation);
+    // console.log('TeaRightAnimation', TeaRightAnimation);
     var sprite_tea_right = new cc.Sprite(new cc.SpriteFrame(res.sprite_tea_right,cc.rect(0,0,126,53)));
     sprite_tea_right.texture.setAliasTexParameters();
     sprite_tea_right.attr({x:465,y:224,opacity: 0});
@@ -1221,7 +1227,7 @@ var LogicLayer = cc.Layer.extend({
     var TeaPlayerAnimation = new cc.Animation(frames_tea_player, 0.15);
     TeaPlayerAnimation._frames[7].setDelayUnits(10);
     TeaPlayerAnimation._totalDelayUnits += 9;
-    console.log('TeaPlayerAnimation', TeaPlayerAnimation);
+    // console.log('TeaPlayerAnimation', TeaPlayerAnimation);
     var sprite_tea_player = new cc.Sprite(new cc.SpriteFrame(res.sprite_tea_player,cc.rect(0,0,90,129)));
     sprite_tea_player.texture.setAliasTexParameters();
     sprite_tea_player.attr({x:544,y:234,opacity: 0});
@@ -1241,7 +1247,7 @@ var LogicLayer = cc.Layer.extend({
     var TeaBossAnimation = new cc.Animation(frames_tea_boss, 0.15);
     TeaBossAnimation._frames[7].setDelayUnits(10);
     TeaBossAnimation._totalDelayUnits += 9;
-    console.log('TeaBossAnimation', TeaBossAnimation);
+    // console.log('TeaBossAnimation', TeaBossAnimation);
     var sprite_tea_boss = new cc.Sprite(new cc.SpriteFrame(res.sprite_tea_boss,cc.rect(0,0,117,140)));
     sprite_tea_boss.texture.setAliasTexParameters();
     sprite_tea_boss.attr({x:328,y:233,opacity: 0});
@@ -1670,7 +1676,7 @@ var LogicLayer = cc.Layer.extend({
         //   switchTeaPart('boss', logic_state.tea_countdown.boss);
         // }
         updateTeaPart();
-        console.log('Tea count down: ', logic_state.tea_countdown);
+        // console.log('Tea count down: ', logic_state.tea_countdown);
       }
       if(logic_state.current.block.start_block && logic_state.current.dialogue == logic_state.current.block.dialogues.length) {
         input.switchState('talk', false);
@@ -1692,14 +1698,14 @@ var LogicLayer = cc.Layer.extend({
           break;
         }
         if(output[i] != ' ') {
-          console.log('no', i);
+          // console.log('no', i);
           i--;
         } else {
-          console.log('yes', i);
+          // console.log('yes', i);
           output = output.slice(0, i) + '\n' + output.slice(i+1, output.length);
           i+=80;
         }
-        console.log('out', output);
+        // console.log('out', output);
       };
       return output;
     }
@@ -1730,7 +1736,7 @@ var LogicLayer = cc.Layer.extend({
         return;
       }
       if((controller.talking || !input.talk) && !force) {
-        console.log('Talk fail, talking: ', controller.talking, ', talk state: ', input.talk);
+        // console.log('Talk fail, talking: ', controller.talking, ', talk state: ', input.talk);
         return;
       }
       var boss_delay = 800 + Math.floor(Math.random() * 1200);
@@ -1769,14 +1775,18 @@ var LogicLayer = cc.Layer.extend({
             var delay = 4;
             var callback = function () {
               delay = Math.floor(delay * 1.4);
-              if(count > 18) {
+              if(count > 30) {
                 delay = 1000;
               } else {
                 count ++;
-                delay = 10 + Math.floor(Math.random() * 40);
+                delay = 5 + Math.floor(Math.random() * 30);
               }
               if(delay !== 1000) {
-                target_label.string = original_text.replace(/\[delay[0-9]*\]/g, '').replace('{{total_seconds}}', Math.floor(18 + Math.random() * 120));
+                if(TikTok.getSeconds().toString().length > 2) {
+                  target_label.string = original_text.replace(/\[delay[0-9]*\]/g, '').replace('{{total_seconds}}', Math.floor(100 + Math.random() * 899));
+                } else {
+                  target_label.string = original_text.replace(/\[delay[0-9]*\]/g, '').replace('{{total_seconds}}', Math.floor(10 + Math.random() * 89));
+                }
               } else {
                 target_label.string = textPre(original_text.replace(/\[delay[0-9]*\]/g, ''));
               }
