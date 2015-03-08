@@ -763,13 +763,13 @@ var GroundLayer = cc.Layer.extend({
         this.location.x = randomRange(this.start_location.x - 20, this.start_location.x + 20);
         this.location.y = randomRange(this.start_location.y - 8, this.start_location.y + 8);
         this.speed = {
-          x: randomRange(-80, 80, true),
-          y: randomRange(80, 140, true)
+          x: randomRange(-100, 100, true),
+          y: randomRange(100, 170, true)
         };
         this.vector = {
-          x: randomRange(70, 80, true),
+          x: randomRange(80, 120, true),
           y: randomRange(-20, -8, true),
-          r: 0.5
+          r: 0.7
         };
         this.apply();
         this.color();
