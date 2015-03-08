@@ -183,6 +183,8 @@ var PressstartLayer = cc.Layer.extend({
           // }, self)));
           // console.log(cc.moveTo(2, cc.p(-450, 0)));
           self.blow();
+          // cc.audioEngine.playMusic(res.sprite_prelude, true);
+          audio_tree.audio_background.play().fadeIn(3000);
           self.runAction(cc.sequence(cc.delayTime(0.7), cc.callFunc(function () {
             var event = new cc.EventCustom("pressstart_gone");
             cc.eventManager.dispatchEvent(event);
@@ -813,13 +815,13 @@ var GroundLayer = cc.Layer.extend({
       var lights_container = new cc.Node();
       lights_container.attr({x:0, y:0});
       self.addChild(lights_container, 5);
-      for (var i = 0; i < 10; i++) {
+      for (var i = 0; i < 6; i++) {
         lights.push(new Light(681, 139, lights_container));
       }
-      for (var i = 0; i < 16; i++) {
+      for (var i = 0; i < 12; i++) {
         lights.push(new Light(731, 139, lights_container));
       }
-      for (var i = 0; i < 6; i++) {
+      for (var i = 0; i < 4; i++) {
         lights.push(new Light(781, 139, lights_container));
       }
       // console.log('lights_container', lights_container);

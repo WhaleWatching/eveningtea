@@ -42,6 +42,11 @@ var res = {
 	p_water: 'res/sprite/water.plist',
 	p_tea: 'res/sprite/tea.plist',
 	sprite_pressstart: 'res/sprite/pressstart.png'
+
+	// Audios
+
+	// sprite_prelude: 'res/audio/prelude.mp3'
+
 };
 
 var g_resources = [];
