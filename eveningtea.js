@@ -26,6 +26,27 @@ var randomRange = function (start, end, floored) {
   }
 }
 
+var musicFadeTo = function (volume, duration, _start_volume) {
+  var time_step = duration/40;
+  var start_volume;
+  if(typeof(_start_volume) === 'undefined') {
+    start_volume = cc.audioEngine.getMusicVolume();
+  } else {
+    start_volume = _start_volume;
+  }
+  var vol_step = (volume - start_volume) / 40;
+  var step = 0;
+  var callback = function () {
+    // console.log(vol_step, start_volume, step, start_volume + vol_step * step);
+    cc.audioEngine.setMusicVolume(start_volume + vol_step * step);
+    step++;
+    if(step < 41) {
+      setTimeout(callback, time_step);
+    }
+  }
+  callback();
+}
+
 var game_state = {
   state: 0,
   end: false,
@@ -186,8 +207,9 @@ var PressstartLayer = cc.Layer.extend({
           // cc.audioEngine.playMusic(res.sprite_prelude, true);
           // audio_tree.background.setVolume(0).play().fadeTo(audio_tree.background._start_volume, 3000);
           // audio_tree.curtain.play();
+          musicFadeTo(1, 3000, 0);
           cc.audioEngine.playMusic(res.audio_ambient, true);
-          cc.audioEngine.playEffect(res.audio_opening, false);
+          // cc.audioEngine.playEffect(res.audio_opening, false);
           self.runAction(cc.sequence(cc.delayTime(0.7), cc.callFunc(function () {
             var event = new cc.EventCustom("pressstart_gone");
             cc.eventManager.dispatchEvent(event);
@@ -941,6 +963,9 @@ var LogicLayer = cc.Layer.extend({
                   TeapotSprite.runAction(cc.fadeIn(1));
                   sprite_tea_player.runAction(cc.fadeIn(1));
                   sprite_tea_boss.runAction(cc.fadeIn(1));
+                  setTimeout(function() {
+                    cc.audioEngine.playEffect(res.audio_show_tea, false);
+                  }, 700);
                   input.tea_inited = true;
                 }
                 input.tea = true;
@@ -1086,6 +1111,7 @@ var LogicLayer = cc.Layer.extend({
       input.end();
       sprite_ammo.attr({opacity:255});
       sprite_ammo.runAction(cc.sequence(cc.animate(AmmoAnimation), cc.delayTime(8),cc.callFunc(function () {
+        musicFadeTo(0, 3000);
         controller.director.pressstartEnd();
       })));
     }
@@ -1511,6 +1537,9 @@ var LogicLayer = cc.Layer.extend({
             intervalCallback.call(label);
           }
         } else if(typeCallback) {
+          if(next_mountain) {
+            musicFadeTo(1, 500);
+          }
           if(whole_str == logic.messages.mountain) {
             next_mountain = true;
           } else {
@@ -1693,6 +1722,10 @@ var LogicLayer = cc.Layer.extend({
     controller.fill_tea_part = fillTeaPart;
 
     controller.director.step_action = function () {
+      if(controller.director.isFullHp() && Math.random() > 0.8) {
+        controller.director.end();
+        return;
+      }
       logic_state.step ++;
       if(!logic_state.current.block.start_block || (logic_state.current.block.start_block && logic_state.current.dialogue == logic_state.current.block.dialogues.length) ) {
         logic_state.tea_countdown.player --;
@@ -1747,10 +1780,6 @@ var LogicLayer = cc.Layer.extend({
     var random_log = '';
 
     controller.director.next = function () {
-      if(controller.director.isFullHp() && Math.random() > 0.7) {
-        controller.director.end();
-        return;
-      }
       var pick = 0;
       do {
         if(random_log.match(/\[[0-9]*\]/g) && random_log.match(/\[[0-9]*\]/g).length > 8 ) {
@@ -1811,20 +1840,27 @@ var LogicLayer = cc.Layer.extend({
             var target_label = this;
             var count = 0;
             var delay = 4;
+            var played = false;
             var callback = function () {
               delay = Math.floor(delay * 1.4);
-              if(count > 30) {
+              var current_sec = TikTok.getSeconds().toString()
+              if(count > (TikTok.getSeconds() + 1) * 50 && !played) {
                 delay = 1000;
+                played = true;
               } else {
                 count ++;
                 delay = 5 + Math.floor(Math.random() * 30);
               }
               if(delay !== 1000) {
-                if(TikTok.getSeconds().toString().length > 2) {
-                  target_label.string = original_text.replace(/\[delay[0-9]*\]/g, '').replace('{{total_seconds}}', Math.floor(100 + Math.random() * 899));
-                } else {
-                  target_label.string = original_text.replace(/\[delay[0-9]*\]/g, '').replace('{{total_seconds}}', Math.floor(10 + Math.random() * 89));
-                }
+                var placeholder = '';
+                for (var i = 0; i < current_sec.length; i++) {
+                  if(count < (i + 1) * 50) {
+                    placeholder = placeholder + Math.floor(Math.random() * 10).toString();
+                  } else {
+                    placeholder = placeholder + current_sec[i];
+                  }
+                };
+                target_label.string = original_text.replace(/\[delay[0-9]*\]/g, '').replace('{{total_seconds}}', placeholder);
               } else {
                 target_label.string = textPre(original_text.replace(/\[delay[0-9]*\]/g, ''));
               }
@@ -1893,8 +1929,9 @@ var LogicLayer = cc.Layer.extend({
         return;
       }
       input.duringStart();
+      musicFadeTo(0.3, 1000);
+      cc.audioEngine.playEffect(res.audio_action_mountain, false);
       // audio_tree.action_mountain.play();
-      // cc.audioEngine.playEffect(res.audio_action_mountain, false);
       // controller.director.next();
       controller.director.log('[Mountaining]', 'player', function () {
         logic_state.current.dialogue++;

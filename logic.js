@@ -7,8 +7,8 @@
   logic.tea_fog_size = 8;
 
   logic.messages = {
-    tea_still_hot: '[The tea is boiling hot]',
-    tea_too_hot: '[The tea is still too hot]',
+    tea_still_hot: '[The tea is still too hot]',
+    tea_too_hot: '[The tea is boiling hot]',
     mountain: '[Mountaining]',
     drinking: '[Drinking tea]'
   };
@@ -25,14 +25,14 @@
   logic['start_block'] = {
     start_block: true,
     dialogues: [
-      {role: 'player', text: 'How did we end up here,[delay600]sitting like[delay300] this?'},
-      {role: 'boss', text: 'It’s the[delay750] 37th time that you’ve asked this same question'},
-      {role: 'player', text: '..[delay300]..[delay300]..'},
-      {role: 'boss', text: 'Let me remind you again,[delay500] you ran out of ammunition'},
-      {role: 'player', text: 'So do you'},
-      {role: 'boss', text: 'And you cannot deal any substantial damage to me[delay300] with your melee attack'},
-      {role: 'player', text: 'Neither can you'},
-      {role: 'boss', text: 'Guess your next question will be:[delay500] "how long have we been here?"'},
+      // {role: 'player', text: 'How did we end up here,[delay600]sitting like[delay300] this?'},
+      // {role: 'boss', text: 'It’s the[delay750] 37th time that you’ve asked this same question'},
+      // {role: 'player', text: '..[delay300]..[delay300]..'},
+      // {role: 'boss', text: 'Let me remind you again,[delay500] you ran out of ammunition'},
+      // {role: 'player', text: 'So do you'},
+      // {role: 'boss', text: 'And you cannot deal any substantial damage to me[delay300] with your melee attack'},
+      // {role: 'player', text: 'Neither can you'},
+      // {role: 'boss', text: 'Guess your next question will be:[delay500] "how long have we been here?"'},
       {role: 'player', text: 'How long have we been here?'},
       {role: 'boss', total_listen: true , text: 'Objectively,[delay300] {{total_seconds}} seconds.[delay600] Subjectively,[delay300] you know it better than me'},
       {role: 'player', text: 'Fine,[delay850] what do we do now?'},

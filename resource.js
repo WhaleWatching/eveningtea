@@ -46,9 +46,13 @@ var res = {
 	// Audios
 
 	audio_ambient: 'res/audio/ambient.ogg',
-	audio_opening: 'res/audio/opening.ogg',
+	// audio_opening: 'res/audio/opening.ogg',
 	audio_action_talk: 'res/audio/action_talk.ogg',
-	audio_action_tea: 'res/audio/action_tea.ogg'
+	audio_action_tea: 'res/audio/action_tea.ogg',
+	audio_action_mountain: 'res/audio/action_mountain.ogg',
+	audio_show_tea: 'res/audio/show_tea.ogg',
+	audio_tea_drinking: 'res/audio/tea_drinking.ogg',
+	audio_tea_knock_table: 'res/audio/tea_knock_table.ogg'
 
 };
 
