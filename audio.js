@@ -3,6 +3,11 @@
   // Audio res list
 
   // Audio res
+  var res_opening = 'res/audio/opening';
+  var res_ambient = 'res/audio/ambient';
+  var res_action_talk = 'res/audio/action_talk';
+  var res_action_tea = 'res/audio/action_tea';
+
 
   // Audio res for test
   var res_audio_access = 'res/audio/test/access';
@@ -13,33 +18,33 @@
   // Audio using
   var audio_using = {
     background: {
-      res: res_audio_quiet,
-      volume: 80,
+      res: res_ambient,
+      volume: 100,
       repeat: true
     },
     curtain: {
-      res: res_audio_victory,
-      volume: 20,
+      res: res_opening,
+      volume: 100,
       repeat: false
     },
     action_talk: {
-      res: res_audio_tank,
-      volume: 20,
+      res: res_action_talk,
+      volume: 100,
       repeat: false
     },
     action_tea: {
-      res: res_audio_tank,
-      volume: 20,
+      res: res_action_tea,
+      volume: 100,
       repeat: false
     },
     action_mountain: {
-      res: res_audio_tank,
-      volume: 20,
+      res: res_action_talk,
+      volume: 100,
       repeat: false
     },
     mountaining: {
-      res: res_audio_tank,
-      volume: 20,
+      res: res_action_talk,
+      volume: 100,
       repeat: false
     },
     drinking: {
@@ -82,7 +87,7 @@
     var audio_current = audio_using[index];
     var audio_instance;
     audio_instance = new buzz.sound(audio_current.res, {
-      formats: ['mp3'],
+      formats: ['ogg', 'mp3'],
       preload: true,
       loop: audio_current.repeat,
       volume: audio_current.volume

@@ -41,11 +41,14 @@ var res = {
 	p_dust: 'res/sprite/dust.plist',
 	p_water: 'res/sprite/water.plist',
 	p_tea: 'res/sprite/tea.plist',
-	sprite_pressstart: 'res/sprite/pressstart.png'
+	sprite_pressstart: 'res/sprite/pressstart.png',
 
 	// Audios
 
-	// sprite_prelude: 'res/audio/prelude.mp3'
+	audio_ambient: 'res/audio/ambient.ogg',
+	audio_opening: 'res/audio/opening.ogg',
+	audio_action_talk: 'res/audio/action_talk.ogg',
+	audio_action_tea: 'res/audio/action_tea.ogg'
 
 };
 
