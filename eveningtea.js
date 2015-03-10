@@ -1352,6 +1352,12 @@ var LogicLayer = cc.Layer.extend({
               callback();
             }
           })));
+          setTimeout(function() {
+            cc.audioEngine.playEffect(res.audio_tea_drinking);
+          }, 900);
+          setTimeout(function() {
+            cc.audioEngine.playEffect(res.audio_tea_knock_table);
+          }, 3150);
         } else {
           if(callback) {
             callback();
@@ -1371,6 +1377,12 @@ var LogicLayer = cc.Layer.extend({
               callback();
             }
           })));
+          setTimeout(function() {
+            cc.audioEngine.playEffect(res.audio_tea_drinking);
+          }, 900);
+          setTimeout(function() {
+            cc.audioEngine.playEffect(res.audio_tea_knock_table);
+          }, 3150);
         } else {
           if(callback) {
             callback();
@@ -1389,6 +1401,12 @@ var LogicLayer = cc.Layer.extend({
             controller.director.step_action();
             drinkTea('boss', callback);
           })));
+          setTimeout(function() {
+            cc.audioEngine.playEffect(res.audio_tea_drinking);
+          }, 900);
+          setTimeout(function() {
+            cc.audioEngine.playEffect(res.audio_tea_knock_table);
+          }, 3150);
         } else {
           drinkTea('boss', callback);
         }
@@ -1810,6 +1828,7 @@ var LogicLayer = cc.Layer.extend({
         var event = new cc.EventCustom("key_pressed");
         cc.eventManager.dispatchEvent(event);
       }
+      cc.audioEngine.playEffect(res.audio_action_talk, false);
       if(logic_state.current.dialogue < logic_state.current.block.dialogues.length) {
         var current_dialogue = logic_state.current.block.dialogues[logic_state.current.dialogue];
         var original_text = current_dialogue.text;
@@ -1822,7 +1841,6 @@ var LogicLayer = cc.Layer.extend({
         input.duringStart();
         if(current_dialogue.role == 'player') {
           // audio_tree.action_talk.play();
-          cc.audioEngine.playEffect(res.audio_action_talk, false);
         }
         controller.director.log(current_text, current_dialogue.role, function () {
           // console.log();
