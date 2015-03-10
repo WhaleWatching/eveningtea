@@ -135,7 +135,7 @@
     dialogues: [
       {role: 'boss', text: 'How could people with confrontational ideologies[delay500] like us[delay750] still sit together peacefully[delay500] and have tea?'},
       {role: 'player', text: 'Can we don’t talk about ideology?'},
-      {role: 'boss', text: 'I\'m bored of that as well.[delay500] I am talking about the [delay650]state[delay400] of our [delay500]existence'},
+      {role: 'boss', text: 'I\'m bored of that as well.[delay500] I am talking about the state[delay400] of our [delay500]existence'},
       {role: 'player', text: 'The only reason we are having this discussion[delay650] is because there is nothing else we could do[delay500] at this state'},
       {role: 'boss', text: 'You finally start to realize that'}
     ]

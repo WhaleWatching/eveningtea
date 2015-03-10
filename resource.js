@@ -49,9 +49,15 @@ var res = {
 	// audio_opening: 'res/audio/opening.ogg',
 	audio_action_talk: 'res/audio/action_talk.ogg',
 	audio_action_tea: 'res/audio/action_tea.ogg',
+	audio_ammo_teleport: 'res/audio/ammo_teleport.ogg',
+	audio_ammo_crush: 'res/audio/ammo_crush.ogg',
 	audio_action_mountain: 'res/audio/action_mountain.ogg',
+	audio_ambient_mountained: 'res/audio/ambient_mountained.ogg',
 	audio_show_tea: 'res/audio/show_tea.ogg',
-	audio_tea_drinking: 'res/audio/tea_drinking.ogg',
+	audio_tea_drinking_1: 'res/audio/tea_drinking_1.ogg',
+	audio_tea_drinking_2: 'res/audio/tea_drinking_2.ogg',
+	audio_tea_filling: 'res/audio/tea_filling.ogg',
+	audio_tea_unable: 'res/audio/tea_unable.ogg',
 	audio_tea_knock_table: 'res/audio/tea_knock_table.ogg'
 
 };

@@ -1114,6 +1114,10 @@ var LogicLayer = cc.Layer.extend({
         musicFadeTo(0, 3000);
         controller.director.pressstartEnd();
       })));
+      cc.audioEngine.playEffect(res.audio_ammo_teleport);
+      setTimeout(function() {
+        cc.audioEngine.playEffect(res.audio_ammo_crush);
+      }, 900);
     }
 
 
@@ -1189,8 +1193,8 @@ var LogicLayer = cc.Layer.extend({
       frames_tea_left.push(sprite_frame);
     };
     var TeaLeftAnimation = new cc.Animation(frames_tea_left, 0.10);
-    TeaLeftAnimation._frames[14].setDelayUnits(10);
-    TeaLeftAnimation._totalDelayUnits += 9;
+    TeaLeftAnimation._frames[14].setDelayUnits(25);
+    TeaLeftAnimation._totalDelayUnits += 24;
     // console.log('TeaLeftAnimation', TeaLeftAnimation);
     var sprite_tea_left = new cc.Sprite(new cc.SpriteFrame(res.sprite_tea_left,cc.rect(0,0,110,51)));
     sprite_tea_left.texture.setAliasTexParameters();
@@ -1210,8 +1214,8 @@ var LogicLayer = cc.Layer.extend({
       frames_tea_right.push(sprite_frame);
     };
     var TeaRightAnimation = new cc.Animation(frames_tea_right, 0.10);
-    TeaRightAnimation._frames[17].setDelayUnits(10);
-    TeaRightAnimation._totalDelayUnits += 9;
+    TeaRightAnimation._frames[17].setDelayUnits(25);
+    TeaRightAnimation._totalDelayUnits += 24;
     // console.log('TeaRightAnimation', TeaRightAnimation);
     var sprite_tea_right = new cc.Sprite(new cc.SpriteFrame(res.sprite_tea_right,cc.rect(0,0,126,53)));
     sprite_tea_right.texture.setAliasTexParameters();
@@ -1256,8 +1260,9 @@ var LogicLayer = cc.Layer.extend({
           finish();
         })));
         setTimeout(function() {
+          cc.audioEngine.playEffect(res.audio_tea_filling);
           fillTeaPart('player');
-        }, 1700);
+        }, 1900);
       } else {
         logic_state.filling_tea.boss = true;
         sprite_tea_left.attr({opacity:255});
@@ -1268,8 +1273,9 @@ var LogicLayer = cc.Layer.extend({
           finish();
         })));
         setTimeout(function() {
+          cc.audioEngine.playEffect(res.audio_tea_filling); 
           fillTeaPart('boss');
-        }, 1400);
+        }, 1600);
       }
     }
 
@@ -1325,6 +1331,7 @@ var LogicLayer = cc.Layer.extend({
       if(logic_state.tea_countdown.player >= 3) {
         tea_string = logic.messages.tea_too_hot;
       }
+      cc.audioEngine.playEffect(res.audio_tea_unable);
       controller.director.log(tea_string, 'player', function () {
         input.duringEnd(true);
         this._tea_is_too_hot = true;
@@ -1353,7 +1360,7 @@ var LogicLayer = cc.Layer.extend({
             }
           })));
           setTimeout(function() {
-            cc.audioEngine.playEffect(res.audio_tea_drinking);
+            cc.audioEngine.playEffect(res.audio_tea_drinking_1);
           }, 900);
           setTimeout(function() {
             cc.audioEngine.playEffect(res.audio_tea_knock_table);
@@ -1378,7 +1385,7 @@ var LogicLayer = cc.Layer.extend({
             }
           })));
           setTimeout(function() {
-            cc.audioEngine.playEffect(res.audio_tea_drinking);
+            cc.audioEngine.playEffect(res.audio_tea_drinking_2);
           }, 900);
           setTimeout(function() {
             cc.audioEngine.playEffect(res.audio_tea_knock_table);
@@ -1402,7 +1409,7 @@ var LogicLayer = cc.Layer.extend({
             drinkTea('boss', callback);
           })));
           setTimeout(function() {
-            cc.audioEngine.playEffect(res.audio_tea_drinking);
+            cc.audioEngine.playEffect(res.audio_tea_drinking_1);
           }, 900);
           setTimeout(function() {
             cc.audioEngine.playEffect(res.audio_tea_knock_table);
@@ -1828,7 +1835,6 @@ var LogicLayer = cc.Layer.extend({
         var event = new cc.EventCustom("key_pressed");
         cc.eventManager.dispatchEvent(event);
       }
-      cc.audioEngine.playEffect(res.audio_action_talk, false);
       if(logic_state.current.dialogue < logic_state.current.block.dialogues.length) {
         var current_dialogue = logic_state.current.block.dialogues[logic_state.current.dialogue];
         var original_text = current_dialogue.text;
@@ -1841,6 +1847,7 @@ var LogicLayer = cc.Layer.extend({
         input.duringStart();
         if(current_dialogue.role == 'player') {
           // audio_tree.action_talk.play();
+          cc.audioEngine.playEffect(res.audio_action_talk, false);
         }
         controller.director.log(current_text, current_dialogue.role, function () {
           // console.log();
@@ -1862,7 +1869,7 @@ var LogicLayer = cc.Layer.extend({
             var callback = function () {
               delay = Math.floor(delay * 1.4);
               var current_sec = TikTok.getSeconds().toString()
-              if(count > (TikTok.getSeconds() + 1) * 50 && !played) {
+              if(count > (TikTok.getSeconds() + 1) * 35 && !played) {
                 delay = 1000;
                 played = true;
               } else {
@@ -1872,7 +1879,7 @@ var LogicLayer = cc.Layer.extend({
               if(delay !== 1000) {
                 var placeholder = '';
                 for (var i = 0; i < current_sec.length; i++) {
-                  if(count < (i + 1) * 50) {
+                  if(count < (i + 1) * 35) {
                     placeholder = placeholder + Math.floor(Math.random() * 10).toString();
                   } else {
                     placeholder = placeholder + current_sec[i];
@@ -1893,6 +1900,7 @@ var LogicLayer = cc.Layer.extend({
         controller.director.next();
         var popcorn_pick = Math.floor(Math.random()*logic.popcorn_pool.length);
         if(!mountain) {
+          cc.audioEngine.playEffect(res.audio_action_talk, false);
           controller.director.log(logic.popcorn_pool[popcorn_pick], 'player', function () {
             setTimeout(function() {
               drinkTea('boss', function () {
@@ -1947,13 +1955,14 @@ var LogicLayer = cc.Layer.extend({
         return;
       }
       input.duringStart();
-      musicFadeTo(0.3, 1000);
+      musicFadeTo(0, 1000);
       cc.audioEngine.playEffect(res.audio_action_mountain, false);
       // audio_tree.action_mountain.play();
       // controller.director.next();
       controller.director.log('[Mountaining]', 'player', function () {
         logic_state.current.dialogue++;
         controller.director.step_action();
+        // cc.audioEngine.playEffect(res.audio_ambient_mountained, true);
         controller.director.talk(true, true);
         mountain_delay = mountain_delay * 1.5;
         // controller.director.log('[Mountaining]', 'boss', function () {
