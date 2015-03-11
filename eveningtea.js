@@ -1323,6 +1323,8 @@ var LogicLayer = cc.Layer.extend({
 
     var teaIsTooHot = function () {
       input.blinkTea();
+      cc.audioEngine.stopAllEffects();
+      cc.audioEngine.playEffect(res.audio_tea_unable);
       if(last_log._tea_is_too_hot) {
         return;
       }
@@ -1331,7 +1333,6 @@ var LogicLayer = cc.Layer.extend({
       if(logic_state.tea_countdown.player >= 3) {
         tea_string = logic.messages.tea_too_hot;
       }
-      cc.audioEngine.playEffect(res.audio_tea_unable);
       controller.director.log(tea_string, 'player', function () {
         input.duringEnd(true);
         this._tea_is_too_hot = true;
