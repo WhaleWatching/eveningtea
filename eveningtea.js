@@ -132,8 +132,10 @@ var LoaderScene = cc.Scene.extend({
                   self._label.setString('Craft the wood table...');
                 } else if(percent<60) {
                   self._label.setString('Polishing weapons...');
-                } else {
+                } else if(percent<80) {
                   self._label.setString('Make tea...');
+                } else {
+                  self._label.setString('Time to blow this scene...');
                 }
                 self._bgLayer.stopAllActions();
                 self._bgLayer.runAction(cc.tintTo(500, color,color,color));
