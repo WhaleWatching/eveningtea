@@ -100,11 +100,6 @@ var LoaderScene = cc.Scene.extend({
         var texture2d = self._texture2d = new cc.Texture2D();
         texture2d.initWithElement(img);
         texture2d.handleLoadedTexture();
-        var logo = self._logo = new cc.Sprite(texture2d);
-        logo.setScale(cc.contentScaleFactor());
-        logo.x = centerPos.x;
-        logo.y = centerPos.y;
-        self._bgLayer.addChild(logo, 10);
     },
     onEnter: function () {
         var self = this;
@@ -130,6 +125,7 @@ var LoaderScene = cc.Scene.extend({
             function (result, count, loadedCount) {
                 var percent = (loadedCount / count * 100) | 0;
                 percent = Math.min(percent, 100);
+                var color = Math.floor(((100 - percent)/100) * 18);
                 if(percent<10) {
                   self._label.setString('Adjust camera...');
                 } else if(percent<30) {
@@ -139,6 +135,8 @@ var LoaderScene = cc.Scene.extend({
                 } else {
                   self._label.setString('Make tea...');
                 }
+                self._bgLayer.stopAllActions();
+                self._bgLayer.runAction(cc.tintTo(100, color,color,color));
             }, function () {
                 if (self.cb)
                     self.cb();
