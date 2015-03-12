@@ -77,6 +77,85 @@ var TikTok = {
   }
 };
 
+var LoaderScene = cc.Scene.extend({
+    _interval : null,
+    _label : null,
+    _className:"LoaderScene",
+    init : function(){
+        var self = this;
+        var logoWidth = 160;
+        var logoHeight = 200;
+        var bgLayer = self._bgLayer = new cc.LayerColor(cc.color(18, 18, 18, 255));
+        self.addChild(bgLayer, 0);
+        var fontSize = 28, lblHeight =  -logoHeight / 2 + 100;
+        var label = self._label = new cc.LabelTTF("Preparing", "Play", fontSize);
+        label.setPosition(cc.pAdd(cc.p(450, 80), cc.p(0, lblHeight)));
+        label.setColor(cc.color(180, 180, 180));
+        label.attr({scale: 0.5});
+        bgLayer.addChild(this._label, 10);
+        return true;
+    },
+    _initStage: function (img, centerPos) {
+        var self = this;
+        var texture2d = self._texture2d = new cc.Texture2D();
+        texture2d.initWithElement(img);
+        texture2d.handleLoadedTexture();
+        var logo = self._logo = new cc.Sprite(texture2d);
+        logo.setScale(cc.contentScaleFactor());
+        logo.x = centerPos.x;
+        logo.y = centerPos.y;
+        self._bgLayer.addChild(logo, 10);
+    },
+    onEnter: function () {
+        var self = this;
+        cc.Node.prototype.onEnter.call(self);
+        self.schedule(self._startLoading, 0.3);
+    },
+    onExit: function () {
+        cc.Node.prototype.onExit.call(this);
+        var tmpStr = "Finished";
+        this._label.setString(tmpStr);
+    },
+    initWithResources: function (resources, cb) {
+        if(cc.isString(resources))
+            resources = [resources];
+        this.resources = resources || [];
+        this.cb = cb;
+    },
+    _startLoading: function () {
+        var self = this;
+        self.unschedule(self._startLoading);
+        var res = self.resources;
+        cc.loader.load(res,
+            function (result, count, loadedCount) {
+                var percent = (loadedCount / count * 100) | 0;
+                percent = Math.min(percent, 100);
+                if(percent<10) {
+                  self._label.setString('Adjust camera...');
+                } else if(percent<30) {
+                  self._label.setString('Craft the wood table...');
+                } else if(percent<60) {
+                  self._label.setString('Polishing weapons...');
+                } else {
+                  self._label.setString('Make tea...');
+                }
+            }, function () {
+                if (self.cb)
+                    self.cb();
+            });
+    }
+});
+LoaderScene.preload = function(resources, cb){
+    var _cc = cc;
+    if(!_cc.loaderScene) {
+        _cc.loaderScene = new LoaderScene();
+        _cc.loaderScene.init();
+    }
+    _cc.loaderScene.initWithResources(resources, cb);
+    cc.director.runScene(_cc.loaderScene);
+    return _cc.loaderScene;
+};
+
 var ControllerLayer = cc.Layer.extend({
   sprite:null,
   ctor: function () {
@@ -698,6 +777,7 @@ var WaterLayer = cc.Layer.extend({
 
     for (var i = 0; i < 160; i++) {
       var SpriteLight = new cc.Sprite(res.sprite_light);
+      SpriteLight.setBlendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
       lights_call.apply(SpriteLight);
       this.addChild(SpriteLight);
     };
@@ -951,6 +1031,9 @@ var LogicLayer = cc.Layer.extend({
       mountain_inited: false,
       talk_inited: false,
       switchState: function (target, state) {
+        if(game_state.end) {
+          return;
+        }
         if (typeof(target) == 'string' && typeof(state) == 'boolean') {
           if(state) {
             switch(target) {
@@ -1011,6 +1094,9 @@ var LogicLayer = cc.Layer.extend({
         }
       },
       duringStart: function (only_logic) {
+        if(game_state.end) {
+          return;
+        }
         if(!only_logic) {
           if(input.sprite_ui_tea.fade_in_action) {
             input.sprite_ui_tea.fade_in_action.stop();
@@ -1034,6 +1120,9 @@ var LogicLayer = cc.Layer.extend({
         controller.talking = true;
       },
       duringEnd: function (only_logic) {
+        if(game_state.end) {
+          return;
+        }
         if(!only_logic) {
           if(input.tea_inited) {
             input.sprite_ui_tea.fade_in_action = input.sprite_ui_tea.runAction(cc.fadeIn(0.1));
@@ -1500,7 +1589,7 @@ var LogicLayer = cc.Layer.extend({
 
     var delay_point_reg = /\[delay[0-9]*\]/;
 
-    var mountain_delay = 1;
+    var mountain_delay = 4;
 
     var next_mountain = false;
 
@@ -1957,22 +2046,16 @@ var LogicLayer = cc.Layer.extend({
       }
       input.duringStart();
       musicFadeTo(0, 1000);
+      var boss_delay = 800 + Math.floor(Math.random() * 1200);
       cc.audioEngine.playEffect(res.audio_action_mountain, false);
-      // audio_tree.action_mountain.play();
-      // controller.director.next();
-      controller.director.log('[Mountaining]', 'player', function () {
-        logic_state.current.dialogue++;
-        controller.director.step_action();
-        // cc.audioEngine.playEffect(res.audio_ambient_mountained, true);
-        controller.director.talk(true, true);
-        mountain_delay = mountain_delay * 1.5;
-        // controller.director.log('[Mountaining]', 'boss', function () {
-        //   controller.director.step_action();
-        //   mountain_delay = mountain_delay * 2;
-        //   input.duringEnd(true);
-        //   controller.director.talk();
-        // });
-      });
+      setTimeout(function() {
+        controller.director.log('[Mountaining]', 'player', function () {
+          logic_state.current.dialogue++;
+          controller.director.step_action();
+          controller.director.talk(true, true);
+          mountain_delay = mountain_delay * 1.5;
+        });
+      }, boss_delay);
     }
 
     var game_start_listener = cc.EventListener.create({

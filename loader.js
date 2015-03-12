@@ -1,10 +1,13 @@
 
 window.onload = function(){
+  setTimeout(function() {
+    document.getElementById('gameCanvas').classList.remove('unresloved');
+  }, 300);
   cc.game.onStart = function(){
       cc.view.adjustViewPort(false);
       cc.view.resizeWithBrowserSize(false);
       //load resources
-      cc.LoaderScene.preload(g_resources, function () {
+      LoaderScene.preload(g_resources, function () {
           cc.director.runScene(new EveningScene());
       }, this);
   };

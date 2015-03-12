@@ -27,11 +27,14 @@
         font-family: 'Play';
         visibility: hidden;
     }
+    #gameCanvas.unresloved {
+        visibility: hidden;
+    }
 </style>
     <link href='font/font-play.css' rel='stylesheet' type='text/css'>
 </head>
 <body style="">
-<canvas id="gameCanvas" height="400" width="900"></canvas>
+<canvas id="gameCanvas" height="400" width="900" class="unresloved"></canvas>
 <div class="font-loader">Loader</div>
 <script src="cocos2d-js-v3.3.js"></script>
 <script src="loader.js"></script>
