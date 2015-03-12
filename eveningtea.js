@@ -136,7 +136,7 @@ var LoaderScene = cc.Scene.extend({
                   self._label.setString('Make tea...');
                 }
                 self._bgLayer.stopAllActions();
-                self._bgLayer.runAction(cc.tintTo(100, color,color,color));
+                self._bgLayer.runAction(cc.tintTo(500, color,color,color));
             }, function () {
                 if (self.cb)
                     self.cb();
