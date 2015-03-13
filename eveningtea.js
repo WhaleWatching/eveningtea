@@ -2078,7 +2078,7 @@ var LogicLayer = cc.Layer.extend({
         logic_state.current.dialogue++;
         controller.director.step_action();
         musicFadeTo(0, 2000);
-        effectFadeTo(1, 2000, 0);
+        effectFadeTo(0.8, 2000, 0);
         logic_state.mountained_id = cc.audioEngine.playEffect(res.audio_ambient_mountained, true);
         setTimeout(function() {
           controller.director.talk(true, true);
