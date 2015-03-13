@@ -22,6 +22,18 @@
     "I think so"
   ];
 
+  logic.loading = [
+    'Initializing Spring Water',
+    'Boiling Water',
+    'Initializing Teapot',
+    'Initializing Tealeaf',
+    'Preheating Teapot',
+    'Washing Tealeaf',
+    'Pouring Water Over The Tealeaf',
+    'Initializing Teacup',
+    'Let It Steep'
+  ];
+
   logic['start_block'] = {
     start_block: true,
     dialogues: [

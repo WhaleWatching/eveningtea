@@ -126,17 +126,9 @@ var LoaderScene = cc.Scene.extend({
                 var percent = (loadedCount / count * 100) | 0;
                 percent = Math.min(percent, 100);
                 var color = Math.floor(((100 - percent)/100) * 18);
-                if(percent<10) {
-                  self._label.setString('[' + percent + ']Adjust camera...');
-                } else if(percent<30) {
-                  self._label.setString('[' + percent + ']Craft the wood table...');
-                } else if(percent<60) {
-                  self._label.setString('[' + percent + ']Polishing weapons...');
-                } else if(percent<80) {
-                  self._label.setString('[' + percent + ']Make tea...');
-                } else {
-                  self._label.setString('[' + percent + ']Time to blow this scene...');
-                }
+                var loading_index = Math.floor(percent / 100 * logic.loading.length);
+
+                self._label.setString(logic.loading[loading_index]);
                 self._bgLayer.stopAllActions();
                 self._bgLayer.runAction(cc.tintTo(500, color,color,color));
             }, function () {
