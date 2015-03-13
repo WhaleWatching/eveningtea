@@ -1449,7 +1449,7 @@ var LogicLayer = cc.Layer.extend({
           })));
           setTimeout(function() {
             cc.audioEngine.playEffect(res.audio_tea_drinking_1);
-          }, 1400);
+          }, 1300);
           setTimeout(function() {
             cc.audioEngine.playEffect(res.audio_tea_knock_table);
           }, 3150);
@@ -1498,7 +1498,7 @@ var LogicLayer = cc.Layer.extend({
           })));
           setTimeout(function() {
             cc.audioEngine.playEffect(res.audio_tea_drinking_1);
-          }, 1400);
+          }, 1300);
           setTimeout(function() {
             cc.audioEngine.playEffect(res.audio_tea_knock_table);
           }, 3150);
