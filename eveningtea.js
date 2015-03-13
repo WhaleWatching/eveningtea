@@ -88,11 +88,16 @@ var LoaderScene = cc.Scene.extend({
         var bgLayer = self._bgLayer = new cc.LayerColor(cc.color(18, 18, 18, 255));
         self.addChild(bgLayer, 0);
         var fontSize = 28, lblHeight =  -logoHeight / 2 + 100;
-        var label = self._label = new cc.LabelTTF("Preparing", "Play", fontSize);
-        label.setPosition(cc.pAdd(cc.p(450, 80), cc.p(0, lblHeight)));
+        var label = self._label = new cc.LabelTTF(logic.loading[0], "Play", fontSize);
+        label.setPosition(cc.pAdd(cc.p(450, 63), cc.p(0, lblHeight)));
         label.setColor(cc.color(180, 180, 180));
         label.attr({scale: 0.5});
         bgLayer.addChild(this._label, 10);
+        var label_percent = self._label_percent = new cc.LabelTTF("[0%]", "Play", fontSize);
+        label_percent.setPosition(cc.pAdd(cc.p(450, 82), cc.p(0, lblHeight)));
+        label_percent.setColor(cc.color(180, 180, 180));
+        label_percent.attr({scale: 0.5});
+        bgLayer.addChild(this._label_percent, 10);
         return true;
     },
     _initStage: function (img, centerPos) {
@@ -129,6 +134,7 @@ var LoaderScene = cc.Scene.extend({
                 var loading_index = Math.floor(percent / 100 * logic.loading.length);
 
                 self._label.setString(logic.loading[loading_index]);
+                self._label_percent.setString('[' + percent + '%]');
                 self._bgLayer.stopAllActions();
                 self._bgLayer.runAction(cc.tintTo(500, color,color,color));
             }, function () {
@@ -1443,7 +1449,7 @@ var LogicLayer = cc.Layer.extend({
           })));
           setTimeout(function() {
             cc.audioEngine.playEffect(res.audio_tea_drinking_1);
-          }, 900);
+          }, 1200);
           setTimeout(function() {
             cc.audioEngine.playEffect(res.audio_tea_knock_table);
           }, 3150);
@@ -1468,7 +1474,7 @@ var LogicLayer = cc.Layer.extend({
           })));
           setTimeout(function() {
             cc.audioEngine.playEffect(res.audio_tea_drinking_2);
-          }, 900);
+          }, 1200);
           setTimeout(function() {
             cc.audioEngine.playEffect(res.audio_tea_knock_table);
           }, 3150);
@@ -1492,7 +1498,7 @@ var LogicLayer = cc.Layer.extend({
           })));
           setTimeout(function() {
             cc.audioEngine.playEffect(res.audio_tea_drinking_1);
-          }, 900);
+          }, 1200);
           setTimeout(function() {
             cc.audioEngine.playEffect(res.audio_tea_knock_table);
           }, 3150);
@@ -2040,14 +2046,14 @@ var LogicLayer = cc.Layer.extend({
       musicFadeTo(0, 1000);
       var boss_delay = 800 + Math.floor(Math.random() * 1200);
       cc.audioEngine.playEffect(res.audio_action_mountain, false);
-      setTimeout(function() {
-        controller.director.log('[Mountaining]', 'player', function () {
-          logic_state.current.dialogue++;
-          controller.director.step_action();
+      controller.director.log('[Mountaining]', 'player', function () {
+        logic_state.current.dialogue++;
+        controller.director.step_action();
+        setTimeout(function() {
           controller.director.talk(true, true);
-          mountain_delay = mountain_delay * 1.5;
-        });
-      }, boss_delay);
+        }, boss_delay);
+        mountain_delay = mountain_delay * 1.5;
+      });
     }
 
     var game_start_listener = cc.EventListener.create({
