@@ -2073,7 +2073,8 @@ var LogicLayer = cc.Layer.extend({
       }
       input.duringStart();
       var boss_delay = 1200 + Math.floor(Math.random() * 1200);
-      cc.audioEngine.playEffect(res.audio_action_mountain, false);
+      // cc.audioEngine.playEffect(res.audio_action_mountain, false);
+      audio_tree.action_mountain.play();
       controller.director.log(logic.messages.mountain, 'player', function () {
         logic_state.current.dialogue++;
         controller.director.step_action();
