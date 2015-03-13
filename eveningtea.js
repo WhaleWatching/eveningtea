@@ -1673,14 +1673,14 @@ var LogicLayer = cc.Layer.extend({
         } else if(typeCallback) {
           label.string = whole_str;
           if(next_mountain) {
-            musicFadeTo(1, 2000);
-            effectFadeTo(0, 2000);
+            musicFadeTo(1, 3000);
+            effectFadeTo(0, 3000);
             setTimeout(function() {
               console.log(logic_state.mountained_id);
               cc.audioEngine.stopEffect(logic_state.mountained_id);
               cc.audioEngine.setEffectsVolume(1);
               typeCallback.call(label);
-            }, 2400);
+            }, 3400);
           } else {
             typeCallback.call(label);
           }
