@@ -1204,7 +1204,7 @@ var LogicLayer = cc.Layer.extend({
       cc.audioEngine.playEffect(res.audio_ammo_teleport);
       setTimeout(function() {
         cc.audioEngine.playEffect(res.audio_ammo_crush);
-      }, 900);
+      }, 600);
     }
 
 
