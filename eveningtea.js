@@ -47,6 +47,27 @@ var musicFadeTo = function (volume, duration, _start_volume) {
   callback();
 }
 
+var effectFadeTo = function (volume, duration, _start_volume) {
+  var time_step = duration/40;
+  var start_volume;
+  if(typeof(_start_volume) === 'undefined') {
+    start_volume = cc.audioEngine.getEffectsVolume();
+  } else {
+    start_volume = _start_volume;
+  }
+  var vol_step = (volume - start_volume) / 40;
+  var step = 0;
+  var callback = function () {
+    // console.log(vol_step, start_volume, step, start_volume + vol_step * step);
+    cc.audioEngine.setEffectsVolume(start_volume + vol_step * step);
+    step++;
+    if(step < 41) {
+      setTimeout(callback, time_step);
+    }
+  }
+  callback();
+}
+
 var game_state = {
   state: 0,
   end: false,
@@ -1618,16 +1639,16 @@ var LogicLayer = cc.Layer.extend({
         if(debug_speed_up && !next_mountain) {
           delay = 10;
         }
-        // if(whole_str == logic.messages.mountain) {
-        //   delay = mountain_delay;
-        //   // console.log('mountain delay');
-        // }
         if(next_mountain) {
           delay = delay * mountain_delay;
           // console.log('mountain delay');
         }
         if(isMessage(whole_str)) {
           delay = 60;
+        }
+        if(whole_str == logic.messages.mountain) {
+          delay = 600;
+          // console.log('mountain delay');
         }
         // console.log(str_num, delay_points);
         return delay;
@@ -1652,6 +1673,12 @@ var LogicLayer = cc.Layer.extend({
         } else if(typeCallback) {
           if(next_mountain) {
             musicFadeTo(1, 500);
+            effectFadeTo(0, 500);
+            setTimeout(function() {
+              console.log(logic_state.mountained_id);
+              cc.audioEngine.stopEffect(logic_state.mountained_id);
+              cc.audioEngine.setEffectsVolume(1);
+            }, 600);
           }
           if(whole_str == logic.messages.mountain) {
             next_mountain = true;
@@ -2043,12 +2070,14 @@ var LogicLayer = cc.Layer.extend({
         return;
       }
       input.duringStart();
-      musicFadeTo(0, 1000);
       var boss_delay = 1200 + Math.floor(Math.random() * 1200);
       cc.audioEngine.playEffect(res.audio_action_mountain, false);
-      controller.director.log('[Mountaining]', 'player', function () {
+      controller.director.log(logic.messages.mountain, 'player', function () {
         logic_state.current.dialogue++;
         controller.director.step_action();
+        musicFadeTo(0, 2000);
+        effectFadeTo(1, 2000, 0);
+        logic_state.mountained_id = cc.audioEngine.playEffect(res.audio_ambient_mountained, true);
         setTimeout(function() {
           controller.director.talk(true, true);
         }, boss_delay);
