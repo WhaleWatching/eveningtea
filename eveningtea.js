@@ -1646,10 +1646,10 @@ var LogicLayer = cc.Layer.extend({
         if(isMessage(whole_str)) {
           delay = 60;
         }
-        if(whole_str == logic.messages.mountain) {
-          delay = 600;
-          // console.log('mountain delay');
-        }
+        // if(whole_str == logic.messages.mountain) {
+        //   delay = 600;
+        //   // console.log('mountain delay');
+        // }
         // console.log(str_num, delay_points);
         return delay;
       }
@@ -1671,22 +1671,24 @@ var LogicLayer = cc.Layer.extend({
             intervalCallback.call(label);
           }
         } else if(typeCallback) {
+          label.string = whole_str;
           if(next_mountain) {
-            musicFadeTo(1, 500);
-            effectFadeTo(0, 500);
+            musicFadeTo(1, 2000);
+            effectFadeTo(0, 2000);
             setTimeout(function() {
               console.log(logic_state.mountained_id);
               cc.audioEngine.stopEffect(logic_state.mountained_id);
               cc.audioEngine.setEffectsVolume(1);
-            }, 600);
+              typeCallback.call(label);
+            }, 2000);
+          } else {
+            typeCallback.call(label);
           }
           if(whole_str == logic.messages.mountain) {
             next_mountain = true;
           } else {
             next_mountain = false;
           }
-          label.string = whole_str;
-          typeCallback.call(label);
         }
       }
       type();
