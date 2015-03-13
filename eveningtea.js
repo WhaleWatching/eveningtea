@@ -1204,7 +1204,7 @@ var LogicLayer = cc.Layer.extend({
       cc.audioEngine.playEffect(res.audio_ammo_teleport);
       setTimeout(function() {
         cc.audioEngine.playEffect(res.audio_ammo_crush);
-      }, 600);
+      }, 750);
     }
 
 
@@ -1449,7 +1449,7 @@ var LogicLayer = cc.Layer.extend({
           })));
           setTimeout(function() {
             cc.audioEngine.playEffect(res.audio_tea_drinking_1);
-          }, 1300);
+          }, 1250);
           setTimeout(function() {
             cc.audioEngine.playEffect(res.audio_tea_knock_table);
           }, 3150);
@@ -1498,7 +1498,7 @@ var LogicLayer = cc.Layer.extend({
           })));
           setTimeout(function() {
             cc.audioEngine.playEffect(res.audio_tea_drinking_1);
-          }, 1300);
+          }, 1250);
           setTimeout(function() {
             cc.audioEngine.playEffect(res.audio_tea_knock_table);
           }, 3150);
