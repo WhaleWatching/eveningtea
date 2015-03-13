@@ -1449,7 +1449,7 @@ var LogicLayer = cc.Layer.extend({
           })));
           setTimeout(function() {
             cc.audioEngine.playEffect(res.audio_tea_drinking_1);
-          }, 1500);
+          }, 1400);
           setTimeout(function() {
             cc.audioEngine.playEffect(res.audio_tea_knock_table);
           }, 3150);
@@ -1474,7 +1474,7 @@ var LogicLayer = cc.Layer.extend({
           })));
           setTimeout(function() {
             cc.audioEngine.playEffect(res.audio_tea_drinking_2);
-          }, 1500);
+          }, 1400);
           setTimeout(function() {
             cc.audioEngine.playEffect(res.audio_tea_knock_table);
           }, 3150);
@@ -1498,7 +1498,7 @@ var LogicLayer = cc.Layer.extend({
           })));
           setTimeout(function() {
             cc.audioEngine.playEffect(res.audio_tea_drinking_1);
-          }, 1500);
+          }, 1400);
           setTimeout(function() {
             cc.audioEngine.playEffect(res.audio_tea_knock_table);
           }, 3150);
@@ -1915,7 +1915,7 @@ var LogicLayer = cc.Layer.extend({
         // console.log('Talk fail, talking: ', controller.talking, ', talk state: ', input.talk);
         return;
       }
-      var boss_delay = 800 + Math.floor(Math.random() * 1200);
+      var boss_delay = 1200 + Math.floor(Math.random() * 1200);
       if(debug_speed_up) {
         boss_delay = 0;
       }
@@ -2044,7 +2044,7 @@ var LogicLayer = cc.Layer.extend({
       }
       input.duringStart();
       musicFadeTo(0, 1000);
-      var boss_delay = 800 + Math.floor(Math.random() * 1200);
+      var boss_delay = 1200 + Math.floor(Math.random() * 1200);
       cc.audioEngine.playEffect(res.audio_action_mountain, false);
       controller.director.log('[Mountaining]', 'player', function () {
         logic_state.current.dialogue++;
