@@ -1680,7 +1680,7 @@ var LogicLayer = cc.Layer.extend({
               cc.audioEngine.stopEffect(logic_state.mountained_id);
               cc.audioEngine.setEffectsVolume(1);
               typeCallback.call(label);
-            }, 2000);
+            }, 2400);
           } else {
             typeCallback.call(label);
           }
