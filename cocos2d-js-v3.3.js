@@ -1660,6 +1660,7 @@ cc.SAXParser = cc.Class.extend({
     _parseXML: function (textxml) {
         var xmlDoc;
         if (this._isSupportDOMParser) {
+            window.xx = textxml;
             xmlDoc = this._parser.parseFromString(textxml, "text/xml");
         } else {
             xmlDoc = new ActiveXObject("Microsoft.XMLDOM");
@@ -1673,8 +1674,8 @@ cc.PlistParser = cc.SAXParser.extend({
     parse : function (xmlTxt) {
         var xmlDoc = this._parseXML(xmlTxt);
         var plist = xmlDoc.documentElement;
-        if (plist.tagName != 'plist')
-            throw "Not a plist file!";
+        // if (plist.tagName != 'plist')
+        //     throw "Not a plist file!";
         var node = null;
         for (var i = 0, len = plist.childNodes.length; i < len; i++) {
             node = plist.childNodes[i];

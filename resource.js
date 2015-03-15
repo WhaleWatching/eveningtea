@@ -1,4 +1,6 @@
-var res = {
+var g_resources = [];
+
+var res_img = {
 	sprite_background_sunset: 'res/sprite/background_sunset.png',
 	sprite_words_title: 'res/sprite/title.png',
 	sprite_ui_left: 'res/sprite/ui_left.png',
@@ -38,31 +40,59 @@ var res = {
 	sprite_ui_talk: 'res/sprite/ui_talk.png',
 	sprite_arraw: 'res/sprite/arraw.png',
 	sprite_mountain: 'res/sprite/mountain.png',
+	sprite_pressstart: 'res/sprite/pressstart.png'
+};
+for (var i in res_img) {
+    g_resources.push({src: res_img[i], type: 'png'});
+}
+
+var res_plist = {
 	p_dust: 'res/sprite/dust.plist',
 	p_water: 'res/sprite/water.plist',
-	p_tea: 'res/sprite/tea.plist',
-	sprite_pressstart: 'res/sprite/pressstart.png',
-
-	// Audios
-
-	audio_ambient: 'res/audio/ambient.ogg',
-	// audio_opening: 'res/audio/opening.ogg',
-	audio_action_talk: 'res/audio/action_talk.ogg',
-	audio_action_tea: 'res/audio/action_tea.ogg',
-	audio_ammo_teleport: 'res/audio/ammo_teleport.ogg',
-	audio_ammo_crush: 'res/audio/ammo_crush.ogg',
-	audio_action_mountain: 'res/audio/action_mountain.ogg',
-	audio_ambient_mountained: 'res/audio/ambient_mountained.ogg',
-	audio_show_tea: 'res/audio/show_tea.ogg',
-	audio_tea_drinking_1: 'res/audio/tea_drinking_1.ogg',
-	audio_tea_drinking_2: 'res/audio/tea_drinking_2.ogg',
-	audio_tea_filling: 'res/audio/tea_filling.ogg',
-	audio_tea_unable: 'res/audio/tea_unable.ogg',
-	audio_tea_knock_table: 'res/audio/tea_knock_table.ogg'
-
+	p_tea: 'res/sprite/tea.plist'
 };
+for (var i in res_plist) {
+    g_resources.push({src: res_plist[i], type: 'plist'});
+}
 
-var g_resources = [];
-for (var i in res) {
-    g_resources.push(res[i]);
+var res_audio = {};
+
+if(window.chrome) {
+	res_audio = {
+		audio_ambient: 'res/audio/ambient.ogg',
+		audio_action_talk: 'res/audio/action_talk.ogg',
+		audio_action_tea: 'res/audio/action_tea.ogg',
+		audio_ammo_teleport: 'res/audio/ammo_teleport.ogg',
+		audio_ammo_crush: 'res/audio/ammo_crush.ogg',
+		audio_action_mountain: 'res/audio/action_mountain.ogg',
+		audio_ambient_mountained: 'res/audio/ambient_mountained.ogg',
+		audio_show_tea: 'res/audio/show_tea.ogg',
+		audio_tea_drinking_1: 'res/audio/tea_drinking_1.ogg',
+		audio_tea_drinking_2: 'res/audio/tea_drinking_2.ogg',
+		audio_tea_filling: 'res/audio/tea_filling.ogg',
+		audio_tea_unable: 'res/audio/tea_unable.ogg',
+		audio_tea_knock_table: 'res/audio/tea_knock_table.ogg'
+	}
+	for (var i in res_audio) {
+	    g_resources.push({src: res_audio[i], type: 'ogg'});
+	}
+} else {
+	res_audio = {
+		audio_ambient: 'res/audio/ambient.mp3',
+		audio_action_talk: 'res/audio/action_talk.mp3',
+		audio_action_tea: 'res/audio/action_tea.mp3',
+		audio_ammo_teleport: 'res/audio/ammo_teleport.mp3',
+		audio_ammo_crush: 'res/audio/ammo_crush.mp3',
+		audio_action_mountain: 'res/audio/action_mountain.mp3',
+		audio_ambient_mountained: 'res/audio/ambient_mountained.mp3',
+		audio_show_tea: 'res/audio/show_tea.mp3',
+		audio_tea_drinking_1: 'res/audio/tea_drinking_1.mp3',
+		audio_tea_drinking_2: 'res/audio/tea_drinking_2.mp3',
+		audio_tea_filling: 'res/audio/tea_filling.mp3',
+		audio_tea_unable: 'res/audio/tea_unable.mp3',
+		audio_tea_knock_table: 'res/audio/tea_knock_table.mp3'
+	}
+	for (var i in res_audio) {
+	    g_resources.push({src: res_audio[i], type: 'mp3'});
+	}
 }

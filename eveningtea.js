@@ -227,7 +227,7 @@ var BackgroundLayer = cc.LayerColor.extend({
       y: 200
     };
     
-    var BackgroundSunsetSprite = new cc.Sprite(res.sprite_background_sunset);
+    var BackgroundSunsetSprite = new cc.Sprite(res_img.sprite_background_sunset);
     BackgroundSunsetSprite.texture.setAliasTexParameters();
     BackgroundSunsetSprite.attr(background_position);
 
@@ -243,7 +243,7 @@ var PressstartLayer = cc.Layer.extend({
     self = this;
     this._super();
 
-    var PromptSprite = new cc.Sprite(res.sprite_pressstart);
+    var PromptSprite = new cc.Sprite(res_img.sprite_pressstart);
     PromptSprite.texture.setAliasTexParameters();
     PromptSprite.attr({
       x: 450,
@@ -255,7 +255,7 @@ var PressstartLayer = cc.Layer.extend({
     // console.log(blink);
     PromptSprite.runAction(cc.repeatForever(blink));
 
-    var PressBgLSprite = new cc.Sprite(res.sprite_press_bg);
+    var PressBgLSprite = new cc.Sprite(res_img.sprite_press_bg);
     PressBgLSprite.texture.setAliasTexParameters();
     PressBgLSprite.attr({
       x: 0,
@@ -267,7 +267,7 @@ var PressstartLayer = cc.Layer.extend({
     });
     this.addChild(PressBgLSprite);
 
-    var PressBgRSprite = new cc.Sprite(res.sprite_press_bg);
+    var PressBgRSprite = new cc.Sprite(res_img.sprite_press_bg);
     PressBgRSprite.texture.setAliasTexParameters();
     PressBgRSprite.attr({
       x: 450,
@@ -302,12 +302,12 @@ var PressstartLayer = cc.Layer.extend({
           // }, self)));
           // console.log(cc.moveTo(2, cc.p(-450, 0)));
           self.blow();
-          // cc.audioEngine.playMusic(res.sprite_prelude, true);
+          // cc.audioEngine.playMusic(res_img.sprite_prelude, true);
           // audio_tree.background.setVolume(0).play().fadeTo(audio_tree.background._start_volume, 3000);
           // audio_tree.curtain.play();
           musicFadeTo(1, 3000, 0);
-          cc.audioEngine.playMusic(res.audio_ambient, true);
-          // cc.audioEngine.playEffect(res.audio_opening, false);
+          cc.audioEngine.playMusic(res_audio.audio_ambient, true);
+          // cc.audioEngine.playEffect(res_audio.audio_opening, false);
           self.runAction(cc.sequence(cc.delayTime(0.7), cc.callFunc(function () {
             var event = new cc.EventCustom("pressstart_gone");
             cc.eventManager.dispatchEvent(event);
@@ -327,7 +327,7 @@ var TitleLayer = cc.Layer.extend({
   ctor: function () {
     self = this;
     this._super();
-    var TitleSprite = new cc.Sprite(res.sprite_words_title);
+    var TitleSprite = new cc.Sprite(res_img.sprite_words_title);
     TitleSprite.texture.setAliasTexParameters();
     TitleSprite.attr({
       x: 450,
@@ -382,8 +382,8 @@ var UiLayer = cc.Layer.extend({
   ctor: function () {
     self = this;
     this._super();
-    var UiLeftSprite = new cc.Sprite(res.sprite_ui_left);
-    var UiRightSprite = new cc.Sprite(res.sprite_ui_right);
+    var UiLeftSprite = new cc.Sprite(res_img.sprite_ui_left);
+    var UiRightSprite = new cc.Sprite(res_img.sprite_ui_right);
     UiLeftSprite.texture.setAliasTexParameters();
     UiRightSprite.texture.setAliasTexParameters();
     UiLeftSprite.attr({
@@ -403,7 +403,7 @@ var UiLayer = cc.Layer.extend({
     this.addChild(UiLeftSprite);
     this.addChild(UiRightSprite);
 
-    var UiShootSprite = new cc.Sprite(res.sprite_ui_shoot);
+    var UiShootSprite = new cc.Sprite(res_img.sprite_ui_shoot);
     UiShootSprite.texture.setAliasTexParameters();
     UiShootSprite.attr({
       x: 800,
@@ -417,7 +417,7 @@ var UiLayer = cc.Layer.extend({
       boss: 0.65
     }
 
-    var UiHpPlayerSprite =  new cc.Sprite(res.sprite_ui_hp);
+    var UiHpPlayerSprite =  new cc.Sprite(res_img.sprite_ui_hp);
     UiHpPlayerSprite.texture.setAliasTexParameters();
     UiHpPlayerSprite.attr({
       x: 830.5,
@@ -428,7 +428,7 @@ var UiLayer = cc.Layer.extend({
     });
     UiHpPlayerSprite.runAction(cc.scaleTo(0.1, hp.player, 1));
     this.addChild(UiHpPlayerSprite, 20);
-    var UiHpBackPlayerSprite =  new cc.Sprite(res.sprite_ui_hp);
+    var UiHpBackPlayerSprite =  new cc.Sprite(res_img.sprite_ui_hp);
     UiHpBackPlayerSprite.texture.setAliasTexParameters();
     UiHpBackPlayerSprite.attr({
       x: 830.5,
@@ -441,7 +441,7 @@ var UiLayer = cc.Layer.extend({
     UiHpBackPlayerSprite.runAction(cc.scaleTo(0.1, hp.player, 1));
     this.addChild(UiHpBackPlayerSprite, 10);
 
-    var UiHpBossSprite =  new cc.Sprite(res.sprite_ui_hp);
+    var UiHpBossSprite =  new cc.Sprite(res_img.sprite_ui_hp);
     UiHpBossSprite.texture.setAliasTexParameters();
     UiHpBossSprite.attr({
       x: 68.5,
@@ -452,7 +452,7 @@ var UiLayer = cc.Layer.extend({
     });
     UiHpBossSprite.runAction(cc.scaleTo(0.1, hp.boss, 1));
     this.addChild(UiHpBossSprite, 20);
-    var UiHpBackBossSprite =  new cc.Sprite(res.sprite_ui_hp);
+    var UiHpBackBossSprite =  new cc.Sprite(res_img.sprite_ui_hp);
     UiHpBackBossSprite.texture.setAliasTexParameters();
     UiHpBackBossSprite.attr({
       x: 68.5,
@@ -518,7 +518,7 @@ var UiLayer = cc.Layer.extend({
 
     var UiBossBullets = [];
     for (var i = 0; i < 0; i++) {
-      var bullet =  new cc.Sprite(res.sprite_ui_bullet);
+      var bullet =  new cc.Sprite(res_img.sprite_ui_bullet);
       bullet.attr({
         x: 23 + i * 7,
         y: 19,
@@ -530,7 +530,7 @@ var UiLayer = cc.Layer.extend({
 
     var UiRoleBullets = [];
     for (var i = 0; i < 0; i++) {
-      var bullet =  new cc.Sprite(res.sprite_ui_bullet);
+      var bullet =  new cc.Sprite(res_img.sprite_ui_bullet);
       bullet.attr({
         x: 876 - i * 7,
         y: 18,
@@ -580,7 +580,7 @@ var RoleLayer = cc.Layer.extend({
     this._super();
     this.scheduleUpdate();
 
-    this.role_sprite = new cc.Sprite(res.sprite_role);
+    this.role_sprite = new cc.Sprite(res_img.sprite_role);
     this.role_sprite.attr({
       x: 840,
       y: 165
@@ -619,12 +619,12 @@ var SunLayer = cc.Layer.extend({
     this._super();
     var frames = [];
     for (var i = 0; i < 8; i++) {
-      var sprite_frame = new cc.SpriteFrame(res.sprite_sun,cc.rect(i*237,0,237,68));
+      var sprite_frame = new cc.SpriteFrame(res_img.sprite_sun,cc.rect(i*237,0,237,68));
       frames.push(sprite_frame);
     };
     var SunAnimation = new cc.Animation(frames, 0.2);
     // console.log('SunAnimation', SunAnimation);
-    var sprite_sun = new cc.Sprite(new cc.SpriteFrame(res.sprite_sun,cc.rect(0,0,237,68)));
+    var sprite_sun = new cc.Sprite(new cc.SpriteFrame(res_img.sprite_sun,cc.rect(0,0,237,68)));
     sprite_sun.attr({x:305,y:218});
     // sprite_sun.setBlendFunc(gl.ONE_MINUS_DST_COLOR, gl.ONE);
     this.addChild(sprite_sun, 1);
@@ -639,7 +639,7 @@ var SunlightLayer = cc.Layer.extend({
     this._super();
 
 
-    var sprite_sunlight = new cc.Sprite(res.sprite_sunlight);
+    var sprite_sunlight = new cc.Sprite(res_img.sprite_sunlight);
     // sprite_sunlight.setBlendFunc(gl.SRC_ALPHA, gl.ONE);
     // sprite_sunlight.setBlendFunc(gl.SRC_ALPHA, gl.DST_COLOR);
     // sprite_sunlight.setBlendFunc(gl.DST_COLOR, gl.ONE);
@@ -666,7 +666,7 @@ var IslandsLayer = cc.Layer.extend({
     this._super();
 
 
-    sprite_mountain = new cc.Sprite(res.sprite_mountain);
+    sprite_mountain = new cc.Sprite(res_img.sprite_mountain);
     sprite_mountain.attr({
       x: 497,
       y: 310,
@@ -679,7 +679,7 @@ var IslandsLayer = cc.Layer.extend({
     }
 
 
-    var sprite_islands = new cc.Sprite(res.sprite_island);
+    var sprite_islands = new cc.Sprite(res_img.sprite_island);
     sprite_islands.texture.setAliasTexParameters();
     // sprite_islands.setBlendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
     sprite_islands.attr({x:450,y:238});
@@ -687,12 +687,12 @@ var IslandsLayer = cc.Layer.extend({
 
     var frames_ref1 = [];
     for (var i = 0; i < 8; i++) {
-      var sprite_frame = new cc.SpriteFrame(res.sprite_ref1,cc.rect(i*127,0,127,48));
+      var sprite_frame = new cc.SpriteFrame(res_img.sprite_ref1,cc.rect(i*127,0,127,48));
       frames_ref1.push(sprite_frame);
     };
     var Ref1Animation = new cc.Animation(frames_ref1, 0.2);
     // console.log('Ref1Animation', Ref1Animation);
-    var sprite_ref1 = new cc.Sprite(new cc.SpriteFrame(res.sprite_ref1,cc.rect(0,0,127,48)));
+    var sprite_ref1 = new cc.Sprite(new cc.SpriteFrame(res_img.sprite_ref1,cc.rect(0,0,127,48)));
     sprite_ref1.attr({x:58,y:223, opacity: 170});
     sprite_ref1.setBlendFunc(gl.DST_COLOR, gl.ONE_MINUS_SRC_ALPHA);
     // sprite_ref1.setBlendFunc(gl.ONE_MINUS_DST_COLOR, gl.ONE);
@@ -702,12 +702,12 @@ var IslandsLayer = cc.Layer.extend({
 
     var frames_ref2 = [];
     for (var i = 0; i < 8; i++) {
-      var sprite_frame = new cc.SpriteFrame(res.sprite_ref2,cc.rect(0,i*65,368,65));
+      var sprite_frame = new cc.SpriteFrame(res_img.sprite_ref2,cc.rect(0,i*65,368,65));
       frames_ref2.push(sprite_frame);
     };
     var Ref2Animation = new cc.Animation(frames_ref2, 0.2);
     // console.log('Ref2Animation', Ref2Animation);
-    var sprite_ref2 = new cc.Sprite(new cc.SpriteFrame(res.sprite_ref2,cc.rect(0,0,368,65)));
+    var sprite_ref2 = new cc.Sprite(new cc.SpriteFrame(res_img.sprite_ref2,cc.rect(0,0,368,65)));
     sprite_ref2.texture.setAliasTexParameters();
     sprite_ref2.attr({x:577,y:220, opacity: 170});
     sprite_ref2.setBlendFunc(gl.DST_COLOR, gl.ONE_MINUS_SRC_ALPHA);
@@ -718,12 +718,12 @@ var IslandsLayer = cc.Layer.extend({
 
     var frames_ref3 = [];
     for (var i = 0; i < 8; i++) {
-      var sprite_frame = new cc.SpriteFrame(res.sprite_ref3,cc.rect(i*101,0,101,65));
+      var sprite_frame = new cc.SpriteFrame(res_img.sprite_ref3,cc.rect(i*101,0,101,65));
       frames_ref3.push(sprite_frame);
     };
     var Ref3Animation = new cc.Animation(frames_ref3, 0.2);
     // console.log('Ref3Animation', Ref3Animation);
-    var sprite_ref3 = new cc.Sprite(new cc.SpriteFrame(res.sprite_ref3,cc.rect(0,0,101,65)));
+    var sprite_ref3 = new cc.Sprite(new cc.SpriteFrame(res_img.sprite_ref3,cc.rect(0,0,101,65)));
     sprite_ref3.texture.setAliasTexParameters();
     sprite_ref3.attr({x:855,y:209, opacity: 170});
     sprite_ref3.setBlendFunc(gl.DST_COLOR, gl.ONE_MINUS_SRC_ALPHA);
@@ -742,7 +742,7 @@ var DustLayer = cc.Layer.extend({
     self = this;
     this._super();
 
-    var DustPart = new cc.ParticleSystem(res.p_dust);
+    var DustPart = new cc.ParticleSystem(res_plist.p_dust);
     DustPart.setStartColor(cc.color(217, 191, 77, 127));
     DustPart.setStartColorVar(cc.color(0, 0, 0, 127));
     DustPart.setEndColor(cc.color(217, 191, 77, 0));
@@ -795,7 +795,7 @@ var WaterLayer = cc.Layer.extend({
     }
 
     for (var i = 0; i < 160; i++) {
-      var SpriteLight = new cc.Sprite(res.sprite_light);
+      var SpriteLight = new cc.Sprite(res_img.sprite_light);
       SpriteLight.setBlendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
       lights_call.apply(SpriteLight);
       this.addChild(SpriteLight);
@@ -815,22 +815,22 @@ var GroundLayer = cc.Layer.extend({
     this._super();
     this.scheduleUpdate();
 
-    var GrassSprite = new cc.Sprite(res.sprite_grass);
+    var GrassSprite = new cc.Sprite(res_img.sprite_grass);
     GrassSprite.attr({x: 451, y: 159});
     GrassSprite.texture.setAliasTexParameters();
     this.addChild(GrassSprite);
 
-    var Weapon1Sprite = new cc.Sprite(res.sprite_weapon1);
+    var Weapon1Sprite = new cc.Sprite(res_img.sprite_weapon1);
     Weapon1Sprite.attr({x: 865, y: 184});
     Weapon1Sprite.texture.setAliasTexParameters();
     this.addChild(Weapon1Sprite, 1);
 
-    var Weapon2Sprite = new cc.Sprite(res.sprite_weapon2);
+    var Weapon2Sprite = new cc.Sprite(res_img.sprite_weapon2);
     Weapon2Sprite.attr({x: 227, y: 191});
     Weapon2Sprite.texture.setAliasTexParameters();
     this.addChild(Weapon2Sprite, 1);
 
-    var TableSprite = new cc.Sprite(res.sprite_table);
+    var TableSprite = new cc.Sprite(res_img.sprite_table);
     TableSprite.attr({x: 437, y: 180});
     TableSprite.texture.setAliasTexParameters();
     this.addChild(TableSprite, 1);
@@ -838,12 +838,12 @@ var GroundLayer = cc.Layer.extend({
 
     var frames_fire = [];
     for (var i = 0; i < 8; i++) {
-      var sprite_frame = new cc.SpriteFrame(res.sprite_fire,cc.rect(0,i*148,227,148));
+      var sprite_frame = new cc.SpriteFrame(res_img.sprite_fire,cc.rect(0,i*148,227,148));
       frames_fire.push(sprite_frame);
     };
     var FireAnimation = new cc.Animation(frames_fire, 0.13);
     // console.log('FireAnimation', FireAnimation);
-    var sprite_fire = new cc.Sprite(new cc.SpriteFrame(res.sprite_fire,cc.rect(0,0,227,148)));
+    var sprite_fire = new cc.Sprite(new cc.SpriteFrame(res_img.sprite_fire,cc.rect(0,0,227,148)));
     sprite_fire.texture.setAliasTexParameters();
     sprite_fire.attr({x:725,y:151});
     // sprite_fire.setBlendFunc(gl.DST_COLOR, gl.ONE_MINUS_SRC_ALPHA);
@@ -874,7 +874,7 @@ var GroundLayer = cc.Layer.extend({
         r: 0
       };
       this.life = 0;
-      this.sprite = new cc.Sprite(res.sprite_light_fire);
+      this.sprite = new cc.Sprite(res_img.sprite_light_fire);
       parent.addChild(this.sprite);
       this.opacity = 1;
       this.current_life = 0;
@@ -963,12 +963,12 @@ var GroundLayer = cc.Layer.extend({
 
     var frames_katana = [];
     for (var i = 0; i < 4; i++) {
-      var sprite_frame = new cc.SpriteFrame(res.sprite_katana,cc.rect(i*76,0,76,185));
+      var sprite_frame = new cc.SpriteFrame(res_img.sprite_katana,cc.rect(i*76,0,76,185));
       frames_katana.push(sprite_frame);
     };
     var KatanaAnimation = new cc.Animation(frames_katana, 0.18);
     // console.log('KatanaAnimation', KatanaAnimation);
-    var sprite_katana = new cc.Sprite(new cc.SpriteFrame(res.sprite_katana,cc.rect(0,0,76,185)));
+    var sprite_katana = new cc.Sprite(new cc.SpriteFrame(res_img.sprite_katana,cc.rect(0,0,76,185)));
     sprite_katana.texture.setAliasTexParameters();
     sprite_katana.attr({x:805,y:186});
     // sprite_katana.setBlendFunc(gl.DST_COLOR, gl.ONE_MINUS_SRC_ALPHA);
@@ -979,12 +979,12 @@ var GroundLayer = cc.Layer.extend({
 
     var frames_spear = [];
     for (var i = 0; i < 4; i++) {
-      var sprite_frame = new cc.SpriteFrame(res.sprite_spear,cc.rect(i*78,0,78,318));
+      var sprite_frame = new cc.SpriteFrame(res_img.sprite_spear,cc.rect(i*78,0,78,318));
       frames_spear.push(sprite_frame);
     };
     var SpearAnimation = new cc.Animation(frames_spear, 0.18);
     // console.log('SpearAnimation', SpearAnimation);
-    var sprite_spear = new cc.Sprite(new cc.SpriteFrame(res.sprite_spear,cc.rect(0,0,78,318)));
+    var sprite_spear = new cc.Sprite(new cc.SpriteFrame(res_img.sprite_spear,cc.rect(0,0,78,318)));
     sprite_spear.texture.setAliasTexParameters();
     sprite_spear.attr({x:70,y:239});
     // sprite_spear.setBlendFunc(gl.DST_COLOR, gl.ONE_MINUS_SRC_ALPHA);
@@ -1008,12 +1008,12 @@ var IdleLayer = cc.Layer.extend({
 
     var frames_player = [];
     for (var i = 0; i < 12; i++) {
-      var sprite_frame = new cc.SpriteFrame(res.sprite_player,cc.rect(i*165,0,165,223));
+      var sprite_frame = new cc.SpriteFrame(res_img.sprite_player,cc.rect(i*165,0,165,223));
       frames_player.push(sprite_frame);
     };
     var PlayerAnimation = new cc.Animation(frames_player, 0.18);
     // console.log('PlayerAnimation', PlayerAnimation);
-    var sprite_player = new cc.Sprite(new cc.SpriteFrame(res.sprite_player,cc.rect(0,0,165,223)));
+    var sprite_player = new cc.Sprite(new cc.SpriteFrame(res_img.sprite_player,cc.rect(0,0,165,223)));
     sprite_player.texture.setAliasTexParameters();
     sprite_player.attr({x:552,y:213});
     this.addChild(sprite_player, 1);
@@ -1021,12 +1021,12 @@ var IdleLayer = cc.Layer.extend({
 
     var frames_boss = [];
     for (var i = 0; i < 12; i++) {
-      var sprite_frame = new cc.SpriteFrame(res.sprite_boss,cc.rect(i*162,0,162,203));
+      var sprite_frame = new cc.SpriteFrame(res_img.sprite_boss,cc.rect(i*162,0,162,203));
       frames_boss.push(sprite_frame);
     };
     var BossAnimation = new cc.Animation(frames_boss, 0.18);
     // console.log('BossAnimation', BossAnimation);
-    var sprite_boss = new cc.Sprite(new cc.SpriteFrame(res.sprite_boss,cc.rect(0,0,162,203)));
+    var sprite_boss = new cc.Sprite(new cc.SpriteFrame(res_img.sprite_boss,cc.rect(0,0,162,203)));
     sprite_boss.texture.setAliasTexParameters();
     sprite_boss.attr({x:342,y:207});
     this.addChild(sprite_boss, 1);
@@ -1066,7 +1066,7 @@ var LogicLayer = cc.Layer.extend({
                   sprite_tea_player.runAction(cc.fadeIn(1));
                   sprite_tea_boss.runAction(cc.fadeIn(1));
                   setTimeout(function() {
-                    cc.audioEngine.playEffect(res.audio_show_tea, false);
+                    cc.audioEngine.playEffect(res_audio.audio_show_tea, false);
                   }, 700);
                   input.tea_inited = true;
                 }
@@ -1169,7 +1169,7 @@ var LogicLayer = cc.Layer.extend({
     };
     controller.input = input;
 
-    input.sprite_ui_tea = new cc.Sprite(res.sprite_ui_tea);
+    input.sprite_ui_tea = new cc.Sprite(res_img.sprite_ui_tea);
     input.sprite_ui_tea.attr({
       x: 615,
       y: 220,
@@ -1178,7 +1178,7 @@ var LogicLayer = cc.Layer.extend({
     });
     this.addChild(input.sprite_ui_tea);
 
-    input.sprite_ui_talk = new cc.Sprite(res.sprite_ui_talk);
+    input.sprite_ui_talk = new cc.Sprite(res_img.sprite_ui_talk);
     input.sprite_ui_talk.attr({
       x: 615,
       y: 240,
@@ -1187,7 +1187,7 @@ var LogicLayer = cc.Layer.extend({
     });
     this.addChild(input.sprite_ui_talk);
 
-    input.sprite_ui_mountain = new cc.Sprite(res.sprite_ui_mountain);
+    input.sprite_ui_mountain = new cc.Sprite(res_img.sprite_ui_mountain);
     input.sprite_ui_mountain.attr({
       x: 615,
       y: 200,
@@ -1201,12 +1201,12 @@ var LogicLayer = cc.Layer.extend({
 
     var ammo_player = [];
     for (var i = 0; i < 12; i++) {
-      var sprite_frame = new cc.SpriteFrame(res.sprite_ammo,cc.rect(i*185,0,185,200));
+      var sprite_frame = new cc.SpriteFrame(res_img.sprite_ammo,cc.rect(i*185,0,185,200));
       ammo_player.push(sprite_frame);
     };
     var AmmoAnimation = new cc.Animation(ammo_player, 0.10);
     // console.log('AmmoAnimation', AmmoAnimation);
-    var sprite_ammo = new cc.Sprite(new cc.SpriteFrame(res.sprite_ammo,cc.rect(0,0,185,200)));
+    var sprite_ammo = new cc.Sprite(new cc.SpriteFrame(res_img.sprite_ammo,cc.rect(0,0,185,200)));
     sprite_ammo.texture.setAliasTexParameters();
     sprite_ammo.attr({x:438,y:300,opacity:0});
     this.addChild(sprite_ammo, 10);
@@ -1222,9 +1222,9 @@ var LogicLayer = cc.Layer.extend({
         musicFadeTo(0, 3000);
         controller.director.pressstartEnd();
       })));
-      cc.audioEngine.playEffect(res.audio_ammo_teleport);
+      cc.audioEngine.playEffect(res_audio.audio_ammo_teleport);
       setTimeout(function() {
-        cc.audioEngine.playEffect(res.audio_ammo_crush);
+        cc.audioEngine.playEffect(res_audio.audio_ammo_crush);
       }, 750);
     }
 
@@ -1232,18 +1232,18 @@ var LogicLayer = cc.Layer.extend({
     // TEA
 
 
-    var TeapotSprite = new cc.Sprite(res.sprite_teapot);
+    var TeapotSprite = new cc.Sprite(res_img.sprite_teapot);
     TeapotSprite.attr({x: 436, y: 219, opacity: 0});
     TeapotSprite.texture.setAliasTexParameters();
     this.addChild(TeapotSprite, 1);
 
-    var TeaPlayerStartSprite = new cc.Sprite(res.sprite_tea_player_start);
+    var TeaPlayerStartSprite = new cc.Sprite(res_img.sprite_tea_player_start);
     TeaPlayerStartSprite.attr({x:544,y:234});
     TeaPlayerStartSprite.texture.setAliasTexParameters();
     this.addChild(TeaPlayerStartSprite, 1);
 
 
-    var TeaPlayerPart = new cc.ParticleSystem(res.p_tea);
+    var TeaPlayerPart = new cc.ParticleSystem(res_plist.p_tea);
     TeaPlayerPart.setStartColor(cc.color(255, 255, 255, 200));
     TeaPlayerPart.setStartColorVar(cc.color(0, 0, 0, 50));
     TeaPlayerPart.setEndColor(cc.color(255, 255, 255, 0));
@@ -1256,7 +1256,7 @@ var LogicLayer = cc.Layer.extend({
     TeaPlayerPart.attr({x: 520, y: 212});
     // console.log(TeaPlayerPart);
     this.addChild(TeaPlayerPart);
-    var TeaBossPart = new cc.ParticleSystem(res.p_tea);
+    var TeaBossPart = new cc.ParticleSystem(res_plist.p_tea);
     TeaBossPart.setStartColor(cc.color(255, 255, 255, 200));
     TeaBossPart.setStartColorVar(cc.color(0, 0, 0, 50));
     TeaBossPart.setEndColor(cc.color(255, 255, 255, 0));
@@ -1293,18 +1293,18 @@ var LogicLayer = cc.Layer.extend({
     // Tea fills boss
     var frames_tea_left = [];
     for (var i = 0; i < 14; i++) {
-      var sprite_frame = new cc.SpriteFrame(res.sprite_tea_left,cc.rect(0,51*i,110,51));
+      var sprite_frame = new cc.SpriteFrame(res_img.sprite_tea_left,cc.rect(0,51*i,110,51));
       frames_tea_left.push(sprite_frame);
     };
     for (var i = 13; i >= 0; i--) {
-      var sprite_frame = new cc.SpriteFrame(res.sprite_tea_left,cc.rect(0,51*i,110,51));
+      var sprite_frame = new cc.SpriteFrame(res_img.sprite_tea_left,cc.rect(0,51*i,110,51));
       frames_tea_left.push(sprite_frame);
     };
     var TeaLeftAnimation = new cc.Animation(frames_tea_left, 0.10);
     TeaLeftAnimation._frames[14].setDelayUnits(25);
     TeaLeftAnimation._totalDelayUnits += 24;
     // console.log('TeaLeftAnimation', TeaLeftAnimation);
-    var sprite_tea_left = new cc.Sprite(new cc.SpriteFrame(res.sprite_tea_left,cc.rect(0,0,110,51)));
+    var sprite_tea_left = new cc.Sprite(new cc.SpriteFrame(res_img.sprite_tea_left,cc.rect(0,0,110,51)));
     sprite_tea_left.texture.setAliasTexParameters();
     sprite_tea_left.attr({x:415,y:223,opacity: 0});
     this.addChild(sprite_tea_left, 1);
@@ -1314,18 +1314,18 @@ var LogicLayer = cc.Layer.extend({
     // Tea fills player
     var frames_tea_right = [];
     for (var i = 0; i < 17; i++) {
-      var sprite_frame = new cc.SpriteFrame(res.sprite_tea_right,cc.rect(0,53*i,126,53));
+      var sprite_frame = new cc.SpriteFrame(res_img.sprite_tea_right,cc.rect(0,53*i,126,53));
       frames_tea_right.push(sprite_frame);
     };
     for (var i = 16; i >= 0; i--) {
-      var sprite_frame = new cc.SpriteFrame(res.sprite_tea_right,cc.rect(0,53*i,126,53));
+      var sprite_frame = new cc.SpriteFrame(res_img.sprite_tea_right,cc.rect(0,53*i,126,53));
       frames_tea_right.push(sprite_frame);
     };
     var TeaRightAnimation = new cc.Animation(frames_tea_right, 0.10);
     TeaRightAnimation._frames[17].setDelayUnits(25);
     TeaRightAnimation._totalDelayUnits += 24;
     // console.log('TeaRightAnimation', TeaRightAnimation);
-    var sprite_tea_right = new cc.Sprite(new cc.SpriteFrame(res.sprite_tea_right,cc.rect(0,0,126,53)));
+    var sprite_tea_right = new cc.Sprite(new cc.SpriteFrame(res_img.sprite_tea_right,cc.rect(0,0,126,53)));
     sprite_tea_right.texture.setAliasTexParameters();
     sprite_tea_right.attr({x:465,y:224,opacity: 0});
     this.addChild(sprite_tea_right, 1);
@@ -1368,7 +1368,7 @@ var LogicLayer = cc.Layer.extend({
           finish();
         })));
         setTimeout(function() {
-          cc.audioEngine.playEffect(res.audio_tea_filling);
+          cc.audioEngine.playEffect(res_audio.audio_tea_filling);
           fillTeaPart('player');
         }, 1900);
       } else {
@@ -1381,7 +1381,7 @@ var LogicLayer = cc.Layer.extend({
           finish();
         })));
         setTimeout(function() {
-          cc.audioEngine.playEffect(res.audio_tea_filling); 
+          cc.audioEngine.playEffect(res_audio.audio_tea_filling); 
           fillTeaPart('boss');
         }, 1600);
       }
@@ -1391,14 +1391,14 @@ var LogicLayer = cc.Layer.extend({
 
     var frames_tea_player = [];
     for (var i = 0; i < 13; i++) {
-      var sprite_frame = new cc.SpriteFrame(res.sprite_tea_player,cc.rect(i*90,0,90,129));
+      var sprite_frame = new cc.SpriteFrame(res_img.sprite_tea_player,cc.rect(i*90,0,90,129));
       frames_tea_player.push(sprite_frame);
     };
     var TeaPlayerAnimation = new cc.Animation(frames_tea_player, 0.15);
     TeaPlayerAnimation._frames[7].setDelayUnits(10);
     TeaPlayerAnimation._totalDelayUnits += 9;
     // console.log('TeaPlayerAnimation', TeaPlayerAnimation);
-    var sprite_tea_player = new cc.Sprite(new cc.SpriteFrame(res.sprite_tea_player,cc.rect(0,0,90,129)));
+    var sprite_tea_player = new cc.Sprite(new cc.SpriteFrame(res_img.sprite_tea_player,cc.rect(0,0,90,129)));
     sprite_tea_player.texture.setAliasTexParameters();
     sprite_tea_player.attr({x:544,y:234,opacity: 0});
     // sprite_tea_player.setBlendFunc(gl.DST_COLOR, gl.ONE_MINUS_SRC_ALPHA);
@@ -1410,7 +1410,7 @@ var LogicLayer = cc.Layer.extend({
 
     var frames_tea_boss = [];
     for (var i = 0; i < 13; i++) {
-      var sprite_frame = new cc.SpriteFrame(res.sprite_tea_boss,cc.rect(i*117,0,117,140));
+      var sprite_frame = new cc.SpriteFrame(res_img.sprite_tea_boss,cc.rect(i*117,0,117,140));
       // console.log(sprite_frame);
       frames_tea_boss.push(sprite_frame);
     };
@@ -1418,7 +1418,7 @@ var LogicLayer = cc.Layer.extend({
     TeaBossAnimation._frames[7].setDelayUnits(10);
     TeaBossAnimation._totalDelayUnits += 9;
     // console.log('TeaBossAnimation', TeaBossAnimation);
-    var sprite_tea_boss = new cc.Sprite(new cc.SpriteFrame(res.sprite_tea_boss,cc.rect(0,0,117,140)));
+    var sprite_tea_boss = new cc.Sprite(new cc.SpriteFrame(res_img.sprite_tea_boss,cc.rect(0,0,117,140)));
     sprite_tea_boss.texture.setAliasTexParameters();
     sprite_tea_boss.attr({x:328,y:233,opacity: 0});
     // sprite_tea_boss.setBlendFunc(gl.DST_COLOR, gl.ONE_MINUS_SRC_ALPHA);
@@ -1432,7 +1432,7 @@ var LogicLayer = cc.Layer.extend({
     var teaIsTooHot = function () {
       input.blinkTea();
       cc.audioEngine.stopAllEffects();
-      cc.audioEngine.playEffect(res.audio_tea_unable);
+      cc.audioEngine.playEffect(res_audio.audio_tea_unable);
       if(last_log._tea_is_too_hot) {
         return;
       }
@@ -1455,7 +1455,7 @@ var LogicLayer = cc.Layer.extend({
       if(role == 'player') {
         if(logic_state.tea_countdown.player < 1) {
           // audio_tree.action_tea.play();
-          cc.audioEngine.playEffect(res.audio_action_tea, false);
+          cc.audioEngine.playEffect(res_audio.audio_action_tea, false);
           controller.director.log(logic.messages.drinking, 'player', function () {
             controller.director.hp('player', 'more');
           });
@@ -1469,10 +1469,10 @@ var LogicLayer = cc.Layer.extend({
             }
           })));
           setTimeout(function() {
-            cc.audioEngine.playEffect(res.audio_tea_drinking_1);
+            cc.audioEngine.playEffect(res_audio.audio_tea_drinking_1);
           }, 1250);
           setTimeout(function() {
-            cc.audioEngine.playEffect(res.audio_tea_knock_table);
+            cc.audioEngine.playEffect(res_audio.audio_tea_knock_table);
           }, 3150);
         } else {
           if(callback) {
@@ -1494,10 +1494,10 @@ var LogicLayer = cc.Layer.extend({
             }
           })));
           setTimeout(function() {
-            cc.audioEngine.playEffect(res.audio_tea_drinking_2);
+            cc.audioEngine.playEffect(res_audio.audio_tea_drinking_2);
           }, 1400);
           setTimeout(function() {
-            cc.audioEngine.playEffect(res.audio_tea_knock_table);
+            cc.audioEngine.playEffect(res_audio.audio_tea_knock_table);
           }, 3150);
         } else {
           if(callback) {
@@ -1507,7 +1507,7 @@ var LogicLayer = cc.Layer.extend({
       } else {
         if(logic_state.tea_countdown.player < 1) {
           // audio_tree.action_tea.play();
-          cc.audioEngine.playEffect(res.audio_action_tea, false);
+          cc.audioEngine.playEffect(res_audio.audio_action_tea, false);
           controller.director.log(logic.messages.drinking, 'player', function () {
             controller.director.hp('player', 'more');
           });
@@ -1518,82 +1518,16 @@ var LogicLayer = cc.Layer.extend({
             drinkTea('boss', callback);
           })));
           setTimeout(function() {
-            cc.audioEngine.playEffect(res.audio_tea_drinking_1);
+            cc.audioEngine.playEffect(res_audio.audio_tea_drinking_1);
           }, 1250);
           setTimeout(function() {
-            cc.audioEngine.playEffect(res.audio_tea_knock_table);
+            cc.audioEngine.playEffect(res_audio.audio_tea_knock_table);
           }, 3150);
         } else {
           drinkTea('boss', callback);
         }
       }
     }
-
-
-    // var SmokePart1 = new cc.ParticleSystem(res.p_tea);
-    // SmokePart1.setStartColor(cc.color(0, 0, 0, 200));
-    // SmokePart1.setStartColorVar(cc.color(0, 0, 0, 50));
-    // SmokePart1.setEndColor(cc.color(0, 0, 0, 0));
-    // SmokePart1.setEndColorVar(cc.color(0, 0, 0, 0));
-    // SmokePart1.setEmissionRate(100);
-    // SmokePart1.setPosVar(cc.p(8, 0));
-    // SmokePart1.setLife(1.2);
-    // SmokePart1.setSpeed(40);
-    // SmokePart1.setSpeedVar(10);
-    // SmokePart1.setGravity(cc.p(20, 0));
-    // SmokePart1.setSpeedVar(10);
-    // SmokePart1.setStartSize(12);
-    // SmokePart1.setEndSize(8);
-    // SmokePart1.setTotalParticles(200);
-    // // SmokePart1.setAngleVar(10);
-    // // SmokePart1.setBlendFunc(gl.SRC_ALPHA, gl.ONE);
-    // SmokePart1.attr({x: 680, y: 136, scaleX: 2});
-    // console.log(SmokePart1);
-    // this.addChild(SmokePart1);
-
-
-    // var SmokePart2 = new cc.ParticleSystem(res.p_tea);
-    // SmokePart2.setStartColor(cc.color(0, 0, 0, 200));
-    // SmokePart2.setStartColorVar(cc.color(0, 0, 0, 50));
-    // SmokePart2.setEndColor(cc.color(0, 0, 0, 0));
-    // SmokePart2.setEndColorVar(cc.color(0, 0, 0, 0));
-    // SmokePart2.setEmissionRate(100);
-    // SmokePart2.setPosVar(cc.p(8, 0));
-    // SmokePart2.setLife(1.7);
-    // SmokePart2.setSpeed(40);
-    // SmokePart2.setSpeedVar(10);
-    // SmokePart2.setGravity(cc.p(20, 0));
-    // SmokePart2.setSpeedVar(10);
-    // SmokePart2.setStartSize(12);
-    // SmokePart2.setEndSize(8);
-    // SmokePart2.setTotalParticles(200);
-    // // SmokePart2.setAngleVar(10);
-    // // SmokePart2.setBlendFunc(gl.SRC_ALPHA, gl.ONE);
-    // SmokePart2.attr({x: 733, y: 136, scaleX: 2});
-    // console.log(SmokePart2);
-    // this.addChild(SmokePart2);
-
-
-    // var SmokePart3 = new cc.ParticleSystem(res.p_tea);
-    // SmokePart3.setStartColor(cc.color(0, 0, 0, 200));
-    // SmokePart3.setStartColorVar(cc.color(0, 0, 0, 50));
-    // SmokePart3.setEndColor(cc.color(0, 0, 0, 0));
-    // SmokePart3.setEndColorVar(cc.color(0, 0, 0, 0));
-    // SmokePart3.setEmissionRate(50);
-    // SmokePart3.setPosVar(cc.p(5, 0));
-    // SmokePart3.setLife(0.9);
-    // SmokePart3.setSpeed(40);
-    // SmokePart3.setSpeedVar(10);
-    // SmokePart3.setGravity(cc.p(20, 0));
-    // SmokePart3.setSpeedVar(10);
-    // SmokePart3.setStartSize(12);
-    // SmokePart3.setEndSize(8);
-    // SmokePart3.setTotalParticles(200);
-    // // SmokePart3.setAngleVar(10);
-    // // SmokePart3.setBlendFunc(gl.SRC_ALPHA, gl.ONE);
-    // SmokePart3.attr({x: 779, y: 136, scaleX: 2});
-    // console.log(SmokePart3);
-    // this.addChild(SmokePart3);
 
 
 
@@ -1608,7 +1542,7 @@ var LogicLayer = cc.Layer.extend({
 
     var delay_point_reg = /\[delay[0-9]*\]/;
 
-    var mountain_delay = 4;
+    var mountain_delay = 3;
 
     var next_mountain = false;
 
@@ -1817,7 +1751,7 @@ var LogicLayer = cc.Layer.extend({
         color: cc.color(255,255,255,255)
       });
     
-      var ArrawSunsetSprite = new cc.Sprite(res.sprite_arraw);
+      var ArrawSunsetSprite = new cc.Sprite(res_img.sprite_arraw);
       ArrawSunsetSprite.texture.setAliasTexParameters();
       ArrawSunsetSprite.attr({scale: 2});
       label.addChild(ArrawSunsetSprite);
@@ -1964,7 +1898,7 @@ var LogicLayer = cc.Layer.extend({
         input.duringStart();
         if(current_dialogue.role == 'player') {
           // audio_tree.action_talk.play();
-          cc.audioEngine.playEffect(res.audio_action_talk, false);
+          cc.audioEngine.playEffect(res_audio.audio_action_talk, false);
         }
         controller.director.log(current_text, current_dialogue.role, function () {
           // console.log();
@@ -2017,7 +1951,7 @@ var LogicLayer = cc.Layer.extend({
         controller.director.next();
         var popcorn_pick = Math.floor(Math.random()*logic.popcorn_pool.length);
         if(!mountain) {
-          cc.audioEngine.playEffect(res.audio_action_talk, false);
+          cc.audioEngine.playEffect(res_audio.audio_action_talk, false);
           controller.director.log(logic.popcorn_pool[popcorn_pick], 'player', function () {
             setTimeout(function() {
               drinkTea('boss', function () {
@@ -2073,14 +2007,14 @@ var LogicLayer = cc.Layer.extend({
       }
       input.duringStart();
       var boss_delay = 1200 + Math.floor(Math.random() * 1200);
-      // cc.audioEngine.playEffect(res.audio_action_mountain, false);
+      // cc.audioEngine.playEffect(res_audio.audio_action_mountain, false);
       audio_tree.action_mountain.play();
       controller.director.log(logic.messages.mountain, 'player', function () {
         logic_state.current.dialogue++;
         controller.director.step_action();
         musicFadeTo(0, 2000);
         effectFadeTo(0.8, 2000, 0);
-        logic_state.mountained_id = cc.audioEngine.playEffect(res.audio_ambient_mountained, true);
+        logic_state.mountained_id = cc.audioEngine.playEffect(res_audio.audio_ambient_mountained, true);
         setTimeout(function() {
           controller.director.talk(true, true);
         }, boss_delay);
