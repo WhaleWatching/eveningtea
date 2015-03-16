@@ -821,7 +821,7 @@ var GroundLayer = cc.Layer.extend({
     this.addChild(GrassSprite);
 
     var Weapon1Sprite = new cc.Sprite(res_img.sprite_weapon1);
-    Weapon1Sprite.attr({x: 865, y: 184});
+    Weapon1Sprite.attr({x: 880, y: 192});
     Weapon1Sprite.texture.setAliasTexParameters();
     this.addChild(Weapon1Sprite, 1);
 
@@ -1218,7 +1218,7 @@ var LogicLayer = cc.Layer.extend({
       log_clear();
       input.end();
       sprite_ammo.attr({opacity:255});
-      sprite_ammo.runAction(cc.sequence(cc.animate(AmmoAnimation), cc.delayTime(8),cc.callFunc(function () {
+      sprite_ammo.runAction(cc.sequence(cc.animate(AmmoAnimation), cc.delayTime(10),cc.callFunc(function () {
         musicFadeTo(0, 3000);
         controller.director.pressstartEnd();
       })));
