@@ -1998,6 +1998,18 @@ var LogicLayer = cc.Layer.extend({
       }
     }
 
+    var LikeSprite = new cc.Sprite(res_img.sprite_like);
+    LikeSprite.texture.setAliasTexParameters();
+    LikeSprite.attr({opacity: 0});
+    self.addChild(LikeSprite);
+
+    controller.director.like = function () {
+      // LikeSprite.stopAllEffects();
+      LikeSprite.attr({x:550, y: 304, opacity: 0});
+      LikeSprite.runAction(cc.sequence(cc.fadeIn(0.4), cc.delayTime(0.4), cc.fadeOut(0.4)));
+      LikeSprite.runAction(cc.sequence(cc.moveTo(0.4, cc.p(550, 334))));
+    }
+
     controller.director.mountain = function () {
       if(controller.talking) {
         return;

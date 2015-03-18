@@ -35,10 +35,14 @@ var res_img = {
 	sprite_tea_player: 'res/sprite/tea_player.png',
 	sprite_tea_player_start: 'res/sprite/tea_player_start.png',
 	sprite_tea_boss: 'res/sprite/tea_boss.png',
-	sprite_ui_tea: 'res/sprite/ui_tea.png',
-	sprite_ui_mountain: 'res/sprite/ui_mountain.png',
-	sprite_ui_talk: 'res/sprite/ui_talk.png',
+	// sprite_ui_tea: 'res/sprite/ui_tea.png',
+	// sprite_ui_mountain: 'res/sprite/ui_mountain.png',
+	// sprite_ui_talk: 'res/sprite/ui_talk.png',
+	sprite_ui_tea: 'res/sprite/choose_drink.png',
+	sprite_ui_mountain: 'res/sprite/choose_like.png',
+	sprite_ui_talk: 'res/sprite/choose_talk.png',
 	sprite_arraw: 'res/sprite/arraw.png',
+	sprite_like: 'res/sprite/like.png',
 	sprite_mountain: 'res/sprite/mountain.png',
 	sprite_pressstart: 'res/sprite/pressstart.png'
 };

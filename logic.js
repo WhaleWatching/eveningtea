@@ -9,7 +9,7 @@
   logic.messages = {
     tea_still_hot: '[The tea is still too hot]',
     tea_too_hot: '[The tea is boiling hot]',
-    mountain: '[Mountaining]',
+    mountain: '[Like]',
     drinking: '[Drinking tea]'
   };
 
