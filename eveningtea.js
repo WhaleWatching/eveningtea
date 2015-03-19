@@ -414,7 +414,7 @@ var UiLayer = cc.Layer.extend({
 
     var hp = {
       player: 0.35,
-      boss: 0.65
+      boss: 0.60
     }
 
     var UiHpPlayerSprite =  new cc.Sprite(res_img.sprite_ui_hp);
@@ -2009,8 +2009,8 @@ var LogicLayer = cc.Layer.extend({
 
     var like_count = 0;
 
-    var LikeCountText = new cc.LabelTTF('+1', 'Lato', 24);
-    LikeCountText.attr({x: 11, y: -1, scale: 0.5, color: cc.color(0,0,0), anchorX: 0});
+    var LikeCountText = new cc.LabelTTF('+1', 'Lato', 22);
+    LikeCountText.attr({x: 11.5, y: -1.5, scale: 0.5, color: cc.color(0,0,0), anchorX: 0});
     LikeCountText.texture.setAliasTexParameters();
     LikeNode.addChild(LikeCountText);
 
