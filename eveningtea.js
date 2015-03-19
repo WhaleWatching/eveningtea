@@ -2010,7 +2010,7 @@ var LogicLayer = cc.Layer.extend({
     var like_count = 0;
 
     var LikeCountText = new cc.LabelTTF('+1', 'Norpeth', 30);
-    LikeCountText.attr({x: 12, y: -1.5, scale: 0.4, color: cc.color(0,0,0), anchorX: 0});
+    LikeCountText.attr({x: 10, y: -1.5, scale: 0.4, color: cc.color(0,0,0), anchorX: 0});
     LikeCountText.texture.setAliasTexParameters();
     LikeNode.addChild(LikeCountText);
 
@@ -2019,8 +2019,8 @@ var LogicLayer = cc.Layer.extend({
       // LikeNode.stopAllEffects();
       LikeCountText.setString('+' + like_count);
       LikeNode.attr({x:564, y: 304, opacity: 0});
-      LikeNode.runAction(cc.sequence(cc.fadeIn(0.8), cc.delayTime(3), cc.fadeOut(0.5)));
-      LikeNode.runAction(cc.moveTo(0.8, cc.p(564, 334)).easing(cc.easeIn(0.8)));
+      LikeNode.runAction(cc.sequence(cc.fadeIn(1.5), cc.delayTime(1.8), cc.fadeOut(0.5)));
+      LikeNode.runAction(cc.moveTo(1.5, cc.p(564, 334)).easing(cc.easeIn(0.8)));
     }
 
     controller.director.mountain = function () {
