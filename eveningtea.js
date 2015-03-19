@@ -1999,7 +1999,7 @@ var LogicLayer = cc.Layer.extend({
     }
 
     var LikeNode = new cc.Node();
-    LikeNode.attr({x:557, y: 304, opacity: 0});
+    LikeNode.attr({x:560, y: 304, opacity: 0});
     LikeNode.setCascadeOpacityEnabled(true);
     self.addChild(LikeNode);
 
@@ -2018,9 +2018,9 @@ var LogicLayer = cc.Layer.extend({
       like_count++;
       // LikeNode.stopAllEffects();
       LikeCountText.setString('+' + like_count);
-      LikeNode.attr({x:557, y: 304, opacity: 0});
-      LikeNode.runAction(cc.sequence(cc.fadeIn(0.8), cc.delayTime(0.8), cc.fadeOut(0.5)));
-      LikeNode.runAction(cc.sequence(cc.moveTo(0.8, cc.p(557, 334))));
+      LikeNode.attr({x:560, y: 304, opacity: 0});
+      LikeNode.runAction(cc.sequence(cc.fadeIn(0.8), cc.delayTime(3), cc.fadeOut(0.5)));
+      LikeNode.runAction(cc.moveTo(0.8, cc.p(560, 334)).easing(cc.easeIn(0.8)));
     }
 
     controller.director.mountain = function () {
