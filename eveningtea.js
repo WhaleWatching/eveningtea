@@ -2009,8 +2009,8 @@ var LogicLayer = cc.Layer.extend({
 
     var like_count = 0;
 
-    var LikeCountText = new cc.LabelTTF('+1', 'Norpeth', 30);
-    LikeCountText.attr({x: 10, y: -1.5, scale: 0.4, color: cc.color(0,0,0), anchorX: 0});
+    var LikeCountText = new cc.LabelTTF('+1', 'Nunito', 36);
+    LikeCountText.attr({x: 11, y: -2, scale: 0.33, color: cc.color(0,0,0), anchorX: 0});
     LikeCountText.texture.setAliasTexParameters();
     LikeNode.addChild(LikeCountText);
 
