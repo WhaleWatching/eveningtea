@@ -2019,8 +2019,8 @@ var LogicLayer = cc.Layer.extend({
       // LikeNode.stopAllEffects();
       LikeCountText.setString('+' + like_count);
       LikeNode.attr({x:564, y: 304, opacity: 0});
-      LikeNode.runAction(cc.sequence(cc.fadeIn(1.5), cc.delayTime(1.8), cc.fadeOut(0.5)));
-      LikeNode.runAction(cc.moveTo(1.5, cc.p(564, 334)).easing(cc.easeIn(0.8)));
+      LikeNode.runAction(cc.sequence(cc.fadeIn(1.8), cc.delayTime(2), cc.fadeOut(0.5)));
+      LikeNode.runAction(cc.moveTo(1.8, cc.p(564, 334)).easing(cc.easeIn(0.8)));
     }
 
     controller.director.mountain = function () {
