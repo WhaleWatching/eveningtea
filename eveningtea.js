@@ -2009,20 +2009,15 @@ var LogicLayer = cc.Layer.extend({
 
     var like_count = 0;
 
-    var LikeCountText = new cc.LabelTTF('1', 'Nunito', 36);
-    LikeCountText.attr({x: 18, y: -2, scale: 0.33, color: cc.color(0,0,0), anchorX: 0});
+    var LikeCountText = new cc.LabelTTF('+1', 'Lato', 24);
+    LikeCountText.attr({x: 11, y: -1, scale: 0.5, color: cc.color(0,0,0), anchorX: 0});
     LikeCountText.texture.setAliasTexParameters();
     LikeNode.addChild(LikeCountText);
-
-    var LikeCountPlus = new cc.LabelTTF('+', 'Nunito', 36);
-    LikeCountPlus.attr({x: 11, y: -1, scale: 0.33, color: cc.color(0,0,0), anchorX: 0});
-    LikeCountPlus.texture.setAliasTexParameters();
-    LikeNode.addChild(LikeCountPlus);
 
     controller.director.like = function () {
       like_count++;
       // LikeNode.stopAllEffects();
-      LikeCountText.setString(like_count);
+      LikeCountText.setString('+' + like_count);
       LikeNode.attr({x:564, y: 304, opacity: 0});
       LikeNode.runAction(cc.sequence(cc.fadeIn(1.5), cc.delayTime(1.8), cc.fadeOut(0.5)));
       LikeNode.runAction(cc.moveTo(1.5, cc.p(564, 334)).easing(cc.easeIn(0.8)));
