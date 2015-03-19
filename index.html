@@ -9,6 +9,8 @@
     <meta name="screen-orientation" content="portrait"/>
     <meta name="x5-fullscreen" content="true"/>
     <meta name="360-fullscreen" content="true"/>
+    <link href='font/font-play.css' rel='stylesheet' type='text/css'>
+    <link href='font/font-norpeth.css' rel='stylesheet' type='text/css'>
 <style type="text/css">
     body, canvas, div {
         -moz-user-select: none;
@@ -23,19 +25,25 @@
     #Cocos2dGameContainer {
         top: 80px;
     }
-    .font-loader {
+    .font-loader-play {
         font-family: 'Play';
         visibility: hidden;
+        color: white;
+    }
+    .font-loader-norpeth {
+        font-family: 'Norpeth';
+        visibility: hidden;
+        color: white;
     }
     #gameCanvas.unresloved {
         visibility: hidden;
     }
 </style>
-    <link href='font/font-play.css' rel='stylesheet' type='text/css'>
 </head>
 <body style="">
 <canvas id="gameCanvas" height="400" width="900" class="unresloved"></canvas>
-<div class="font-loader">Loader</div>
+<div class="font-loader-norpeth">Norpteh</div>
+<div class="font-loader-play">Play</div>
 <script src="cocos2d-js-v3.3.js"></script>
 <script src="loader.js"></script>
 <script src="buzz.js"></script>

@@ -1999,7 +1999,7 @@ var LogicLayer = cc.Layer.extend({
     }
 
     var LikeNode = new cc.Node();
-    LikeNode.attr({x:560, y: 304, opacity: 0});
+    LikeNode.attr({x:564, y: 304, opacity: 0});
     LikeNode.setCascadeOpacityEnabled(true);
     self.addChild(LikeNode);
 
@@ -2009,8 +2009,8 @@ var LogicLayer = cc.Layer.extend({
 
     var like_count = 0;
 
-    var LikeCountText = new cc.LabelTTF('+1', 'Play', 28);
-    LikeCountText.attr({x: 12, y: -1.5, scale: 0.5, color: cc.color(0,0,0), anchorX: 0});
+    var LikeCountText = new cc.LabelTTF('+1', 'Norpeth', 30);
+    LikeCountText.attr({x: 12, y: -1.5, scale: 0.4, color: cc.color(0,0,0), anchorX: 0});
     LikeCountText.texture.setAliasTexParameters();
     LikeNode.addChild(LikeCountText);
 
@@ -2018,9 +2018,9 @@ var LogicLayer = cc.Layer.extend({
       like_count++;
       // LikeNode.stopAllEffects();
       LikeCountText.setString('+' + like_count);
-      LikeNode.attr({x:560, y: 304, opacity: 0});
+      LikeNode.attr({x:564, y: 304, opacity: 0});
       LikeNode.runAction(cc.sequence(cc.fadeIn(0.8), cc.delayTime(3), cc.fadeOut(0.5)));
-      LikeNode.runAction(cc.moveTo(0.8, cc.p(560, 334)).easing(cc.easeIn(0.8)));
+      LikeNode.runAction(cc.moveTo(0.8, cc.p(564, 334)).easing(cc.easeIn(0.8)));
     }
 
     controller.director.mountain = function () {
