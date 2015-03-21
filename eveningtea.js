@@ -109,13 +109,13 @@ var LoaderScene = cc.Scene.extend({
         var bgLayer = self._bgLayer = new cc.LayerColor(cc.color(18, 18, 18, 255));
         self.addChild(bgLayer, 0);
         var fontSize = 28, lblHeight =  -logoHeight / 2 + 100;
-        var label = self._label = new cc.LabelTTF(logic.loading[0], "Play", fontSize);
-        label.setPosition(cc.pAdd(cc.p(450, 63), cc.p(0, lblHeight)));
+        var label = self._label = new cc.LabelTTF(logic.loading[0], "Play", 28);
+        label.setPosition(cc.p(450, 63));
         label.setColor(cc.color(180, 180, 180));
         label.attr({scale: 0.5});
         bgLayer.addChild(this._label, 10);
-        var label_percent = self._label_percent = new cc.LabelTTF("[0%]", "Play", fontSize);
-        label_percent.setPosition(cc.pAdd(cc.p(450, 82), cc.p(0, lblHeight)));
+        var label_percent = self._label_percent = new cc.LabelTTF("[0%]", "Play", 28);
+        label_percent.setPosition(cc.p(450, 82));
         label_percent.setColor(cc.color(180, 180, 180));
         label_percent.attr({scale: 0.5});
         bgLayer.addChild(this._label_percent, 10);
@@ -248,12 +248,31 @@ var PressstartLayer = cc.Layer.extend({
     PromptSprite.attr({
       x: 450,
       y: 70,
-      color: cc.color(255,255,255)
+      color: cc.color(255,255,255),
+      opacity: 0
     });
     this.addChild(PromptSprite, 1);
     var blink = cc.blink(2,1);
     // console.log(blink);
-    PromptSprite.runAction(cc.repeatForever(blink));
+    // PromptSprite.runAction(cc.repeatForever(blink));
+
+
+    var label = self._label = new cc.LabelTTF(logic.loading[logic.loading.length - 1], "Play", 28);
+    label.setPosition(cc.p(450, 63));
+    label.setColor(cc.color(180, 180, 180));
+    label.attr({scale: 0.5});
+    this.addChild(this._label, 10);
+    var label_percent = self._label_percent = new cc.LabelTTF("[100%]", "Play", 28);
+    label_percent.setPosition(cc.p(450, 82));
+    label_percent.setColor(cc.color(180, 180, 180));
+    label_percent.attr({scale: 0.5});
+    this.addChild(this._label_percent, 10);
+    var label_press = self._label_press = new cc.LabelTTF("- PRESS X TO START -", "Play", 34);
+    label_press.setPosition(cc.p(450, 120));
+    label_press.setColor(cc.color(180, 180, 180));
+    label_press.attr({scale: 0.5});
+    this.addChild(this._label_press, 10);
+    label_press.runAction(cc.repeatForever(blink));
 
     var PressBgLSprite = new cc.Sprite(res_img.sprite_press_bg);
     PressBgLSprite.texture.setAliasTexParameters();
@@ -289,7 +308,10 @@ var PressstartLayer = cc.Layer.extend({
     this.blow = function () {
       PressBgLSprite.runAction(cc.moveTo(1, cc.p(-450, 0)).easing(cc.easeIn(3.0)) );
       PressBgRSprite.runAction(cc.moveTo(1, cc.p(900, 0)).easing(cc.easeIn(3.0)) );
-      self.removeChild(PromptSprite);
+      label_press.stopAllActions();
+      label.attr({opacity: 0});
+      label_percent.attr({opacity: 0});
+      label_press.attr({opacity: 0});
     }
 
     cc.eventManager.addListener({
@@ -1244,7 +1266,7 @@ var LogicLayer = cc.Layer.extend({
 
 
     var TeaPlayerPart = new cc.ParticleSystem(res_plist.p_tea);
-    TeaPlayerPart.setStartColor(cc.color(255, 255, 255, 200));
+    TeaPlayerPart.setStartColor(cc.color(255, 255, 255, 160));
     TeaPlayerPart.setStartColorVar(cc.color(0, 0, 0, 50));
     TeaPlayerPart.setEndColor(cc.color(255, 255, 255, 0));
     TeaPlayerPart.setEndColorVar(cc.color(0, 0, 0, 0));
@@ -1257,7 +1279,7 @@ var LogicLayer = cc.Layer.extend({
     // console.log(TeaPlayerPart);
     this.addChild(TeaPlayerPart);
     var TeaBossPart = new cc.ParticleSystem(res_plist.p_tea);
-    TeaBossPart.setStartColor(cc.color(255, 255, 255, 200));
+    TeaBossPart.setStartColor(cc.color(255, 255, 255, 160));
     TeaBossPart.setStartColorVar(cc.color(0, 0, 0, 50));
     TeaBossPart.setEndColor(cc.color(255, 255, 255, 0));
     TeaBossPart.setEndColorVar(cc.color(0, 0, 0, 0));
