@@ -267,7 +267,7 @@ var PressstartLayer = cc.Layer.extend({
     label_percent.setColor(cc.color(180, 180, 180));
     label_percent.attr({scale: 0.5});
     this.addChild(this._label_percent, 10);
-    var label_press = self._label_press = new cc.LabelTTF("- PRESS X TO START -", "Play", 34);
+    var label_press = self._label_press = new cc.LabelTTF("- PRESS X TO START -", "Play", 36);
     label_press.setPosition(cc.p(450, 120));
     label_press.setColor(cc.color(180, 180, 180));
     label_press.attr({scale: 0.5});
