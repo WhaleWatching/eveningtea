@@ -26,12 +26,16 @@
     }
     #Cocos2dGameContainer {
         display: flex;
-        flex: 1;
+        flex: 8;
         align-items: center;
+    }
+    .font-loader {
+        flex: 1;
     }
     .font-loader-play,
     .font-loader-lato {
         font-size: 0/0 a;
+        height: 0;
     }
     .font-loader-play {
         font-family: 'Play';
@@ -46,7 +50,7 @@
     }
     #gameCanvas.unresloved {
         visibility: hidden;
-        flex: 1;
+        flex: 6;
     }
     footer {
         font-family: 'Play';
@@ -67,8 +71,10 @@
     <canvas id="gameCanvas" height="400" width="900" class="unresloved">
         You're browser is doesn't support &lt;canvas>, please use Chrome or Firefox.
     </canvas>
-    <div class="font-loader-lato">Lato</div>
-    <div class="font-loader-play">Play</div>
+    <div class="font-loader">
+        <div class="font-loader-lato">Lato</div>
+        <div class="font-loader-play">Play</div>
+    </div>
     <footer>&copy; 2012 - 2015 Zerotonin & Adwards. All lefts reversed.</footer>
 </article>
 <script src="cocos2d-js-v3.3.js"></script>
