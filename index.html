@@ -57,7 +57,7 @@
         color: gray;
         text-align: center;
         font-size: 12px;
-        line-height: 28px;
+        line-height: 48px;
     }
     article {
         display: flex;
@@ -76,7 +76,7 @@
     <canvas id="gameCanvas" height="400" width="900" class="unresloved">
         You're browser is doesn't support &lt;canvas>, please use Chrome or Firefox.
     </canvas>
-    <footer>&copy; 2012 - 2015 Zerotonin & Adwards. All lefts reversed.</footer>
+    <footer class="copyright">&copy; 2012 - [copytimeend] Zerotonin & Adwards. All lefts reversed.</footer>
 </article>
 <script src="cocos2d-js-v3.3.js"></script>
 <script src="loader.js"></script>
@@ -85,5 +85,14 @@
 <script src="logic.js"></script>
 <script src="eveningtea.js"></script>
 <script src="resource.js"></script>
+<script type="text/javascript">
+(function (document) {
+  var $ = function () {
+    return document.querySelectorAll.apply(document, arguments);
+  };
+  var elem_copyright = $('.copyright')[0];
+  elem_copyright.innerText = elem_copyright.innerText.replace('[copytimeend]', new Date().getFullYear());
+})(document);
+</script>
 </body>
 </html>
